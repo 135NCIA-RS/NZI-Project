@@ -55,7 +55,7 @@ AppAsset::register($this);
                                     <li class="user-header">
                                         <?php echo Html::img('@web/dist/img/guest.png', ['class' => "img-circle"]) ?>
                                         <p>
-                                            <small>You've not signed in</small>
+                                            You've not signed in
                                         </p>
                                     </li>
 
