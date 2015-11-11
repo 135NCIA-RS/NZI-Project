@@ -45,15 +45,16 @@ AppAsset::register($this);
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <?php echo Html::img('@web/dist/img/guest.png', ['class' => "user-image"]) ?>
-                                    <span class="hidden-xs">Guest</span>
+                                   
+                                   <!-- <?php echo Html::img('@web/dist/img/guest.png', ['class' => "user-image"]) ?>-->
+                                    <i class="fa fa-sign-in"></i>
+                                    <span class="hidden-xs">Sign In</span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
                                     <li class="user-header">
                                         <?php echo Html::img('@web/dist/img/guest.png', ['class' => "img-circle"]) ?>
                                         <p>
-                                            Quest
                                             <small>You've not signed in</small>
                                         </p>
                                     </li>
