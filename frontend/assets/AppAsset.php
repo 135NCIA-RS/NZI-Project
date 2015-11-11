@@ -21,8 +21,8 @@ class AppAsset extends AssetBundle
     public $css = [
         '//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css',
         'css/ionicons.min.css',
-        'dist/css/AdminLTE.min.css',
-        'dist/css/skins/_all-skins.min.css',
+        'css/AdminLTE.min.css',
+        'css/skins/_all-skins.min.css',
         'plugins/iCheck/flat/blue.css',
         'plugins/morris/morris.css',
         'css/site.css',
