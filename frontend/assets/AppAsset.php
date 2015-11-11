@@ -25,6 +25,7 @@ class AppAsset extends AssetBundle
         'css/skins/_all-skins.min.css',
         'plugins/iCheck/flat/blue.css',
         'plugins/morris/morris.css',
+        'css/flag-icon.min.css',
         'css/site.css',
     ];
     public $js = [
