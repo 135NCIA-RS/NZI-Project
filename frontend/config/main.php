@@ -30,37 +30,38 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-    ],
-    'i18n' => [
-            'translations' => [
-                'app*' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
-                    'fileMap' => [
-                        'app' => 'app.php',
-                        'app/error' => 'error.php',
-                        'app.weather' => 'AppWeather.php',
-                    ],
-                    'on missingTranslation' => ['app\components\TranslationEventHandler', 'handleMissingTranslation']
+        
+         'i18n' => [
+        'translations' => [
+            'app*' => [
+                'class' => 'yii\i18n\PhpMessageSource',
+                'sourceLanguage' => 'us',
+                'basePath' => '@app/messages',
+                'fileMap' => [
+                    'app' => 'app.php',
+                    'app/error' => 'error.php',
                 ],
+                'on missingTranslation' => ['app\components\TranslationEventHandler', 'handleMissingTranslation'],
             ],
         ],
+    ],
         
         'urlManager' => [
             'enablePrettyUrl' => 'true',
             'showScriptName' => 'false',
             'rules' => [
-                //'catchAll' => ['site/login'],
-                'login' => 'site/login',
                 'logout' => 'site/logout',
                 'register' => 'site/signup',
-                'sql' => 'site/mysql',
-                'weather' => 'app/weather',
-                'pogoda' => 'app/weather',
+                'login' => 'site/login',
             ],
         ],
-    ],
+    
     'as beforeRequest' => [
-          'class' => 'app\components\LanguageHandler',  
-        ],
+        'class' => 'app\components\LanguageHandler',  
+      ],
+    ],
+    
+   
+    
     'params' => $params,
 ];
