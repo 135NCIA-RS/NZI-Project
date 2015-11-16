@@ -15,7 +15,7 @@ $txt_password = Yii::t('app', 'Password');
 <div class="site-login">
      <div class="login-box">
       <div class="login-logo">
-       <b>In </b>Touch</a>
+       <b>In</b>Touch</a>
       </div><!-- /.login-logo -->
       <div class="login-box-body">
         <p class="login-box-msg"><?= Yii::t('app', 'Sign in to start your session')?></p>
@@ -41,9 +41,7 @@ $txt_password = Yii::t('app', 'Password');
 
             <?php ActiveForm::end(); ?>
 
-        <div class="social-auth-links text-center">
-          
-        </div><!-- /.social-auth-links -->
+        
         <?php 
         $lost= Yii::t('app', 'I forgot my password');
         ?>
