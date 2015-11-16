@@ -89,13 +89,19 @@ AppAsset::register($this);
                                 <i class="fa fa-home"></i> <span>Home</span> 
                             </a>
                         </li>
-                        <li class="active treeview">
+                        <li class="treeview">
                             <a href="#">
-                                <i class="fa fa-language"></i> <span>Language</span> <i class="fa fa-angle-left pull-right"></i>
+                                <i class="fa fa-language"></i> <span><?= Yii::t('app', 'Language') . '&nbsp;' ?>
+                                </span>
+                                <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li class="active"><a href="index.html"><i class="flag-icon flag-icon-pl"></i> Polski</a></li>
-                                <li><a href="index2.html"><i class="flag-icon flag-icon-us"></i> English </a></li>
+                                <?php
+                                foreach (\Yii::$app->params['languages'] as $key => $lang)
+                                {
+                                    echo '<li><a href="/action/lang?lang=' . $key . '"><i class="flag-icon flag-icon-' . $key . '"></i>' . ' | ' . $lang . '</a></li>';
+                                }
+                                ?>
                             </ul>
                         </li>
                     </ul>
