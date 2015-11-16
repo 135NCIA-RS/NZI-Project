@@ -11,6 +11,8 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'language' => 'us',
+    'sourceLanguage' => 'us',
     'components' => [
         'user' => [
             'identityClass' => 'common\models\User',
@@ -29,5 +31,36 @@ return [
             'errorAction' => 'site/error',
         ],
     ],
+    'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'fileMap' => [
+                        'app' => 'app.php',
+                        'app/error' => 'error.php',
+                        'app.weather' => 'AppWeather.php',
+                    ],
+                    'on missingTranslation' => ['app\components\TranslationEventHandler', 'handleMissingTranslation']
+                ],
+            ],
+        ],
+        
+        'urlManager' => [
+            'enablePrettyUrl' => 'true',
+            'showScriptName' => 'false',
+            'rules' => [
+                //'catchAll' => ['site/login'],
+                'login' => 'site/login',
+                'logout' => 'site/logout',
+                'register' => 'site/signup',
+                'sql' => 'site/mysql',
+                'weather' => 'app/weather',
+                'pogoda' => 'app/weather',
+            ],
+        ],
+    ],
+    'as beforeRequest' => [
+          'class' => 'app\components\LanguageHandler',  
+        ],
     'params' => $params,
 ];
