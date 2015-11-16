@@ -16,5 +16,9 @@ return [
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
+//        'gii' => [
+//            'class' => 'yii\gii\Module',
+//            'allowedIPs' => ['127.0.0.1', '::1', '192.168.*.*'],
+//        ],
     ],
 ];
