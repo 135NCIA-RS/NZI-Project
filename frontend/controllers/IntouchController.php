@@ -61,8 +61,14 @@ class IntouchController extends Controller
         if (\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
+        //////////////////////////////////
+        $zdjecie=new \app\models\Photo();
+        $dane = $zdjecie->find()->all();
+        
+        
+        //////////////////////////////////
         $this->layout = 'logged';
-        return $this->render('index');
+        return $this->render('index', ['dane'=>$dane]);
     }
 
 }
