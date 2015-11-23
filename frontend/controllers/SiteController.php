@@ -83,7 +83,8 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
+            //return $this->goHome();
+            return $this->redirect('/intouch/index');
         }
 
         $model = new LoginForm();
@@ -210,4 +211,5 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+    
 }

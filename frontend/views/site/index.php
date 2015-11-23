@@ -7,15 +7,17 @@ $this->title = 'My Yii Application';
 <div class="site-index">
 
     <div class="jumbotron">
-        <h1><?=Yii::t('app', 'Congratulations!')?></h1>
+        <h1><?=Yii::t('app', 'Hello!')?></h1>
+        <h2><?=Yii::t('app', 'Get In Touch with your friends!')?></h2>
 
-        <p class="lead"><?php var_dump(Yii::$app->language); ?></p>
+      <!--  <p class="lead"><?php var_dump(Yii::$app->language); ?></p> -->
 
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+        <p><a class="btn btn-lg btn-success" href="/register">Touch It</a></p>
     </div>
 
     <div class="body-content">
 
+        <!--
         <div class="row">
             <div class="col-lg-4">
                 <h2>Heading</h2>
@@ -47,7 +49,7 @@ $this->title = 'My Yii Application';
 
                 <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
             </div>
-        </div>
+        </div> -->
 
     </div>
 </div>

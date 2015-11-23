@@ -49,6 +49,7 @@ return [
                 'logout' => 'site/logout',
                 'register' => 'site/signup',
                 'login' => 'site/login',
+                'start' => 'intouch/index',
             ],
         ],
     ],

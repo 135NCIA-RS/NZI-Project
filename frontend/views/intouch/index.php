@@ -1,13 +1,11 @@
 <?php
 /* @var $this yii\web\View */
 ?>
-<h1>action/index</h1>
+<h1>intouch/index</h1>
 
 <p>
     You may change the content of this page by modifying
     the file <code><?= __FILE__; ?></code>.
     
-    
-    
-    BUAHAHAHAHAHa
+    HEHEszki
 </p>
