@@ -62,10 +62,10 @@ AppAsset::register($this);
                                     <!-- Menu Footer-->
                                     <li class="user-footer">
                                         <div class="pull-left">
-                                            <a href="/index.php?r=site/signup" class="btn btn-default btn-flat">Register</a>
+                                            <a href="/register" class="btn btn-default btn-flat">Register</a>
                                         </div>
                                         <div class="pull-right">
-                                            <a href="/index.php?r=site/login" class="btn btn-default btn-flat">LogIn</a>
+                                            <a href="/login" class="btn btn-default btn-flat">LogIn</a>
                                         </div>
                                     </li>
                                 </ul>
