@@ -62,12 +62,23 @@ class IntouchController extends Controller
             return $this->goHome();
         }
         //////////////////////////////////
-        $userProfileData = \app\models\Photo::find()->where('user_id=:UID and type=:type',
-                [
-                    ':UID' => Yii::$app->user->getId(),
-                    ':type' => 'profile'
-                    ]);
-        Yii::$app->view->params['userProfilePhoto'] = $userProfileData;
+        $userProfileData =  \app\models\Photo::find()
+                ->where(['user_id' => '1'])
+                ->andWhere(['type' => 'profile'])->one();
+        if(isset($userProfileData['filename']))
+        {
+            $location = "@web/dist/content/images/";
+            //TODO set chmod for that directory(php init)
+            $this->view->params['userProfilePhoto'] = $location . $userProfileData['filename'];
+        }
+        else
+        {
+            $location = "@web/dist/img/guest.png";
+            //TODO add that file
+            $this->view->params['userProfilePhoto'] = $location;
+        
+        }
+        
         $zdjecie=new \app\models\Photo();
         $dane = $zdjecie->find()->all();
         

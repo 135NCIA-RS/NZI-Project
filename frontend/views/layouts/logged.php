@@ -53,7 +53,7 @@ AppAsset::register($this);
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
                                     <li class="user-header">
-                                        <?php echo Html::img('@web/dist/img/guest.png', ['class' => "img-circle"]) ?>
+                                        <?= Html::img($this->params['userProfilePhoto'],['class' => 'img-circle', 'alt' => 'User Image'])?>
                                         <p>
                                             You're InTouch now.
                                         </p>
@@ -91,7 +91,7 @@ AppAsset::register($this);
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                            <?= Html::img($this->params['userProfilePhoto'],['class' => 'img-circle', 'alt' => 'User Image'])?>
                         </div>
                         <div class="pull-left info">
                             <p>Alexander Pierce</p>
