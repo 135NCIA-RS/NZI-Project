@@ -84,6 +84,7 @@ class SiteController extends Controller
     {
         if (!\Yii::$app->user->isGuest) {
             //return $this->goHome();
+            // user is logged in
             return $this->redirect('/intouch/index');
         }
 

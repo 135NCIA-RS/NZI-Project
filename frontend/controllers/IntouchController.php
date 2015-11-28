@@ -62,6 +62,12 @@ class IntouchController extends Controller
             return $this->goHome();
         }
         //////////////////////////////////
+        $userProfileData = \app\models\Photo::find()->where('user_id=:UID and type=:type',
+                [
+                    ':UID' => Yii::$app->user->getId(),
+                    ':type' => 'profile'
+                    ]);
+        Yii::$app->view->params['userProfilePhoto'] = $userProfileData;
         $zdjecie=new \app\models\Photo();
         $dane = $zdjecie->find()->all();
         
