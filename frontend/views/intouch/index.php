@@ -14,4 +14,4 @@ use yii\helpers\Url;
     
     
 </p>
-<?= Html::img($dane[0]['filename']);?>
+
