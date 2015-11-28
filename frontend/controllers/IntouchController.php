@@ -87,5 +87,9 @@ class IntouchController extends Controller
         $this->layout = 'logged';
         return $this->render('index', ['dane'=>$dane]);
     }
-
+    
+    public function actionEditaccount()
+    {
+        return $this->render('editAccount');
+    }
 }

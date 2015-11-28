@@ -50,6 +50,7 @@ return [
                 'register' => 'site/signup',
                 'login' => 'site/login',
                 'start' => 'intouch/index',
+                'editAccount' => 'intouch/editaccount'
             ],
         ],
     ],
