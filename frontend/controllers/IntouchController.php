@@ -62,7 +62,35 @@ class IntouchController extends Controller
             return $this->goHome();
         }
         //////////////////////////////////
-        $userProfileData =  \app\models\Photo::find()
+        $this->getUserData();
+        
+        $zdjecie=new \app\models\Photo();
+        $dane = $zdjecie->find()->all();
+        //////////////////////////////////
+        $this->layout = 'logged';
+        return $this->render('index', ['dane'=>$dane]);
+    }
+    
+    public function actionEditaccount()
+    {
+        if (\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        return $this->render('editAccount');
+    }
+    
+    public function actionProfile()
+    {
+        if (\Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        $this->getUserData();
+        $this->layout = 'logged';
+        return $this->render('userProfile');
+    }
+    private function getUserData()
+    {
+         $userProfileData =  \app\models\Photo::find()
                 ->where(['user_id' => '1'])
                 ->andWhere(['type' => 'profile'])->one();
         if(isset($userProfileData['filename']))
@@ -79,17 +107,6 @@ class IntouchController extends Controller
         
         }
         
-        $zdjecie=new \app\models\Photo();
-        $dane = $zdjecie->find()->all();
         
-        
-        //////////////////////////////////
-        $this->layout = 'logged';
-        return $this->render('index', ['dane'=>$dane]);
-    }
-    
-    public function actionEditaccount()
-    {
-        return $this->render('editAccount');
     }
 }

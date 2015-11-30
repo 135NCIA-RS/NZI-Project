@@ -50,7 +50,8 @@ return [
                 'register' => 'site/signup',
                 'login' => 'site/login',
                 'start' => 'intouch/index',
-                'editAccount' => 'intouch/editaccount'
+                'editAccount' => 'intouch/editaccount',
+                'profile' => 'intouch/profile',
             ],
         ],
     ],
