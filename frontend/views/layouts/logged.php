@@ -72,7 +72,7 @@ AppAsset::register($this);
                                     <!-- Menu Footer-->
                                     <li class="user-footer">
                                         <div class="pull-left">
-                                            <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                            <a href="/profile" class="btn btn-default btn-flat">Profile</a>
                                         </div>
                                         <div class="pull-right">
                                             <a href="#" class="btn btn-default btn-flat">Logout</a>
@@ -106,6 +106,11 @@ AppAsset::register($this);
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
                         <li class="header">MAIN NAVIGATION</li>
+                        <li>
+                            <a href="/profile">
+                                <i class="fa fa-user"></i> <span><?= Yii::t('app','Profile') ?></span> 
+                            </a>
+                        </li>
                         <li class="active treeview">
                             <a href="#">
                                 <i class="fa fa-dashboard"></i> <span>Dashboard</span> <i class="fa fa-angle-left pull-right"></i>
