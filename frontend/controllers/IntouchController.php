@@ -63,7 +63,7 @@ class IntouchController extends Controller
             return $this->goHome();
         }
         //////////////////////////////////
-<<<<<<< HEAD
+
         $this->getUserData();
         
         $zdjecie=new \app\models\Photo();
@@ -92,13 +92,9 @@ class IntouchController extends Controller
     }
     private function getUserData()
     {
-         $userProfileData =  \app\models\Photo::find()
-                ->where(['user_id' => '1'])
-=======
-        $id=Yii::$app->user->getId();
+        $id = Yii::$app->user->getId();
         $userProfileData =  \app\models\Photo::find()
                 ->where(['user_id' => $id])
->>>>>>> 9ca6107cfa2de48d6bda094840f55efb3c3efebf
                 ->andWhere(['type' => 'profile'])->one();
         if(isset($userProfileData['filename']))
         {
@@ -114,12 +110,6 @@ class IntouchController extends Controller
         
         }
         
-<<<<<<< HEAD
-        
-=======
-        
-        $zdjecie=new \app\models\Photo();
-        $dane = $zdjecie->find()->where(['user_id'=>$id]);
         $usinfo = new \app\models\UserInfo();
         $userinfo= $usinfo->find()->where(['user_id'=>$id])->one();
         if ($userinfo==null)
@@ -130,17 +120,7 @@ class IntouchController extends Controller
        
         $this->view->params['userInfo'] = $userinfo;
         //die(var_dump($userinfo));
-        
-        
-        
-        //////////////////////////////////
-        $this->layout = 'logged';
-        return $this->render('index', ['dane'=>$dane]) ;
+
     }
     
-    public function actionEditaccount()
-    {
-        return $this->render('editAccount');
->>>>>>> 9ca6107cfa2de48d6bda094840f55efb3c3efebf
-    }
 }
