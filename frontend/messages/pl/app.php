@@ -10,7 +10,7 @@ return [
     'LogIn'=> 'Zaloguj sie'
     'Main Navigation' =>'Pasek nawigacji'
     'Home' =>'Strona glowna'
-    'Sign in to start your session' =>
+    'Sign in to start your session' =>'Zaloguj sie zeby korzystać z serwisu'
     'I forgot my password' => 'Zapomnialem hasla'
     'Request password reset' => 'zadanie resetowania hasla'
     'Please choose your new password'=> 'Prosze wpisac nowe haslo'
