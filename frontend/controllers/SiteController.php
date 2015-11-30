@@ -72,6 +72,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        if (!\Yii::$app->user->isGuest) {
+            return $this->redirect('/intouch/index');
+        }
         return $this->render('index');
     }
 
@@ -117,6 +120,9 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
+        if (!\Yii::$app->user->isGuest) {
+            return $this->redirect('/intouch/index');
+        }
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
@@ -140,6 +146,9 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
+        if (!\Yii::$app->user->isGuest) {
+            return $this->redirect('/intouch/index');
+        }
         return $this->render('about');
     }
 
@@ -150,6 +159,9 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
+        if (!\Yii::$app->user->isGuest) {
+            return $this->redirect('/intouch/index');
+        }
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
@@ -171,6 +183,9 @@ class SiteController extends Controller
      */
     public function actionRequestPasswordReset()
     {
+        if (!\Yii::$app->user->isGuest) {
+            return $this->redirect('/intouch/index');
+        }
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
@@ -196,6 +211,9 @@ class SiteController extends Controller
      */
     public function actionResetPassword($token)
     {
+        if (!\Yii::$app->user->isGuest) {
+            return $this->redirect('/intouch/index');
+        }
         try {
             $model = new ResetPasswordForm($token);
         } catch (InvalidParamException $e) {
