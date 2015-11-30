@@ -37,7 +37,8 @@ AppAsset::register($this);
                 <nav class="navbar navbar-static-top" role="navigation">
                     <!-- Sidebar toggle button-->
                     <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                        <span class="sr-only">Toggle navigation</span>
+                    
+                        <span class="sr-only"><?= Yii::t('app','Toogle navigation') ?></span>
                     </a>
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
@@ -48,24 +49,24 @@ AppAsset::register($this);
                                    
                                    <!-- <?php echo Html::img('@web/dist/img/guest.png', ['class' => "user-image"]) ?>-->
                                     <i class="fa fa-sign-in"></i>
-                                    <span class="hidden-xs">Sign In</span>
+                                    <span class="hidden-xs"><?= Yii::t('app','Sign in') ?></span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
                                     <li class="user-header">
                                         <?php echo Html::img('@web/dist/img/guest.png', ['class' => "img-circle"]) ?>
                                         <p>
-                                            You've not signed in
+                                            <?= Yii::t('app',"You've not signed in") ?>
                                         </p>
                                     </li>
 
                                     <!-- Menu Footer-->
                                     <li class="user-footer">
                                         <div class="pull-left">
-                                            <a href="/register" class="btn btn-default btn-flat">Register</a>
+                                            <a href="/register" class="btn btn-default btn-flat"><?= Yii::t('app','Register') ?></a>
                                         </div>
                                         <div class="pull-right">
-                                            <a href="/login" class="btn btn-default btn-flat">LogIn</a>
+                                            <a href="/login" class="btn btn-default btn-flat"><?= Yii::t('app','LogIn') ?></a>
                                         </div>
                                     </li>
                                 </ul>
@@ -83,10 +84,10 @@ AppAsset::register($this);
 
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
-                        <li class="header">MAIN NAVIGATION</li>
+                        <li class="header"><?= Yii::t('app','MAIN NAVIGATION') ?></li>
                         <li>
                             <a href="/index.php">
-                                <i class="fa fa-home"></i> <span>Home</span> 
+                                <i class="fa fa-home"></i> <span><?= Yii::t('app','Home') ?></span> 
                             </a>
                         </li>
                         <li class="treeview">
