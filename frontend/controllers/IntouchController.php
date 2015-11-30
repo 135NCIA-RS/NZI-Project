@@ -58,12 +58,14 @@ class IntouchController extends Controller
     
     public function actionIndex()
     {
+        
         if (\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
         //////////////////////////////////
+        $id=Yii::$app->user->getId();
         $userProfileData =  \app\models\Photo::find()
-                ->where(['user_id' => '1'])
+                ->where(['user_id' => $id])
                 ->andWhere(['type' => 'profile'])->one();
         if(isset($userProfileData['filename']))
         {
@@ -79,13 +81,25 @@ class IntouchController extends Controller
         
         }
         
+        
         $zdjecie=new \app\models\Photo();
-        $dane = $zdjecie->find()->all();
+        $dane = $zdjecie->find()->where(['user_id'=>$id]);
+        $usinfo = new \app\models\UserInfo();
+        $userinfo= $usinfo->find()->where(['user_id'=>$id])->one();
+        if ($userinfo==null)
+        {
+            $userinfo = null;
+            $userinfo = ['user_name' => 'Uzupełnij', 'user_surname' => 'Swoje dane'];
+        }
+       
+        $this->view->params['userInfo'] = $userinfo;
+        //die(var_dump($userinfo));
+        
         
         
         //////////////////////////////////
         $this->layout = 'logged';
-        return $this->render('index', ['dane'=>$dane]);
+        return $this->render('index', ['dane'=>$dane]) ;
     }
     
     public function actionEditaccount()

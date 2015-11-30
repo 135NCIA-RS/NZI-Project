@@ -52,11 +52,15 @@ AppAsset::register($this);
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
+                                    
                                     <li class="user-header">
+                                        
                                         <?= Html::img($this->params['userProfilePhoto'],['class' => 'img-circle', 'alt' => 'User Image'])?>
+                                        <p style='color:black; font-weight:bold'><?=$this->params['userInfo']['user_name'].' '.$this->params['userInfo']['user_surname']  ?></p>
                                         <p>
                                             You're InTouch now.
                                         </p>
+                                        
                                     </li>
                                     <!-- Menu Body -->
                                     <li class="user-body">
@@ -94,7 +98,7 @@ AppAsset::register($this);
                             <?= Html::img($this->params['userProfilePhoto'],['class' => 'img-circle', 'alt' => 'User Image'])?>
                         </div>
                         <div class="pull-left info">
-                            <p>Alexander Pierce</p>
+                            <p><?=$this->params['userInfo']['user_name'].' '.$this->params['userInfo']['user_surname']  ?></p>
                             <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                         </div>
                     </div>
