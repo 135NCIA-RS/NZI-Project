@@ -73,14 +73,6 @@ class IntouchController extends Controller
         return $this->render('index', ['dane'=>$dane]);
     }
     
-    public function actionEditaccount()
-    {
-        if (\Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-        return $this->render('editAccount');
-    }
-    
     public function actionProfile()
     {
         if (\Yii::$app->user->isGuest) {
