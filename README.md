@@ -1,1 +1,1 @@
-This's Group #1's project.
+This is Group #1's project.
