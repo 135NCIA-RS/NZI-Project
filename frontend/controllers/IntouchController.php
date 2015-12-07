@@ -21,7 +21,7 @@ class IntouchController extends Controller
                 'only' => ['logout', 'signup'],
                 'rules' => [
                     [
-                        'actions' => ['index'],
+                        'actions' => ['index','userProfile'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -114,6 +114,15 @@ class IntouchController extends Controller
         $this->view->params['userInfo'] = $userinfo;
         //die(var_dump($userinfo));
 
+    }  
+    public function actionUserprofile()
+    {
+        if(Yii::$app->request->isPost)
+        {
+            
+            //$zmienna = $Yii::app->request->post('nazwisko');
+        }
+        return $this->render('userProfile');
     }
     
 }

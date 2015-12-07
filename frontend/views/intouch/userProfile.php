@@ -311,30 +311,32 @@ use yii\helpers\Url;
                         <div class="box-header">
                           <h3 class="box-title">Edit your account</h3>
                         </div>
+                    <form enctype="multipart/form-data" method="post">
+                        <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
                     <div class="box-body">
                         <div class="form-group">
                             <label>Username</label>
-                            <input type="text" class="form-control" id="inputUsername" placeholder="Enter username">
+                            <input type="text" class="form-control" name="inputUsername" placeholder="Enter username">
                         </div>
                         <div class="form-group">
                             <label>Name</label>
-                            <input type="text" class="form-control" id="inputName" placeholder="Enter name">
+                            <input type="text" class="form-control" name="inputName" placeholder="Enter name">
                         </div>
                         <div class="form-group">
                             <label>Surname</label>
-                            <input type="text" class="form-control" id="inputSurname" placeholder="Enter surname">
+                            <input type="text" class="form-control" name="inputSurname" placeholder="Enter surname">
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" class="form-control" id="inputEmail" placeholder="Enter email">
+                            <input type="email" class="form-control" name="inputEmail" placeholder="Enter email">
                         </div>
                         <div class="form-group">
                             <label>Password</label>
-                            <input type="password" class="form-control" id="inputPassword" placeholder="Enter password">
+                            <input type="password" class="form-control" name="inputPassword" placeholder="Enter password">
                         </div>
                         <div class="form-group">
                             <label>Repeat password</label>
-                            <input type="password" class="form-control" id="inputPasswordRepeat" placeholder="Enter password again">
+                            <input type="password" class="form-control" name="inputPasswordRepeat" placeholder="Enter password again">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputFile">Profile picture</label>
@@ -345,6 +347,7 @@ use yii\helpers\Url;
                     <div class="box-footer">
                         <button type="submit" class="btn btn-primary">Save changes</button>
                     </div>
+                    </form>
                 </div>
               </div>
               <!-- /.tab-pane -->
