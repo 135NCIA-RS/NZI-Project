@@ -5,6 +5,7 @@ namespace app\components;
 use app\models\UserInfo;
 use common\models\User;
 use app\components\exceptions\InvalidDateException;
+use app\components\exceptions\InvalidUserException;
 
 class UserService
 {
@@ -209,6 +210,25 @@ class UserService
         }
         $profile->user_birthdate = $dt;
         if ($profile->save())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static function setPassword($id, $password)
+    {
+        $user = User::findOne($id);
+        if ($user == null)
+        {
+            throw new InvalidUserException();
+        }
+
+        $user->password = $password;
+        if($user->save())
         {
             return true;
         }
