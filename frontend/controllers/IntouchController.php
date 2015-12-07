@@ -69,6 +69,7 @@ class IntouchController extends Controller
         
         $zdjecie=new \app\models\Photo();
         $dane = $zdjecie->find()->all();
+        //UserService::setBirthDate(1, "28-04-1993");
         //////////////////////////////////
         $this->layout = 'logged';
         return $this->render('index', ['dane'=>$dane]);
