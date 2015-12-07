@@ -30,6 +30,11 @@ class UserService
         return $this->id;
     }
 
+    /**
+     * Returns name of the user for the specified index
+     * @param int $id User's ID 
+     * @return string or boolean : User's Name (not username) or false
+     */
     public static function getName($id)
     {
         $user = UserInfo::find()
@@ -39,6 +44,11 @@ class UserService
         return isset($data['user_name']) ? $data['user_name'] : false;
     }
 
+    /**
+     * Returns surname of the user for the specified index
+     * @param int $id User's ID
+     * @return string or boolean : User's Surname or false on error
+     */
     public static function getSurname($id)
     {
         $data = UserInfo::find()
@@ -48,11 +58,22 @@ class UserService
         return isset($data['user_surname']) ? $data['user_surname'] : false;
     }
 
+    /**
+     * Returns Full User Name in format "Name Surname"
+     * @param int $id User's ID
+     * @return string Name + Surname
+     */
     public static function getNameLong($id)
     {
         return "TODO"; // Surname + name
     }
 
+    /**
+     * Returns Birthdate or DateTime object with birthdate or false for specified user's index
+     * @param int $id User's ID
+     * @param string $option mask (eg. "Y-m-d"), or "object" (DateTime), or nothing
+     * @return string|boolean|DateTime
+     */
     public static function getBirthDate($id, $option = "default")
     {
         $data = UserInfo::find()
@@ -90,6 +111,11 @@ class UserService
         }
     }
 
+    /**
+     * Returns email for specified user's id (or false)
+     * @param int $id User's ID
+     * @return string|boolean email or false on error
+     */
     public static function getEmail($id)
     {
         $data = User::find()
@@ -98,7 +124,12 @@ class UserService
                 ->one();
         return isset($data['email']) ? $data['email'] : false;
     }
-
+    
+    /**
+     * Returns username for specified user's id (or false)
+     * @param int $id User's ID
+     * @return string|boolean Username or false on error
+     */
     public static function getUserName($id)
     {
         $data = User::find()
@@ -108,6 +139,12 @@ class UserService
         return isset($data['username']) ? $data['username'] : false;
     }
 
+    /**
+     * Returns DateTime object for specified date
+     * @param string $text date in format Y-m-d (1993-06-24)
+     * @return DateTime Obj with birth date inside
+     * @throws InvalidDateException
+     */
     private static function getDateObj($text)
     {
         if (strtotime($text) !== false)
@@ -120,6 +157,13 @@ class UserService
         }
     }
 
+    /**
+     * Returns date in specified format
+     * @param string $date Date
+     * @param string $mask PHP Date format eg. Y-m-d
+     * @return string Date in specified mask
+     * @throws InvalidDateException
+     */
     private static function getMaskedDate($date, $mask)
     {
         try
@@ -133,6 +177,12 @@ class UserService
         return $date->format($mask);
     }
 
+    /**
+     * Sets name for specified User index
+     * @param int $id User's ID
+     * @param string $name User's new name (NOT USERNAME)
+     * @return boolean true on success, false on fail
+     */
     public static function setName($id, $name)
     {
         $profile = UserInfo::findOne($id);
@@ -153,6 +203,12 @@ class UserService
         }
     }
 
+    /**
+     * Sets surname for specified user's ID
+     * @param int $id User's ID
+     * @param string $surname User's new surname
+     * @return boolean true on success, false on fail
+     */
     public static function setSurname($id, $surname)
     {
         $profile = UserInfo::findOne($id);
@@ -172,6 +228,13 @@ class UserService
         }
     }
 
+    /**
+     * Sets email for specified user IF user exists
+     * @param int $id User's ID
+     * @param string $email User's email
+     * @return boolean true on success, false on SQL fail
+     * @throws InvalidUserException if User does not exist
+     */
     public static function setEmail($id, $email)
     {
         $profile = User::findOne($id);
@@ -190,6 +253,13 @@ class UserService
         }
     }
 
+    /**
+     * Sets Birth Date for specified user's id
+     * @param int $id User's ID
+     * @param string $date Birth Date
+     * @return boolean true on success, false on SQL fail
+     * @throws InvalidDateException if $date is not date
+     */
     public static function setBirthDate($id, $date)
     {
         //validate
@@ -219,6 +289,13 @@ class UserService
         }
     }
 
+    /**
+     * Sets new password for specified user's id
+     * @param int $id User's ID
+     * @param string $password User's new password
+     * @return boolean true on success, false on fail
+     * @throws InvalidUserException if user does not exist
+     */
     public static function setPassword($id, $password)
     {
         $user = User::findOne($id);
@@ -228,7 +305,7 @@ class UserService
         }
 
         $user->password = $password;
-        if($user->save())
+        if ($user->save())
         {
             return true;
         }
