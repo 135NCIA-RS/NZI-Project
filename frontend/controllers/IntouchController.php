@@ -120,8 +120,7 @@ class IntouchController extends Controller
     {
         if(Yii::$app->request->isPost)
         {
-            
-            //$zmienna = $Yii::app->request->post('nazwisko');
+            //$zmienna = Yii::$app->request->post('nazwisko');
         }
         return $this->render('userProfile');
     }
