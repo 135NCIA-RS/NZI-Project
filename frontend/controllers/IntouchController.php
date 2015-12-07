@@ -21,12 +21,7 @@ class IntouchController extends Controller
                 'only' => ['logout', 'signup'],
                 'rules' => [
                     [
-                        'actions' => ['index','userProfile'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                    [
-                        'actions' => ['logout'],
+                        'actions' => ['index','profile','logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],

@@ -11,6 +11,11 @@ use Yii;
  * @property string $user_name
  * @property string $user_surname
  * @property string $user_birthdate
+ * @property string $user_education
+ * @property string $user_city
+ * @property string $user_about
+ *
+ * @property User $user
  */
 class UserInfo extends \yii\db\ActiveRecord
 {
@@ -28,10 +33,12 @@ class UserInfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'user_name', 'user_surname', 'user_birthdate'], 'required'],
+            [['user_id'], 'required'],
             [['user_id'], 'integer'],
             [['user_name', 'user_surname'], 'string', 'max' => 255],
-            [['user_birthdate'], 'string', 'max' => 10]
+            [['user_birthdate'], 'string', 'max' => 10],
+            [['user_education', 'user_city'], 'string', 'max' => 256],
+            [['user_about'], 'string', 'max' => 1024]
         ];
     }
 
@@ -45,7 +52,18 @@ class UserInfo extends \yii\db\ActiveRecord
             'user_name' => 'User Name',
             'user_surname' => 'User Surname',
             'user_birthdate' => 'User Birthdate',
+            'user_education' => 'User Education',
+            'user_city' => 'User City',
+            'user_about' => 'User About',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
     /**

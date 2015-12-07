@@ -135,13 +135,14 @@ class UserService
     public static function setName($id, $name)
     {
         $profile = UserInfo::findOne($id);
-        if($profile == null)
+
+        if ($profile == null)
         {
             $profile = new UserInfo();
             $profile->user_id = $id;
-            $profile->user_birthdate = "";
         }
         $profile->user_name = $name;
+        die(var_dump($profile->save()));
         if ($profile->save())
         {
             return true;
@@ -155,6 +156,11 @@ class UserService
     public static function setSurname($id, $surname)
     {
         $profile = UserInfo::findOne($id);
+        if ($profile == null)
+        {
+            $profile = new UserInfo();
+            $profile->user_id = $id;
+        }
         $profile->user_surname = $surname;
         if ($profile->save())
         {
@@ -169,6 +175,10 @@ class UserService
     public static function setEmail($id, $email)
     {
         $profile = User::findOne($id);
+        if ($profile == null)
+        {
+            return false;
+        }
         $profile->email = $email;
         if ($profile->save())
         {
@@ -193,6 +203,11 @@ class UserService
         }
         //
         $profile = UserInfo::find()->where(['user_id' => $id])->one();
+        if ($profile == null)
+        {
+            $profile = new UserInfo();
+            $profile->user_id = $id;
+        }
         $profile->user_birthdate = $dt;
         if ($profile->save())
         {
@@ -203,7 +218,5 @@ class UserService
             return false;
         }
     }
-    
-    
 
 }
