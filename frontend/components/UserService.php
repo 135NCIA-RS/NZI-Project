@@ -138,6 +138,8 @@ class UserService
         if($profile == null)
         {
             $profile = new UserInfo();
+            $profile->user_id = $id;
+            $profile->user_birthdate = "";
         }
         $profile->user_name = $name;
         if ($profile->save())
