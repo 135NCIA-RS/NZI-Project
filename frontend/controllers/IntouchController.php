@@ -80,6 +80,10 @@ class IntouchController extends Controller
         if (\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
+        if(Yii::$app->request->isPost)
+        {
+            //$zmienna = Yii::$app->request->post('nazwisko');
+        }
         $this->getUserData();
         $this->layout = 'logged';
         return $this->render('userProfile');
@@ -116,14 +120,6 @@ class IntouchController extends Controller
         //die(var_dump($userinfo));
 
     }  
-    public function actionUserprofile()
-    {
-        if(Yii::$app->request->isPost)
-        {
-            
-            //$zmienna = $Yii::app->request->post('nazwisko');
-        }
-        return $this->render('userProfile');
-    }
+    
     
 }
