@@ -13,6 +13,7 @@ use app\components\UserService;
 
 class IntouchController extends Controller
 {
+
     public function behaviors()
     {
         return [
@@ -21,7 +22,7 @@ class IntouchController extends Controller
                 'only' => ['logout', 'signup'],
                 'rules' => [
                     [
-                        'actions' => ['index','profile','logout'],
+                        'actions' => ['index', 'profile', 'logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -51,58 +52,59 @@ class IntouchController extends Controller
             ],
         ];
     }
-    
+
     public function actionIndex()
     {
-        
-        if (\Yii::$app->user->isGuest) {
+
+        if (\Yii::$app->user->isGuest)
+        {
             return $this->goHome();
         }
         //////////////////////////////////
 
         $this->getUserData();
-        
-        $zdjecie=new \app\models\Photo();
+
+        $zdjecie = new \app\models\Photo();
         $dane = $zdjecie->find()->all();
         //UserService::setBirthDate(1, "28-04-1993");
         //UserService::setPassword(1, "pass");
         //////////////////////////////////
         $this->layout = 'logged';
-        return $this->render('index', ['dane'=>$dane]);
+        return $this->render('index', ['dane' => $dane]);
     }
-    
+
     public function actionProfile()
     {
-        if (\Yii::$app->user->isGuest) {
+        if (\Yii::$app->user->isGuest)
+        {
             return $this->goHome();
         }
-        if(Yii::$app->request->isPost)
+        if (Yii::$app->request->isPost)
         {
 
-           // var_dump($_POST);
-           // var_dump($_FILES);
-          //  $plik=$_FILES['exampleInputFile']['tmp_name'];
-          //  $nazwa=md5(uniqid(time())).'.jpg';
-          //   move_uploaded_file($plik, Yii::$app->basePath.'/web/userimg/'.$nazwa);
-
+            // var_dump($_POST);
+            // var_dump($_FILES);
+            //  $plik=$_FILES['exampleInputFile']['tmp_name'];
+            //  $nazwa=md5(uniqid(time())).'.jpg';
+            //   move_uploaded_file($plik, Yii::$app->basePath.'/web/userimg/'.$nazwa);
             //$zmienna = Yii::$app->request->post('nazwisko');
             $id = Yii::$app->user->getId();
-            
-            UserService::setName($id,Yii::$app->request->post('inputName'));
-            UserService::setSurname($id,Yii::$app->request->post('inputSurname'));
 
+            UserService::setName($id, Yii::$app->request->post('inputName'));
+            UserService::setSurname($id, Yii::$app->request->post('inputSurname'));
         }
         $this->getUserData();
         $this->layout = 'logged';
         return $this->render('userProfile');
     }
+
     private function getUserData()
     {
         $id = Yii::$app->user->getId();
-        $userProfileData =  \app\models\Photo::find()
-                ->where(['user_id' => $id])
-                ->andWhere(['type' => 'profile'])->one();
-        if(isset($userProfileData['filename']))
+        $userProfileData = \app\models\Photo::find()
+                        ->where(['user_id' => $id])
+                        ->andWhere(['type' => 'profile'])->one();
+        if (isset($userProfileData['filename']))
         {
             $location = "@web/dist/content/images/";
             //TODO set chmod for that directory(php init)
@@ -113,19 +115,18 @@ class IntouchController extends Controller
             $location = "@web/dist/img/guest.png";
             //TODO add that file
             $this->view->params['userProfilePhoto'] = $location;
-        
         }
-        
+
         $usinfo = new \app\models\UserInfo();
-        $userinfo= $usinfo->find()->where(['user_id'=>$id])->one();
-        if ($userinfo==null)
+        $userinfo = $usinfo->find()->where(['user_id' => $id])->one();
+        if ($userinfo == null)
         {
             $userinfo = null;
             $userinfo = ['user_name' => 'Uzupełnij', 'user_surname' => 'Swoje dane'];
         }
-       
+
         $this->view->params['userInfo'] = $userinfo;
         //die(var_dump($userinfo));
+    }
 
-    }  
 }

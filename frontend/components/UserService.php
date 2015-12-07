@@ -177,7 +177,7 @@ class UserService
         $profile = User::findOne($id);
         if ($profile == null)
         {
-            return false;
+            throw new InvalidUserException();
         }
         $profile->email = $email;
         if ($profile->save())
