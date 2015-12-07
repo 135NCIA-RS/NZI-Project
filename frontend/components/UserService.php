@@ -132,4 +132,72 @@ class UserService
         return $date->format($mask);
     }
 
+    public static function setName($id, $name)
+    {
+        $profile = UserInfo::findOne($id);
+        $profile->user_name = $name;
+        if ($profile->save())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static function setSurname($id, $surname)
+    {
+        $profile = UserInfo::findOne($id);
+        $profile->user_surname = $surname;
+        if ($profile->save())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static function setEmail($id, $email)
+    {
+        $profile = User::findOne($id);
+        $profile->email = $email;
+        if ($profile->save())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static function setBirthDate($id, $date)
+    {
+        //validate
+        if (($timestamp = strtotime($date)) !== false)
+        {
+            $dt = date('Y-m-d', $timestamp);
+        }
+        else
+        {
+            throw new InvalidDateException("INVALID BIRTH DATE", 2);
+        }
+        //
+        $profile = UserInfo::find()->where(['user_id' => $id])->one();
+        $profile->user_birthdate = $dt;
+        if ($profile->save())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    
+
 }
