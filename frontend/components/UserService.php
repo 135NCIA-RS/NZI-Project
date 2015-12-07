@@ -135,6 +135,10 @@ class UserService
     public static function setName($id, $name)
     {
         $profile = UserInfo::findOne($id);
+        if($profile == null)
+        {
+            $profile = new UserInfo();
+        }
         $profile->user_name = $name;
         if ($profile->save())
         {
