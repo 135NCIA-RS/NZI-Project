@@ -83,6 +83,10 @@ class IntouchController extends Controller
         if(Yii::$app->request->isPost)
         {
             //$zmienna = Yii::$app->request->post('nazwisko');
+            $id = Yii::$app->user->getId();
+            
+            UserService::setName($id,Yii::$app->request->post('inputName'));
+            UserService::setSurname($id,Yii::$app->request->post('inputSurname'));
         }
         $this->getUserData();
         $this->layout = 'logged';
@@ -120,6 +124,4 @@ class IntouchController extends Controller
         //die(var_dump($userinfo));
 
     }  
-    
-    
 }
