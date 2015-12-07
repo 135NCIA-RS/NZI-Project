@@ -315,20 +315,12 @@ use yii\helpers\Url;
                         <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
                     <div class="box-body">
                         <div class="form-group">
-                            <label>Username</label>
-                            <input type="text" class="form-control" name="inputUsername" placeholder="Enter username">
-                        </div>
-                        <div class="form-group">
                             <label>Name</label>
                             <input type="text" class="form-control" name="inputName" placeholder="Enter name">
                         </div>
                         <div class="form-group">
                             <label>Surname</label>
                             <input type="text" class="form-control" name="inputSurname" placeholder="Enter surname">
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" class="form-control" name="inputEmail" placeholder="Enter email">
                         </div>
                         <div class="form-group">
                             <label>Password</label>
