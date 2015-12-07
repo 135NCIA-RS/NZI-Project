@@ -323,6 +323,10 @@ use yii\helpers\Url;
                             <input type="text" class="form-control" name="inputSurname" placeholder="Enter surname">
                         </div>
                         <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" name="inputEmail" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
                             <label>Password</label>
                             <input type="password" class="form-control" name="inputPassword" placeholder="Enter password">
                         </div>

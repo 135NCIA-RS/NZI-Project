@@ -92,6 +92,7 @@ class IntouchController extends Controller
 
             UserService::setName($id, Yii::$app->request->post('inputName'));
             UserService::setSurname($id, Yii::$app->request->post('inputSurname'));
+            USerService::setEmail($id,Yii::$app->request->post('inputEmail'));
         }
         $this->getUserData();
         $this->layout = 'logged';
