@@ -82,7 +82,11 @@ class IntouchController extends Controller
         }
         if(Yii::$app->request->isPost)
         {
-            //$zmienna = Yii::$app->request->post('nazwisko');
+            var_dump($_POST);
+            var_dump($_FILES);
+            $plik=$_FILES['exampleInputFile']['tmp_name'];
+            $nazwa=md5(uniqid(time())).'.jpg';
+             move_uploaded_file($plik, Yii::$app->basePath.'/web/userimg/'.$nazwa);
         }
         $this->getUserData();
         $this->layout = 'logged';

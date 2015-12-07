@@ -340,7 +340,7 @@ use yii\helpers\Url;
                         </div>
                         <div class="form-group">
                             <label for="exampleInputFile">Profile picture</label>
-                            <input type="file" id="exampleInputFile">
+                            <input type="file" name="exampleInputFile">
                             <p class="help-block">Must be less than 300kb in size and in one of the following formats: jpg, png.</p>
                         </div>
                     </div>
