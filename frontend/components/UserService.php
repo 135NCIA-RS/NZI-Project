@@ -142,7 +142,6 @@ class UserService
             $profile->user_id = $id;
         }
         $profile->user_name = $name;
-        die(var_dump($profile->save()));
         if ($profile->save())
         {
             return true;
