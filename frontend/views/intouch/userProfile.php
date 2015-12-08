@@ -48,38 +48,35 @@ use yii\helpers\Url;
           <div class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">About Me</h3>
+              <a href="profile/aboutedit" ><i class="fa fa-cog" ></i></a>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
               <strong><i class="fa fa-book margin-r-5"></i> Education</strong>
 
               <p class="text-muted">
-                B.S. in Computer Science from the University of Tennessee at Knoxville
+                <?= $education ?>
               </p>
 
               <hr>
 
               <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
 
-              <p class="text-muted">Malibu, California</p>
+              <p class="text-muted"><?= $city ?></p>
 
               <hr>
 
-              <strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
+              <strong><i class="fa fa-birthday-cake margin-r-5"></i> Date of birth's</strong>
 
               <p>
-                <span class="label label-danger">UI Design</span>
-                <span class="label label-success">Coding</span>
-                <span class="label label-info">Javascript</span>
-                <span class="label label-warning">PHP</span>
-                <span class="label label-primary">Node.js</span>
+                <?= $birth ?>
               </p>
 
               <hr>
 
               <strong><i class="fa fa-file-text-o margin-r-5"></i> Notes</strong>
 
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+              <p><?= $about ?></p>
             </div>
             <!-- /.box-body -->
           </div>

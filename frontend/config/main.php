@@ -51,6 +51,7 @@ return [
                 'login' => 'site/login',
                 'start' => 'intouch/index',
                 'profile' => 'intouch/profile',
+                'profile/aboutedit'=> 'intouch/aboutedit'
             ],
         ],
     ],

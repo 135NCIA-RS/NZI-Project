@@ -79,25 +79,73 @@ class IntouchController extends Controller
         {
             return $this->goHome();
         }
+        $id = Yii::$app->user->getId();
         if (Yii::$app->request->isPost)
         {
 
             //To upload profile photo
-              $plik=$_FILES['exampleInputFile']['tmp_name'];
-              $nazwa=md5(uniqid(time())).'.jpg';
-              move_uploaded_file($plik, Yii::$app->basePath.'/web/dist/content/images/'.$nazwa);
+            $plik = $_FILES['exampleInputFile']['tmp_name'];
+            $nazwa = md5(uniqid(time())) . '.jpg';
+            move_uploaded_file($plik, Yii::$app->basePath . '/web/dist/content/images/' . $nazwa);
             $zmienna = Yii::$app->request->post('nazwisko');
             ////////////////////
-            
-            $id = Yii::$app->user->getId();
+
+
 
             UserService::setName($id, Yii::$app->request->post('inputName'));
             UserService::setSurname($id, Yii::$app->request->post('inputSurname'));
-            USerService::setEmail($id,Yii::$app->request->post('inputEmail'));
+            USerService::setEmail($id, Yii::$app->request->post('inputEmail'));
         }
+        $education = UserService::getUserEducation($id);
+        $about = UserService::getUserAbout($id);
+        $city = UserService::getUserCity($id);
+        $birth = UserService::getBirthDate($id);
+        //////////////////////////////////////////////////////////////////////////
         $this->getUserData();
         $this->layout = 'logged';
-        return $this->render('userProfile');
+        return $this->render('userProfile', ['education' => $education, 'about' => $about, 'city' => $city, 'birth' => $birth]);
+    }
+
+    public function actionAboutedit()
+    {
+        if (\Yii::$app->user->isGuest)
+        {
+            return $this->goHome();
+        }
+        $id = Yii::$app->user->getId();
+        ////////////////////////////
+        
+        $education = UserService::getUserEducation($id);
+        $about = UserService::getUserAbout($id);
+        $city = UserService::getUserCity($id);
+        $birth = UserService::getBirthDate($id);
+        
+        if (Yii::$app->request->isPost)
+        {
+            UserService::setUserCity($id, Yii::$app->request->post('inputLocation'));
+            UserService::setUserEducation($id, Yii::$app->request->post('inputEducation'));
+            UserService::setUserAbout($id, Yii::$app->request->post('inputNotes'));
+
+            try
+            {
+                UserService::setBirthDate($id, Yii::$app->request->post('inputDate'));
+            }
+            catch (\app\components\exceptions\InvalidDateException $e)
+            {
+                Yii::$app->session->setFlash('error', 'Invalid date');
+                return $this->redirect('/profile/aboutedit');
+            }
+
+            Yii::$app->session->setFlash('success', 'Profile\'s been Succesfuly Updated');
+            //UserService::setUserAbout($id, Yii::$app->request->post('inputNotes'));
+            return $this->redirect('/profile' );
+        }
+
+
+        ///////////////////////////
+        $this->getUserData();
+        $this->layout = 'logged';
+        return $this->render('aboutEdit', ['education' => $education, 'about' => $about, 'city' => $city, 'birth' => $birth]);
     }
 
     private function getUserData()
