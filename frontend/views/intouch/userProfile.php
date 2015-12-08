@@ -47,7 +47,7 @@ use yii\helpers\Url;
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">About Me</h3>
-                    <span class="pull-right"><a href="profile/aboutedit" ><i class="fa fa-cog" ></i></a></span>
+                    
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -87,7 +87,7 @@ use yii\helpers\Url;
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#activity" data-toggle="tab">Activity</a></li>
                     <li><a href="#timeline" data-toggle="tab">Timeline</a></li>
-                    <li><a href="#settings" data-toggle="tab">Settings</a></li>
+                    
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
@@ -97,7 +97,7 @@ use yii\helpers\Url;
                                 <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image">
                                 <span class="username">
                                     <a href="#">Jonathan Burke Jr.</a>
-                                    <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
+                                   
                                 </span>
                                 <span class="description">Shared publicly - 7:30 PM today</span>
                             </div>
@@ -128,7 +128,7 @@ use yii\helpers\Url;
                                 <img class="img-circle img-bordered-sm" src="../../dist/img/user7-128x128.jpg" alt="User Image">
                                 <span class="username">
                                     <a href="#">Sarah Ross</a>
-                                    <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
+                                    
                                 </span>
                                 <span class="description">Sent you a message - 3 days ago</span>
                             </div>
@@ -160,7 +160,7 @@ use yii\helpers\Url;
                                 <img class="img-circle img-bordered-sm" src="../../dist/img/user6-128x128.jpg" alt="User Image">
                                 <span class="username">
                                     <a href="#">Adam Jones</a>
-                                    <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
+                                    
                                 </span>
                                 <span class="description">Posted 5 photos - 5 days ago</span>
                             </div>
@@ -232,7 +232,7 @@ use yii\helpers\Url;
                                     </div>
                                     <div class="timeline-footer">
                                         <a class="btn btn-primary btn-xs">Read more</a>
-                                        <a class="btn btn-danger btn-xs">Delete</a>
+                                        
                                     </div>
                                 </div>
                             </li>
@@ -299,49 +299,7 @@ use yii\helpers\Url;
                             </li>
                         </ul>
                     </div>
-                    <!-- /.tab-pane -->
-
-                    <div class="tab-pane" id="settings">
-                        <div class="box box-warning">
-                            <div class="box-header">
-                                <h3 class="box-title">Edit your account</h3>
-                            </div>
-                            <form enctype="multipart/form-data" method="post">
-                                <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
-                                <div class="box-body">
-                                    <div class="form-group">
-                                        <label>Name</label>
-                                        <input type="text" value="<?= $name ?>" class="form-control" name="inputName" placeholder="Enter name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Surname</label>
-                                        <input type="text" value="<?= $surname ?>" class="form-control" name="inputSurname" placeholder="Enter surname">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Email</label>
-                                        <input type="email" value="<?= $email ?>" class="form-control" name="inputEmail" placeholder="Enter email">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Password</label>
-                                        <input type="password" class="form-control" name="inputPassword" value="" placeholder="Enter password">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Repeat password</label>
-                                        <input type="password" class="form-control" name="inputPasswordRepeat" value="" placeholder="Enter password again">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputFile">Change profile's picture</label>
-                                        <input type="file" name="exampleInputFile">
-                                        <p class="help-block">Must be less than 300kb in size and in one of the following formats: jpg, png.</p>
-                                    </div>
-                                </div>
-                                <div class="box-footer">
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- /.tab-pane -->
+                    
                 </div>
                 <!-- /.tab-content -->
             </div>
