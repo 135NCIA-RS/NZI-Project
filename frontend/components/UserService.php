@@ -65,7 +65,18 @@ class UserService
      */
     public static function getNameLong($id)
     {
-        return "TODO"; // Surname + name
+        $surname = self::getSurname($id);
+        $name = self::getName($id);
+
+        if(is_bool($name) || is_bool($surname))
+        {
+            return false;
+        }
+        if (strlen($name) == 0 || strlen($surname) == 0)
+        {
+            return "Uzupelnij dane";
+        }
+        return $name . " " . $surname ; // Surname + name
     }
 
     /**
@@ -124,7 +135,7 @@ class UserService
                 ->one();
         return isset($data['email']) ? $data['email'] : false;
     }
-    
+
     /**
      * Returns username for specified user's id (or false)
      * @param int $id User's ID
@@ -314,7 +325,7 @@ class UserService
             return false;
         }
     }
-    
+
     /**
      * Returns Profile Education Info for specified ID
      * @param int $id User's ID
@@ -328,7 +339,7 @@ class UserService
                 ->one();
         return isset($data['user_education']) ? $data['user_education'] : false;
     }
-    
+
     /**
      * Returns City for specified User's ID
      * @param int $id User's ID
@@ -342,7 +353,7 @@ class UserService
                 ->one();
         return isset($data['user_city']) ? $data['user_city'] : false;
     }
-    
+
     /**
      * Returns About section for specified user's ID
      * @param int $id User's ID
@@ -356,7 +367,7 @@ class UserService
                 ->one();
         return isset($data['user_about']) ? $data['user_about'] : false;
     }
-    
+
     /**
      * Sets Education section for specified user's ID
      * @param int $id User's ID
@@ -381,7 +392,7 @@ class UserService
             return false;
         }
     }
-    
+
     /**
      * Sets about section (user profile) for specified user's id
      * @param int $id User's ID
@@ -406,7 +417,7 @@ class UserService
             return false;
         }
     }
-    
+
     /**
      * Sets City section (User's profile) for specified user's ID
      * @param int $id User's ID
@@ -431,6 +442,5 @@ class UserService
             return false;
         }
     }
-    
 
 }
