@@ -21,9 +21,8 @@ use yii\helpers\Url;
           <!-- Profile Image -->
           <div class="box box-primary">
             <div class="box-body box-profile">
-              <img class="profile-user-img img-responsive img-circle" src="../../dist/img/user4-128x128.jpg" alt="User profile picture">
-
-              <h3 class="profile-username text-center">Nina Mcintire</h3>
+              <?= Html::img($this->params['userProfilePhoto'],['class' => 'profile-user-img img-responsive img-circle', 'alt' => 'User profile image'])?>
+              <h3 class="profile-username text-center"><?=  $this->params['userInfo']['user_name'] . " " .  $this->params['userInfo']['user_surname']?></h3>
 
               <p class="text-muted text-center">Software Engineer</p>
 
