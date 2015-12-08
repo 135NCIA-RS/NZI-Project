@@ -324,7 +324,7 @@ class UserService
     {
         $data = UserInfo::find()
                 ->select('user_education')
-                ->where(['user_id' => $this->id])
+                ->where(['user_id' => $id])
                 ->one();
         return isset($data['user_education']) ? $data['user_education'] : false;
     }
@@ -338,7 +338,7 @@ class UserService
     {
         $data = UserInfo::find()
                 ->select('user_city')
-                ->where(['user_id' => $this->id])
+                ->where(['user_id' => $id])
                 ->one();
         return isset($data['user_city']) ? $data['user_city'] : false;
     }
@@ -352,7 +352,7 @@ class UserService
     {
         $data = UserInfo::find()
                 ->select('user_about')
-                ->where(['user_id' => $this->id])
+                ->where(['user_id' => $id])
                 ->one();
         return isset($data['user_about']) ? $data['user_about'] : false;
     }
