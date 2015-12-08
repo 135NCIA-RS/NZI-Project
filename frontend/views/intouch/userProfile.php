@@ -312,26 +312,26 @@ use yii\helpers\Url;
                     <div class="box-body">
                         <div class="form-group">
                             <label>Name</label>
-                            <input type="text" class="form-control" name="inputName" placeholder="Enter name">
+                            <input type="text" value="<?= $name ?>" class="form-control" name="inputName" placeholder="Enter name">
                         </div>
                         <div class="form-group">
                             <label>Surname</label>
-                            <input type="text" class="form-control" name="inputSurname" placeholder="Enter surname">
+                            <input type="text" value="<?= $surname ?>" class="form-control" name="inputSurname" placeholder="Enter surname">
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" class="form-control" name="inputEmail" placeholder="Enter email">
+                            <input type="email" value="<?= $email ?>" class="form-control" name="inputEmail" placeholder="Enter email">
                         </div>
                         <div class="form-group">
                             <label>Password</label>
-                            <input type="password" class="form-control" name="inputPassword" placeholder="Enter password">
+                            <input type="password" class="form-control" name="inputPassword" value="" placeholder="Enter password">
                         </div>
                         <div class="form-group">
                             <label>Repeat password</label>
-                            <input type="password" class="form-control" name="inputPasswordRepeat" placeholder="Enter password again">
+                            <input type="password" class="form-control" name="inputPasswordRepeat" value="" placeholder="Enter password again">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputFile">Profile picture</label>
+                            <label for="exampleInputFile">Change profile's picture</label>
                             <input type="file" name="exampleInputFile">
                             <p class="help-block">Must be less than 300kb in size and in one of the following formats: jpg, png.</p>
                         </div>

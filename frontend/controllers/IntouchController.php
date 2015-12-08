@@ -85,25 +85,48 @@ class IntouchController extends Controller
 
             //To upload profile photo
             $plik = $_FILES['exampleInputFile']['tmp_name'];
-            $nazwa = md5(uniqid(time())) . '.jpg';
-            move_uploaded_file($plik, Yii::$app->basePath . '/web/dist/content/images/' . $nazwa);
-            $zmienna = Yii::$app->request->post('nazwisko');
-            ////////////////////
-
-
+            if (count($plik) > 0)
+            {
+                $nazwa = md5(uniqid(time())) . '.jpg';
+                move_uploaded_file($plik, Yii::$app->basePath . '/web/dist/content/images/' . $nazwa);
+                $zmienna = Yii::$app->request->post('nazwisko');
+                \app\components\PhotoService::setProfilePhoto($id, $nazwa);
+            }
 
             UserService::setName($id, Yii::$app->request->post('inputName'));
             UserService::setSurname($id, Yii::$app->request->post('inputSurname'));
             USerService::setEmail($id, Yii::$app->request->post('inputEmail'));
+
+            $pass1cnt = strlen(Yii::$app->request->post('inputPassword'));
+            $pass2cnt = strlen(Yii::$app->request->post('inputPasswordRepeat'));
+            if ($pass1cnt > 0 || $pass2cnt > 0)
+            {
+                if ($pass1cnt != $pass2cnt)
+                {
+                    Yii::$app->session->setFlash('error', 'Passwords not match. Password\'s has not been changed');
+                    return $this->redirect('/profile');
+                }
+                if ($pass1cnt < 6)
+                {
+                    Yii::$app->session->setFlash('error', 'Password is too short');
+                    return $this->redirect('/profile');
+                }
+            }
+            ////////////////////
+
+            Yii::$app->session->setFlash('success', 'Profile\'s been succesfuly updated');
         }
         $education = UserService::getUserEducation($id);
         $about = UserService::getUserAbout($id);
         $city = UserService::getUserCity($id);
         $birth = UserService::getBirthDate($id);
+        $name = UserService::getName($id);
+        $surname = UserService::getSurname($id);
+        $email = UserService::getEmail($id);
         //////////////////////////////////////////////////////////////////////////
         $this->getUserData();
         $this->layout = 'logged';
-        return $this->render('userProfile', ['education' => $education, 'about' => $about, 'city' => $city, 'birth' => $birth]);
+        return $this->render('userProfile', ['name' => $name, 'surname' => $surname, 'email' => $email, 'education' => $education, 'about' => $about, 'city' => $city, 'birth' => $birth]);
     }
 
     public function actionAboutedit()
