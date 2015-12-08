@@ -114,12 +114,12 @@ class IntouchController extends Controller
         }
         $id = Yii::$app->user->getId();
         ////////////////////////////
-        
+
         $education = UserService::getUserEducation($id);
         $about = UserService::getUserAbout($id);
         $city = UserService::getUserCity($id);
         $birth = UserService::getBirthDate($id);
-        
+
         if (Yii::$app->request->isPost)
         {
             UserService::setUserCity($id, Yii::$app->request->post('inputLocation'));
@@ -138,7 +138,7 @@ class IntouchController extends Controller
 
             Yii::$app->session->setFlash('success', 'Profile\'s been Succesfuly Updated');
             //UserService::setUserAbout($id, Yii::$app->request->post('inputNotes'));
-            return $this->redirect('/profile' );
+            return $this->redirect('/profile');
         }
 
 
@@ -151,14 +151,14 @@ class IntouchController extends Controller
     private function getUserData()
     {
         $id = Yii::$app->user->getId();
-        $userProfileData = \app\models\Photo::find()
-                        ->where(['user_id' => $id])
-                        ->andWhere(['type' => 'profile'])->one();
-        if (isset($userProfileData['filename']))
+
+        $photo = \app\components\PhotoService::getProfilePhoto($id);
+
+        if (is_string($photo))
         {
             $location = "@web/dist/content/images/";
             //TODO set chmod for that directory(php init)
-            $this->view->params['userProfilePhoto'] = $location . $userProfileData['filename'];
+            $this->view->params['userProfilePhoto'] = $location . $photo;
         }
         else
         {
@@ -167,16 +167,19 @@ class IntouchController extends Controller
             $this->view->params['userProfilePhoto'] = $location;
         }
 
-        $usinfo = new \app\models\UserInfo();
-        $userinfo = $usinfo->find()->where(['user_id' => $id])->one();
-        if ($userinfo == null)
+        $userinfo = array();
+        $userinfo['user_name'] = UserService::getName($id);
+        $userinfo['user_surname'] = UserService::getSurname($id);
+        if ($userinfo['user_name'] == false)
         {
-            $userinfo = null;
-            $userinfo = ['user_name' => 'Uzupełnij', 'user_surname' => 'Swoje dane'];
+            $userinfo['user_name'] = "Uzupełnij";
+        }
+        if ($userinfo['user_surname'] == false)
+        {
+            $userinfo['user_surname'] = "swoje dane";
         }
 
         $this->view->params['userInfo'] = $userinfo;
-        //die(var_dump($userinfo));
     }
 
 }
