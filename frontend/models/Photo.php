@@ -64,4 +64,10 @@ class Photo extends \yii\db\ActiveRecord
     {
         return new PhotoQuery(get_called_class());
     }
+    
+    public static function primaryKey()
+    {
+        //parent::primaryKey();
+        return ["user_id","filename","type"];
+    }
 }
