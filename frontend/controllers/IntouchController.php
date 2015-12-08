@@ -88,7 +88,9 @@ class IntouchController extends Controller
             if (strlen($plik) > 0)
             {
                 $nazwa = md5(uniqid(time())) . '.jpg';
-                move_uploaded_file($plik, Yii::$app->basePath . '/web/dist/content/images/' . $nazwa);
+                move_uploaded_file($plik, Yii::$app->basePath . 
+                        '/web/dist/content/images/' .
+                        $nazwa);
                 $zmienna = Yii::$app->request->post('nazwisko');
                 \app\components\PhotoService::setProfilePhoto($id, $nazwa);
             }
