@@ -37,7 +37,7 @@ class UserService
      */
     public static function getName($id)
     {
-        $user = UserInfo::find()
+        $data = UserInfo::find()
                 ->select('user_name')
                 ->where(['user_id' => $id])
                 ->one();
@@ -53,7 +53,7 @@ class UserService
     {
         $data = UserInfo::find()
                 ->select('user_surname')
-                ->where(['user_id' => $this->id])
+                ->where(['user_id' => $id])
                 ->one();
         return isset($data['user_surname']) ? $data['user_surname'] : false;
     }
