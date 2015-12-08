@@ -85,7 +85,7 @@ class IntouchController extends Controller
 
             //To upload profile photo
             $plik = $_FILES['exampleInputFile']['tmp_name'];
-            if (count($plik) > 0)
+            if (strlen($plik) > 0)
             {
                 $nazwa = md5(uniqid(time())) . '.jpg';
                 move_uploaded_file($plik, Yii::$app->basePath . '/web/dist/content/images/' . $nazwa);
