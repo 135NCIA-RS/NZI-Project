@@ -33,7 +33,7 @@ class UserService
     /**
      * Returns name of the user for the specified index
      * @param int $id User's ID 
-     * @return string or boolean : User's Name (not username) or false
+     * @return string|boolean : User's Name (not username) or false
      */
     public static function getName($id)
     {
@@ -47,7 +47,7 @@ class UserService
     /**
      * Returns surname of the user for the specified index
      * @param int $id User's ID
-     * @return string or boolean : User's Surname or false on error
+     * @return string|boolean : User's Surname or false on error
      */
     public static function getSurname($id)
     {
@@ -314,5 +314,123 @@ class UserService
             return false;
         }
     }
+    
+    /**
+     * Returns Profile Education Info for specified ID
+     * @param int $id User's ID
+     * @return string|boolean Value or false on error
+     */
+    public static function getUserEducation($id)
+    {
+        $data = UserInfo::find()
+                ->select('user_education')
+                ->where(['user_id' => $this->id])
+                ->one();
+        return isset($data['user_education']) ? $data['user_education'] : false;
+    }
+    
+    /**
+     * Returns City for specified User's ID
+     * @param int $id User's ID
+     * @return string|boolean Value or false on error
+     */
+    public static function getUserCity($id)
+    {
+        $data = UserInfo::find()
+                ->select('user_city')
+                ->where(['user_id' => $this->id])
+                ->one();
+        return isset($data['user_city']) ? $data['user_city'] : false;
+    }
+    
+    /**
+     * Returns About section for specified user's ID
+     * @param int $id User's ID
+     * @return string|boolean Value or false on error
+     */
+    public static function getUserAbout($id)
+    {
+        $data = UserInfo::find()
+                ->select('user_about')
+                ->where(['user_id' => $this->id])
+                ->one();
+        return isset($data['user_about']) ? $data['user_about'] : false;
+    }
+    
+    /**
+     * Sets Education section for specified user's ID
+     * @param int $id User's ID
+     * @param string $edu Education value
+     * @return boolean true on success, false on fail
+     */
+    public static function setUserEducation($id, $edu)
+    {
+        $profile = UserInfo::findOne($id);
+        if ($profile == null)
+        {
+            $profile = new UserInfo();
+            $profile->user_id = $id;
+        }
+        $profile->user_education = $edu;
+        if ($profile->save())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    /**
+     * Sets about section (user profile) for specified user's id
+     * @param int $id User's ID
+     * @param string $about About value
+     * @return boolean true on success, false on fail
+     */
+    public static function setUserAbout($id, $about)
+    {
+        $profile = UserInfo::findOne($id);
+        if ($profile == null)
+        {
+            $profile = new UserInfo();
+            $profile->user_id = $id;
+        }
+        $profile->user_about = $about;
+        if ($profile->save())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    /**
+     * Sets City section (User's profile) for specified user's ID
+     * @param int $id User's ID
+     * @param string $city City value
+     * @return boolean true on success, false on fail
+     */
+    public static function setUserCity($id, $city)
+    {
+        $profile = UserInfo::findOne($id);
+        if ($profile == null)
+        {
+            $profile = new UserInfo();
+            $profile->user_id = $id;
+        }
+        $profile->user_city = $city;
+        if ($profile->save())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
 
 }
