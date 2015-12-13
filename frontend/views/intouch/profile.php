@@ -8,6 +8,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
+use app\components\PostsMethods;
+use app\components\UserService;
+use app\components\PhotoService;
 
 /* @var $this yii\web\View */
 ?>
@@ -91,34 +94,37 @@ use yii\helpers\Url;
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
                         <!-- Post -->
+                        <?php
+                        $id = Yii::$app->user->getId();
+                        $posts = PostsMethods::getPosts($id);
+                        foreach ($posts as $row) {
+                            ?>
                         <div class="post">
                             <div class="user-block">
-                                <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image">
+                                <img class="img-circle img-bordered-sm" src="../../dist/content/images/<?php echo PhotoService::getProfilePhoto($id);?>" alt="user image">
                                 <span class="username">
-                                    <a href="#">Jonathan Burke Jr.</a>
+                                    <a href="#"><?php echo(UserService::getName($id)." ".UserService::getSurname($id)); ?></a>
                                     <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
                                 </span>
-                                <span class="description">Shared publicly - 7:30 PM today</span>
+                                <span class="description"><?php if($row['post_visibility']=="visible") echo "Post public"; else echo "Post hidden"; ?> - Grzesiu fix the date in the DB pls :<</span>
                             </div>
                             <!-- /.user-block -->
                             <p>
-                                Lorem ipsum represents a long-held tradition for designers,
-                                typographers and the like. Some people hate it and argue for
-                                its demise, but others ignore the hate as they create awesome
-                                tools to help create filler text for everyone from bacon lovers
-                                to Charlie Sheen fans.
+                                <?php echo $row['post_text']; ?>
                             </p>
                             <ul class="list-inline">
                                 <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
                                 <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
                                 </li>
                                 <li class="pull-right">
-                                    <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments
-                                        (5)</a></li>
+                                    <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments (<?php echo(PostsMethods::getNumberOfComments($row['post_id'])); ?>)</a></li>
                             </ul>
 
                             <input class="form-control input-sm" type="text" placeholder="Type a comment">
                         </div>
+                        <?php
+                        }
+                        ?>
                         <!-- /.post -->
 
                         <!-- Post -->
