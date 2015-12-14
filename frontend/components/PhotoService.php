@@ -1,12 +1,13 @@
 <?php
 
 namespace app\components;
-
+use Yii;
+use yii\caching\FileCache;
 use app\models\Photo;
 use common\models\User;
 use app\components\exceptions\InvalidUserException;
 
-class PhotoService // v.1.0
+class PhotoService // v.1.1
 {
     /**
      * Returns profile photo's filename for specified User's ID
@@ -31,12 +32,23 @@ class PhotoService // v.1.0
      */
     public static function setProfilePhoto($id, $filename)
     {
-        $photo = Photo::find()->where(['user_id' => $id])->one();
+        $photo = Photo::find()->where(['user_id' => $id, 'type' => 'profile'])->one();
+        
         if ($photo == null)
         {
             $photo = new Photo();
             $photo->user_id = $id;
         }
+        else
+        {
+            if (file_exists("../web/dist/content/images/".$photo->filename))
+            {
+            unlink("../web/dist/content/images/".$photo->filename);
+            }
+           
+            
+        }
+            
         $photo->filename = $filename;
         $photo->type = "profile";
         
