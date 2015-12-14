@@ -121,7 +121,27 @@ use app\components\PhotoService;
                             </ul>
 
                             <input class="form-control input-sm" type="text" placeholder="Type a comment">
+                            <br>
+                            <div class="direct-chat-msg">
+                      <div class="direct-chat-info clearfix">
+                      </div>
+                      <!-- /.direct-chat-info -->
+                      <div style="background-color: #EDF5F7; padding: 10px; border-radius: 10px; margin-left: 30px;">
+                      <img class="direct-chat-img" src="dist/img/user1-128x128.jpg" alt="message user image" style="margin-right: 10px;"><!-- /.direct-chat-img -->
+                      <p class="message" >
+                  <a href="#" class="name">
+                    <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:15</small>
+                    Alexander Pierce<br>
+                  </a>
+                  I would like to meet you to discuss the latest news about
+                  the arrival of the new theme. They say it is going to be one the
+                  best themes on the market
+                </p>
+                      </div>
+                      <!-- /.direct-chat-text -->
+                    </div>
                         </div>
+                        
                         <?php
                         }
                         ?>
