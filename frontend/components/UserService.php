@@ -442,5 +442,23 @@ class UserService
             return false;
         }
     }
+    
+    /**
+     * Checks if user exists
+     * @param int $user_id User's ID
+     * @return boolean true if exists, false if not
+     */
+    public static function existUser($user_id)
+    {
+        $user = User::findOne($user_id);
+        if ($user == null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 
 }
