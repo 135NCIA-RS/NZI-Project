@@ -8,7 +8,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-use app\components\PostsMethods;
+use app\components\PostsService;
 use app\components\UserService;
 use app\components\PhotoService;
 
@@ -96,7 +96,7 @@ use app\components\PhotoService;
                         <!-- Post -->
                         <?php
                         $id = Yii::$app->user->getId();
-                        $posts = PostsMethods::getPosts($id);
+                        $posts = PostsService::getPosts($id);
                         foreach ($posts as $row) {
                             ?>
                         <div class="post">
@@ -106,27 +106,61 @@ use app\components\PhotoService;
                                     <a href="#"><?php echo(UserService::getName($id)." ".UserService::getSurname($id)); ?></a>
                                     <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
                                 </span>
-                                <span class="description"><?php if($row['post_visibility']=="visible") echo "Post public"; else echo "Post hidden"; ?> - <?php echo(PostsMethods::getPostDate($row['post_id'])); ?></span>
+                                <span class="description"><?php if($row['post_visibility']=="visible") echo "Post public"; else echo "Post hidden"; ?> - <?php echo(PostsService::getPostDate($row['post_id'])); ?></span>
                             </div>
                             <!-- /.user-block -->
                             <p>
-                                <?php echo $row['post_text']; ?>
+                                <?php 
+                                $attachments = PostsService::getAttachments($row['post_id']);
+                                if($row['post_type']=="text")
+                                    echo $row['post_text']; 
+                                else if($row['post_type']=="gallery")
+                                {
+                                    echo $row['post_text']."<br>";
+                                    ?>
+                                    <div class="row margin-bottom">
+                                    <div class="col-sm-6">
+                                        <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[0]['file']; ?>" alt="Photo">
+                                    </div>
+                                    <!-- /.col -->
+                                    <div class="col-sm-6">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>" alt="Photo">
+                                                <br>
+                                                <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[2]['file']; ?>" alt="Photo">
+                                            </div>
+                                            <!-- /.col -->
+                                            <div class="col-sm-6">
+                                                <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[3]['file']; ?>" alt="Photo">
+                                                <br>
+                                                <?php if(isset($attachments[4]['file'])) { ?><img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>" alt="Photo"> <?php } ?>
+                                            </div>
+                                            <!-- /.col -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </div>
+                                    <!-- /.col -->
+                                    </div>
+                                <?php 
+                                }
+                                ?>
                             </p>
                             <ul class="list-inline">
                                 <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
                                 <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
                                 </li>
                                 <li class="pull-right">
-                                    <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments (<?php echo(PostsMethods::getNumberOfComments($row['post_id'])); ?>)</a></li>
+                                    <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments (<?php echo(PostsService::getNumberOfComments($row['post_id'])); ?>)</a></li>
                             </ul>
 
                             <input class="form-control input-sm" type="text" placeholder="Type a comment">
-                            <br>
-                            <div class="direct-chat-msg">
+                            
+                            <div class="direct-chat-msg" style="margin-top: 10px;">
                       <div class="direct-chat-info clearfix">
                       </div>
                       <!-- /.direct-chat-info -->
-                      <?php $comments = PostsMethods::getComments($row['post_id']);
+                      <?php $comments = PostsService::getComments($row['post_id']);
                       foreach ($comments as $comment) {
                       ?>
                       <div style="background-color: #EDF5F7; padding: 10px; border-radius: 10px; margin-left: 30px;">
@@ -178,56 +212,6 @@ use app\components\PhotoService;
                                     </div>
                                 </div>
                             </form>
-                        </div>
-                        <!-- /.post -->
-
-                        <!-- Post -->
-                        <div class="post">
-                            <div class="user-block">
-                                <img class="img-circle img-bordered-sm" src="../../dist/img/user6-128x128.jpg" alt="User Image">
-                                <span class="username">
-                                    <a href="#">Adam Jones</a>
-                                    <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
-                                </span>
-                                <span class="description">Posted 5 photos - 5 days ago</span>
-                            </div>
-                            <!-- /.user-block -->
-                            <div class="row margin-bottom">
-                                <div class="col-sm-6">
-                                    <img class="img-responsive" src="../../dist/img/photo1.png" alt="Photo">
-                                </div>
-                                <!-- /.col -->
-                                <div class="col-sm-6">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <img class="img-responsive" src="../../dist/img/photo2.png" alt="Photo">
-                                            <br>
-                                            <img class="img-responsive" src="../../dist/img/photo3.jpg" alt="Photo">
-                                        </div>
-                                        <!-- /.col -->
-                                        <div class="col-sm-6">
-                                            <img class="img-responsive" src="../../dist/img/photo4.jpg" alt="Photo">
-                                            <br>
-                                            <img class="img-responsive" src="../../dist/img/photo1.png" alt="Photo">
-                                        </div>
-                                        <!-- /.col -->
-                                    </div>
-                                    <!-- /.row -->
-                                </div>
-                                <!-- /.col -->
-                            </div>
-                            <!-- /.row -->
-
-                            <ul class="list-inline">
-                                <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
-                                <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
-                                </li>
-                                <li class="pull-right">
-                                    <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments
-                                        (5)</a></li>
-                            </ul>
-
-                            <input class="form-control input-sm" type="text" placeholder="Type a comment">
                         </div>
                         <!-- /.post -->
                     </div>

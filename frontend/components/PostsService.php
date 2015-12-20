@@ -9,7 +9,7 @@ use app\components\exceptions\InvalidUserException;
 use yii\db\Query;
 
 
-class PostsMethods
+class PostsService
 {
     public static function getPosts($id)
     {
@@ -39,6 +39,14 @@ class PostsMethods
     {
         $connection = \Yii::$app->db;
         $model = $connection->createCommand('SELECT * FROM comment WHERE post_id='.$post_id.' ORDER BY comment_date');
+        $data = $model->queryAll();
+        return isset($data) ? $data : false;
+    }
+    
+    public static function getAttachments($post_id)
+    {
+        $connection = \Yii::$app->db;
+        $model = $connection->createCommand('SELECT * FROM post_attachment WHERE post_id='.$post_id.' ORDER BY attachment_id');
         $data = $model->queryAll();
         return isset($data) ? $data : false;
     }
