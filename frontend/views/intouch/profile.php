@@ -106,7 +106,7 @@ use app\components\PhotoService;
                                     <a href="#"><?php echo(UserService::getName($id)." ".UserService::getSurname($id)); ?></a>
                                     <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
                                 </span>
-                                <span class="description"><?php if($row['post_visibility']=="visible") echo "Post public"; else echo "Post hidden"; ?> - Grzesiu fix the date in the DB pls :<</span>
+                                <span class="description"><?php if($row['post_visibility']=="visible") echo "Post public"; else echo "Post hidden"; ?> - <?php echo(PostsMethods::getPostDate($row['post_id'])); ?></span>
                             </div>
                             <!-- /.user-block -->
                             <p>
@@ -126,18 +126,20 @@ use app\components\PhotoService;
                       <div class="direct-chat-info clearfix">
                       </div>
                       <!-- /.direct-chat-info -->
+                      <?php $comments = PostsMethods::getComments($row['post_id']);
+                      foreach ($comments as $comment) {
+                      ?>
                       <div style="background-color: #EDF5F7; padding: 10px; border-radius: 10px; margin-left: 30px;">
-                      <img class="direct-chat-img" src="dist/img/user1-128x128.jpg" alt="message user image" style="margin-right: 10px;"><!-- /.direct-chat-img -->
+                      <img class="direct-chat-img" src="../../dist/content/images/<?php echo PhotoService::getProfilePhoto($comment['author_id']);?>" alt="message user image" style="margin-right: 10px;"><!-- /.direct-chat-img -->
                       <p class="message" >
                   <a href="#" class="name">
-                    <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:15</small>
-                    Alexander Pierce<br>
+                    <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> <?php echo $comment['comment_date']; ?></small>
+                    <?php echo(UserService::getName($comment['author_id'])." ".UserService::getSurname($comment['author_id'])); ?><br>
                   </a>
-                  I would like to meet you to discuss the latest news about
-                  the arrival of the new theme. They say it is going to be one the
-                  best themes on the market
+                  <?php echo $comment['comment_text']; ?>
                 </p>
-                      </div>
+                      </div> 
+                          <?php } ?>
                       <!-- /.direct-chat-text -->
                     </div>
                         </div>
