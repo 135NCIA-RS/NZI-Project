@@ -7,7 +7,7 @@ use app\models\Photo;
 use common\models\User;
 use app\components\exceptions\InvalidUserException;
 
-class PhotoService // v.1.1
+class PhotoService // v.1.2
 {
     /**
      * Returns profile photo's filename for specified User's ID
@@ -45,8 +45,6 @@ class PhotoService // v.1.1
             {
             unlink("../web/dist/content/images/".$photo->filename);
             }
-           
-            
         }
             
         $photo->filename = $filename;
@@ -75,6 +73,58 @@ class PhotoService // v.1.1
         return isset($data) ? (int)$data : false;
     }
     
+    /**
+     * Adds a new photo to the user's gallery
+     * @param type $user_id User's ID
+     * @param type $filename photo's Filename
+     * @return boolean|array false on error or array with filenames
+     */
+    public static function addPhoto($user_id, $filename)
+    {
+        $photo = Photo::find()->where(['user_id' => $id, 'type' => 'gallery', 'filename'=> $filename])->one();
+        
+        if ($photo == null)
+        {
+            $photo = new Photo();
+            $photo->user_id = $id;
+        }
+        else
+        {
+            return true; //already in database
+        }
+            
+        $photo->filename = $filename;
+        $photo->type = "gallery";
+        
+        if ($photo->save())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     
-
+    /**
+     * Returns User's Gallery Photos Filenames
+     * @param type $user_id User's ID
+     * @return null|boolean|array null on empty gallery, false on error or array of filenames
+     */
+    public static function getGallery($user_id)
+    {
+        $data = Photo::find()
+                ->select('filename')
+                ->where(['user_id' => $user_id])
+                ->andWhere(['type' => 'gallery'])
+                ->all();
+        
+        $dt = [];
+        foreach($data as $var)
+        {
+            $dt[] = $var['filename'];
+        }
+        if(count($dt) == 0) return null;
+        return isset($dt) ? $dt : false;
+    }
 }
