@@ -79,7 +79,7 @@ class IntouchController extends Controller
             if (strlen($plik) > 0)
             {
                 $nazwa = md5(uniqid(time())) . '.jpg';
-                move_uploaded_file($plik, Yii::$app->basePath . 
+                move_uploaded_file($plik, Yii::$app->basePath .
                         '/web/dist/content/images/' .
                         $nazwa);
                 $zmienna = Yii::$app->request->post('nazwisko');
@@ -193,10 +193,10 @@ class IntouchController extends Controller
 
         $this->view->params['userInfo'] = $userinfo;
     }
-    
+
     public function actionUserprofile()
     {
-        $id = Yii::$app->session->get("viewID");  
+        $id = Yii::$app->session->get("viewID");
         $education = UserService::getUserEducation($id);
         $about = UserService::getUserAbout($id);
         $city = UserService::getUserCity($id);
@@ -204,12 +204,21 @@ class IntouchController extends Controller
         $name = UserService::getName($id);
         $surname = UserService::getSurname($id);
         $email = UserService::getEmail($id);
-        $fol= RelationService::getUsersWhoFollowMe($id);
-        $followers=count($fol);
+        $fol = RelationService::getUsersWhoFollowMe($id);
+        $followers = count($fol);
         //////////////////////////////////////////////////////////////////////////
         $this->getUserData($id);
         $this->layout = 'logged';
-        return $this->render('userProfile', ['name' => $name, 'surname' => $surname, 'email' => $email, 'education' => $education, 'about' => $about, 'city' => $city, 'birth' => $birth,'followers'=>$followers]);
+        return $this->render('userProfile', [
+                    'name' => $name,
+                    'surname' => $surname,
+                    'email' => $email,
+                    'education' => $education,
+                    'about' => $about,
+                    'city' => $city,
+                    'birth' => $birth,
+                    'followers' => $followers,
+        ]);
     }
 
 }
