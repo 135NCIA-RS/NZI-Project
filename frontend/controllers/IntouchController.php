@@ -11,6 +11,9 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\components\UserService;
 use common\models\User;
+use app\components\RelationService;
+use app\components\RelationMode;
+use app\components\RelationType;
 
 class IntouchController extends Controller
 {
@@ -208,8 +211,11 @@ class IntouchController extends Controller
         $this->view->params['userInfo'] = $userinfo;
     }
     
-    public function actionUserprofile()
+    public function actionUserprofile($id = -1)
     {
+        if($id == 2){die("Udalo sie");}
+        
+      
         if (\Yii::$app->user->isGuest)
         {
             return $this->goHome();
@@ -223,10 +229,12 @@ class IntouchController extends Controller
         $name = UserService::getName($id);
         $surname = UserService::getSurname($id);
         $email = UserService::getEmail($id);
+        $fol= RelationService::getUsersWhoFollowMe($id);
+        $followers=count($fol);
         //////////////////////////////////////////////////////////////////////////
         $this->getUserData();
         $this->layout = 'logged';
-        return $this->render('userProfile', ['name' => $name, 'surname' => $surname, 'email' => $email, 'education' => $education, 'about' => $about, 'city' => $city, 'birth' => $birth]);
+        return $this->render('userProfile', ['name' => $name, 'surname' => $surname, 'email' => $email, 'education' => $education, 'about' => $about, 'city' => $city, 'birth' => $birth,'followers'=>$followers]);
     }
 
 }

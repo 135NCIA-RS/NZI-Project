@@ -9,6 +9,7 @@ use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
 use yii\helpers\Url;
+
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -19,15 +20,15 @@ AppAsset::register($this);
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
-        <?php $this->head() ?>
+<?php $this->head() ?>
     </head>
     <body class="hold-transition skin-blue sidebar-mini">
-        <?php $this->beginBody() ?>
+<?php $this->beginBody() ?>
         <div class="wrapper">
 
             <header class="main-header">
                 <!-- Logo -->
-                  <a href="/" class="logo">
+                <a href="/" class="logo">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
                     <span class="logo-mini"><b>I</b>T</span>
                     <!-- logo for regular state and mobile devices -->
@@ -41,30 +42,30 @@ AppAsset::register($this);
                     </a>
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
-                         
-                      <!-- User Account: style can be found in dropdown.less -->
+
+                            <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                   
-                                   <!-- <?php echo Html::img('@web/dist/img/guest.png', ['class' => "user-image"]) ?>-->
+
+                                    <!-- <?php echo Html::img('@web/dist/img/guest.png', ['class' => "user-image"]) ?>-->
                                     <i class="fa fa-sign-in"></i>
                                     <span class="hidden-xs">Control</span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
-                                    
+
                                     <li class="user-header">
-                                        
-                                        <?= Html::img($this->params['userProfilePhoto'],['class' => 'img-circle', 'alt' => 'User Image'])?>
-                                        <p style='color:black; font-weight:bold'><?=$this->params['userInfo']['user_name'].' '.$this->params['userInfo']['user_surname']  ?></p>
+
+<?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
+                                        <p style='color:black; font-weight:bold'><?= $this->params['userInfo']['user_name'] . ' ' . $this->params['userInfo']['user_surname'] ?></p>
                                         <p>
                                             You're InTouch now.
                                         </p>
-                                        
+
                                     </li>
                                     <!-- Menu Body -->
                                     <li class="user-body">
-                                        
+
                                         <div class="col-xs-4 text-center">
                                             <a href="#">Friends</a>
                                         </div>
@@ -75,7 +76,7 @@ AppAsset::register($this);
                                             <a href="/profile" class="btn btn-default btn-flat">Profile</a>
                                         </div>
                                         <div class="pull-right">
-                                            <a href="<?= Url::to(['/logout'])?>" data-method="post" class="btn btn-default btn-flat">Logout</a>                                           
+                                            <a href="<?= Url::to(['/logout']) ?>" data-method="post" class="btn btn-default btn-flat">Logout</a>                                           
                                         </div>
                                     </li>
                                 </ul>
@@ -95,24 +96,34 @@ AppAsset::register($this);
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <?= Html::img($this->params['userProfilePhoto'],['class' => 'img-circle', 'alt' => 'User Image'])?>
+<?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
                         </div>
                         <div class="pull-left info">
-                            <p><?=$this->params['userInfo']['user_name'].' '.$this->params['userInfo']['user_surname']  ?></p>
+                            <p><?= $this->params['userInfo']['user_name'] . ' ' . $this->params['userInfo']['user_surname'] ?></p>
                             <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                         </div>
+
                     </div>
-                   
+                    <!-- search form -->
+                    <form action="#" method="get" class="sidebar-form">
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="Search...">
+                            <span class="input-group-btn">
+                                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </form>
+                    <!-- /.search form -->
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
                         <li class="header">MAIN NAVIGATION</li>
                         <li>
                             <a href="/profile">
-                                <i class="fa fa-user"></i> <span><?= Yii::t('app','Profile') ?></span> 
+                                <i class="fa fa-user"></i> <span><?= Yii::t('app', 'Profile') ?></span> 
                             </a>
                         </li>
-                        
-                        
+
+
                     </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -123,12 +134,12 @@ AppAsset::register($this);
                 <!-- Main content -->
                 <section class="content">
                     <?= Alert::widget() ?>
-                    <?= $content ?>
+<?= $content ?>
                 </section>
             </div>
 
 
-            <?php $this->endBody() ?>
+<?php $this->endBody() ?>
     </body>
 </html>
 <?php $this->endPage() ?>

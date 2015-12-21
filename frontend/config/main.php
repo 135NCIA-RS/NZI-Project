@@ -9,8 +9,8 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => [
         'log',
-        'app\components\DynamicProfileLinksBootstrap'
-        ],
+        //'app\components\DynamicProfileLinksBootstrap',
+    ],
     'controllerNamespace' => 'frontend\controllers',
     'language' => 'us',
     'sourceLanguage' => 'us',
@@ -54,12 +54,30 @@ return [
                 'login' => 'site/login',
                 'start' => 'intouch/index',
                 'profile' => 'intouch/profile',
-                'profile/aboutedit'=> 'intouch/aboutedit'
+                'profile/aboutedit' => 'intouch/aboutedit',
+                'u' => 'intouch/userprofile',
             ],
         ],
     ],
     'as beforeRequest' => [
-            'class' => 'app\components\LanguageHandler',
-        ],
+        'class' => 'app\components\LanguageHandler',
+    ],
+    'on beforeAction' => function ($event) {
+        $route = $event->sender->requestedRoute;
+        $users = \common\models\User::find()
+        ->select('username')
+        ->where(['status' => '10'])
+        ->all();
+    foreach ($users as $user) {
+        if (strtolower($route) == strtolower($user['username']))
+        {
+            //yii->app->response->redirect
+        } 
+        else 
+        {
+            // http not found
+        }
+    }
+},
     'params' => $params,
 ];
