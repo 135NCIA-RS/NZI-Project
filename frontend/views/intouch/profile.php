@@ -163,7 +163,7 @@ use app\components\PhotoService;
                       <?php $comments = PostsService::getComments($row['post_id']);
                       foreach ($comments as $comment) {
                       ?>
-                      <div style="background-color: #EDF5F7; padding: 10px; border-radius: 10px; margin-left: 30px;">
+                      <div style="background-color: #EDF5F7; padding: 10px 10px 1px 10px; border-radius: 10px; margin-left: 30px; margin-bottom:5px">
                       <img class="direct-chat-img" src="../../dist/content/images/<?php echo PhotoService::getProfilePhoto($comment['author_id']);?>" alt="message user image" style="margin-right: 10px;"><!-- /.direct-chat-img -->
                       <p class="message" >
                   <a href="#" class="name">
