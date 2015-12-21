@@ -116,10 +116,23 @@ class IntouchController extends Controller
         $name = UserService::getName($id);
         $surname = UserService::getSurname($id);
         $email = UserService::getEmail($id);
+        $followers = count(RelationService::getUsersWhoFollowMe($id));
+        $following = count(RelationService::getUsersWhoIFollow($id));
+        $frends = count(RelationService::getFriendsList($id));
         //////////////////////////////////////////////////////////////////////////
         $this->getUserData();
         $this->layout = 'logged';
-        return $this->render('profile', ['name' => $name, 'surname' => $surname, 'email' => $email, 'education' => $education, 'about' => $about, 'city' => $city, 'birth' => $birth]);
+        return $this->render('profile', [
+                    'name' => $name, 
+                    'surname' => $surname, 
+                    'email' => $email, 
+                    'education' => $education, 
+                    'about' => $about, 
+                    'city' => $city, 
+                    'birth' => $birth, 
+                    'followers' => $followers,
+                    'following' => $following,
+                    'frends' => $frends,]);
     }
 
     public function actionAboutedit()
@@ -205,6 +218,8 @@ class IntouchController extends Controller
         $surname = UserService::getSurname($id);
         $email = UserService::getEmail($id);
         $followers = count(RelationService::getUsersWhoFollowMe($id));
+        $following = count(RelationService::getUsersWhoIFollow($id));
+        $frends = count(RelationService::getFriendsList($id));
         //////////////////////////////////////////////////////////////////////////
         $this->getUserData($id);
         $this->layout = 'logged';
@@ -217,6 +232,8 @@ class IntouchController extends Controller
                     'city' => $city,
                     'birth' => $birth,
                     'followers' => $followers,
+                    'following' => $following,
+                    'frends' => $frends,
         ]);
     }
 

@@ -31,13 +31,13 @@ use app\components\PhotoService;
 
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <b>Followers</b> <a class="pull-right">1,322</a>
+                            <b>Followers</b> <a class="pull-right"><?= $followers ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Following</b> <a class="pull-right">543</a>
+                            <b>Following</b> <a class="pull-right"><?= $following ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Friends</b> <a class="pull-right">13,287</a>
+                            <b>Friends</b> <a class="pull-right"><?= $frends ?></a>
                         </li>
                     </ul>
 
@@ -214,9 +214,9 @@ use app\components\PhotoService;
                                 </div>
                             </form>
                         </div>
+                    <!-- /.tab-pane -->
                         <!-- /.post -->
                     </div>
-                    <!-- /.tab-pane -->
                     <div class="tab-pane" id="timeline">
                         <!-- The timeline -->
                         <ul class="timeline timeline-inverse">

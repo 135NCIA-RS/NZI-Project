@@ -30,10 +30,10 @@ use yii\helpers\Url;
                             <b>Followers</b> <a class="pull-right"><?= $followers ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Following</b> <a class="pull-right">543</a>
+                            <b>Following</b> <a class="pull-right"><?= $following ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Friends</b> <a class="pull-right">13,287</a>
+                            <b>Friends</b> <a class="pull-right"><?= $frends ?></a>
                         </li>
                     </ul>
 
