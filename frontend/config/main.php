@@ -55,7 +55,6 @@ return [
                 'start' => 'intouch/index',
                 'profile' => 'intouch/profile',
                 'profile/aboutedit' => 'intouch/aboutedit',
-                'u' => 'intouch/userprofile',
             ],
         ],
     ],

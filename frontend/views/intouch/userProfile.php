@@ -27,7 +27,7 @@ use yii\helpers\Url;
 
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <b>Followers</b> <a class="pull-right">1,322</a>
+                            <b>Followers</b> <a class="pull-right"><?= $followers ?></a>
                         </li>
                         <li class="list-group-item">
                             <b>Following</b> <a class="pull-right">543</a>
