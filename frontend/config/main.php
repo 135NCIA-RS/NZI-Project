@@ -9,7 +9,7 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => [
         'log',
-        //'app\components\DynamicProfileLinksBootstrap',
+    'app\components\DynamicProfileLinksBootstrap',
     ],
     'controllerNamespace' => 'frontend\controllers',
     'language' => 'us',
@@ -62,22 +62,24 @@ return [
     'as beforeRequest' => [
         'class' => 'app\components\LanguageHandler',
     ],
-    'on beforeAction' => function ($event) {
-        $route = $event->sender->requestedRoute;
+    'on beforeAction' => function ($event)
+    {
+        //$route = $event->sender->requestedRoute; if DynamicProfileLinkBootstrap is enabled
+        $route = substr(Yii::$app->request->url, 1); // because of /
         $users = \common\models\User::find()
-        ->select('username')
-        ->where(['status' => '10'])
-        ->all();
-    foreach ($users as $user) {
-        if (strtolower($route) == strtolower($user['username']))
+                ->select(['username', 'id'])
+                ->where(['status' => '10'])
+                ->all();
+    
+        foreach ($users as $user)
         {
-            //yii->app->response->redirect
-        } 
-        else 
-        {
-            // http not found
+            if (strtolower($route) == strtolower($user['username']))
+            {
+                // Yii::$app->response->redirect(["/" . $route, 'UID' => 2]); //redirect with GET
+                Yii::$app->session->set("viewID", $user['id']);
+                break;
+            }
         }
-    }
-},
+    },
     'params' => $params,
 ];

@@ -23,10 +23,8 @@ class IntouchController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'profile', 'logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -59,13 +57,6 @@ class IntouchController extends Controller
 
     public function actionIndex()
     {
-
-        if (\Yii::$app->user->isGuest)
-        {
-            return $this->goHome();
-        }
-        //////////////////////////////////
-
         $this->getUserData();
 
         $zdjecie = new \app\models\Photo();
@@ -79,10 +70,6 @@ class IntouchController extends Controller
 
     public function actionProfile()
     {
-        if (\Yii::$app->user->isGuest)
-        {
-            return $this->goHome();
-        }
         $id = Yii::$app->user->getId();
         if (Yii::$app->request->isPost)
         {
@@ -137,10 +124,6 @@ class IntouchController extends Controller
 
     public function actionAboutedit()
     {
-        if (\Yii::$app->user->isGuest)
-        {
-            return $this->goHome();
-        }
         $id = Yii::$app->user->getId();
         ////////////////////////////
 
@@ -177,9 +160,9 @@ class IntouchController extends Controller
         return $this->render('aboutEdit', ['education' => $education, 'about' => $about, 'city' => $city, 'birth' => $birth]);
     }
 
-    private function getUserData()
+    private function getUserData($id = -1)
     {
-        $id = Yii::$app->user->getId();
+        $id = ($id == -1) ? Yii::$app->user->getId() : $id;
 
         $photo = \app\components\PhotoService::getProfilePhoto($id);
 
@@ -211,17 +194,9 @@ class IntouchController extends Controller
         $this->view->params['userInfo'] = $userinfo;
     }
     
-    public function actionUserprofile($id = -1)
+    public function actionUserprofile()
     {
-        if($id == 2){die("Udalo sie");}
-        
-      
-        if (\Yii::$app->user->isGuest)
-        {
-            return $this->goHome();
-        }
-        $id = Yii::$app->user->getId();
-        
+        $id = Yii::$app->session->get("viewID");  
         $education = UserService::getUserEducation($id);
         $about = UserService::getUserAbout($id);
         $city = UserService::getUserCity($id);
@@ -232,7 +207,7 @@ class IntouchController extends Controller
         $fol= RelationService::getUsersWhoFollowMe($id);
         $followers=count($fol);
         //////////////////////////////////////////////////////////////////////////
-        $this->getUserData();
+        $this->getUserData($id);
         $this->layout = 'logged';
         return $this->render('userProfile', ['name' => $name, 'surname' => $surname, 'email' => $email, 'education' => $education, 'about' => $about, 'city' => $city, 'birth' => $birth,'followers'=>$followers]);
     }
