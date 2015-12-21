@@ -118,21 +118,22 @@ class IntouchController extends Controller
         $email = UserService::getEmail($id);
         $followers = count(RelationService::getUsersWhoFollowMe($id));
         $following = count(RelationService::getUsersWhoIFollow($id));
-        $frends = count(RelationService::getFriendsList($id));
+        $friends = count(RelationService::getFriendsList($id));
         //////////////////////////////////////////////////////////////////////////
         $this->getUserData();
         $this->layout = 'logged';
         return $this->render('profile', [
-                    'name' => $name, 
-                    'surname' => $surname, 
-                    'email' => $email, 
-                    'education' => $education, 
-                    'about' => $about, 
-                    'city' => $city, 
-                    'birth' => $birth, 
+                    'name' => $name,
+                    'surname' => $surname,
+                    'email' => $email,
+                    'education' => $education,
+                    'about' => $about,
+                    'city' => $city,
+                    'birth' => $birth,
                     'followers' => $followers,
                     'following' => $following,
-                    'frends' => $frends,]);
+                    'friends' => $friends,
+        ]);
     }
 
     public function actionAboutedit()
@@ -219,7 +220,7 @@ class IntouchController extends Controller
         $email = UserService::getEmail($id);
         $followers = count(RelationService::getUsersWhoFollowMe($id));
         $following = count(RelationService::getUsersWhoIFollow($id));
-        $frends = count(RelationService::getFriendsList($id));
+        $friends = count(RelationService::getFriendsList($id));
         //////////////////////////////////////////////////////////////////////////
         $this->getUserData($id);
         $this->layout = 'logged';
@@ -233,7 +234,21 @@ class IntouchController extends Controller
                     'birth' => $birth,
                     'followers' => $followers,
                     'following' => $following,
-                    'frends' => $frends,
+                    'friends' => $friends,
+        ]);
+    }
+
+    public function actionSearch($q)
+    {
+        $id = Yii::$app->user->getId();
+        $this->getUserData($id);
+        $this->layout = 'logged';
+        $users = \app\components\SearchService::findUsers($q);
+        $resultsCnt = count($users);
+        return $this->render('searchResults', [
+                    'query' => $q,
+                    'count' => $resultsCnt,
+                    'users' => $users,
         ]);
     }
 

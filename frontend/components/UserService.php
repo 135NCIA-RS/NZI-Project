@@ -29,6 +29,20 @@ class UserService
     {
         return $this->id;
     }
+    
+    /**
+     * Returns Id for specified user's name (username)
+     * @param string $name
+     * @return string|boolean
+     */
+    public static function getUserIdByName($name)
+    {
+        $data = User::find()
+                ->select('id')
+                ->where(['username' => $name])
+                ->one();
+        return isset($data['id']) ? $data['id'] : false;
+    }
 
     /**
      * Returns name of the user for the specified index

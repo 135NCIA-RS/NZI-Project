@@ -12,16 +12,17 @@ class PhotoService // v.1.2
     /**
      * Returns profile photo's filename for specified User's ID
      * @param int $id User's ID
+     * @param type $onErrorDefaultPhoto if true returns default user photo if user doesn't have picture
      * @return string|boolean filename or false on error
      */
-    public static function getProfilePhoto($id)
+    public static function getProfilePhoto($id, $onErrorDefaultPhoto = false)
     {
         $data = Photo::find()
                 ->select('filename')
                 ->where(['user_id' => $id])
                 ->andWhere(['type' => 'profile'])
                 ->one();
-        return isset($data['filename']) ? $data['filename'] : false;
+        return isset($data['filename']) ? $data['filename'] : ($onErrorDefaultPhoto ? "/dist/img/guest.png" : false);
     }
 
     /**

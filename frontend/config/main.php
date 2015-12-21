@@ -55,6 +55,7 @@ return [
                 'start' => 'intouch/index',
                 'profile' => 'intouch/profile',
                 'profile/aboutedit' => 'intouch/aboutedit',
+                'search' => 'intouch/search',
             ],
         ],
     ],
@@ -63,7 +64,7 @@ return [
     ],
     'on beforeAction' => function ($event)
     {
-        //$route = $event->sender->requestedRoute; if DynamicProfileLinkBootstrap is enabled
+        //$route = $event->sender->requestedRoute; //if DynamicProfileLinkBootstrap is disabled
         $route = substr(Yii::$app->request->url, 1); // because of /
         $users = \common\models\User::find()
                 ->select(['username', 'id'])

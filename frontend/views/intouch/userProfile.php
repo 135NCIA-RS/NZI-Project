@@ -33,7 +33,7 @@ use yii\helpers\Url;
                             <b>Following</b> <a class="pull-right"><?= $following ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b>Friends</b> <a class="pull-right"><?= $frends ?></a>
+                            <b>Friends</b> <a class="pull-right"><?= $friends ?></a>
                         </li>
                     </ul>
 
