@@ -29,7 +29,7 @@
     </div>
     <div>
         <p>
-            <?= $count ?> <?= ($count == 1) ? "result" : "results" ?> found containing all search terms.
+            <?= $count ?> <?= ($count == 1) ? "result" : "results" ?> found
         </p>
     </div>
     <div>
