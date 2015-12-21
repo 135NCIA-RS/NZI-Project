@@ -204,8 +204,7 @@ class IntouchController extends Controller
         $name = UserService::getName($id);
         $surname = UserService::getSurname($id);
         $email = UserService::getEmail($id);
-        $fol = RelationService::getUsersWhoFollowMe($id);
-        $followers = count($fol);
+        $followers = count(RelationService::getUsersWhoFollowMe($id));
         //////////////////////////////////////////////////////////////////////////
         $this->getUserData($id);
         $this->layout = 'logged';
