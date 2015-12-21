@@ -154,7 +154,7 @@ use app\components\PhotoService;
                                     <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments (<?php echo(PostsService::getNumberOfComments($row['post_id'])); ?>)</a></li>
                             </ul>
 
-                            <input class="form-control input-sm" type="text" placeholder="Type a comment">
+                            <input class="form-control input-sm" type="text" placeholder="Type a comment" post_id="<?=$row['post_id']?>" onKeyPress="return sf(this,event);">
                             
                             <div class="direct-chat-msg" style="margin-top: 10px;">
                       <div class="direct-chat-info clearfix">
