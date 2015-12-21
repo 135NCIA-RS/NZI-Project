@@ -215,44 +215,7 @@ class IntouchController extends Controller
             return $this->goHome();
         }
         $id = Yii::$app->user->getId();
-        if (Yii::$app->request->isPost)
-        {
-
-            //To upload profile photo
-            $plik = $_FILES['exampleInputFile']['tmp_name'];
-            if (strlen($plik) > 0)
-            {
-                $nazwa = md5(uniqid(time())) . '.jpg';
-                move_uploaded_file($plik, Yii::$app->basePath . 
-                        '/web/dist/content/images/' .
-                        $nazwa);
-                $zmienna = Yii::$app->request->post('nazwisko');
-                \app\components\PhotoService::setProfilePhoto($id, $nazwa);
-            }
-
-            UserService::setName($id, Yii::$app->request->post('inputName'));
-            UserService::setSurname($id, Yii::$app->request->post('inputSurname'));
-            USerService::setEmail($id, Yii::$app->request->post('inputEmail'));
-
-            $pass1cnt = strlen(Yii::$app->request->post('inputPassword'));
-            $pass2cnt = strlen(Yii::$app->request->post('inputPasswordRepeat'));
-            if ($pass1cnt > 0 || $pass2cnt > 0)
-            {
-                if ($pass1cnt != $pass2cnt)
-                {
-                    Yii::$app->session->setFlash('error', 'Passwords not match. Password\'s has not been changed');
-                    return $this->redirect('/profile');
-                }
-                if ($pass1cnt < 6)
-                {
-                    Yii::$app->session->setFlash('error', 'Password is too short');
-                    return $this->redirect('/profile');
-                }
-            }
-            ////////////////////
-
-            Yii::$app->session->setFlash('success', 'Profile\'s been succesfuly updated');
-        }
+        
         $education = UserService::getUserEducation($id);
         $about = UserService::getUserAbout($id);
         $city = UserService::getUserCity($id);

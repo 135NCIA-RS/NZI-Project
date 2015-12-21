@@ -8,7 +8,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
-
+use yii\helpers\Url;
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -75,7 +75,7 @@ AppAsset::register($this);
                                             <a href="/profile" class="btn btn-default btn-flat">Profile</a>
                                         </div>
                                         <div class="pull-right">
-                                            <a href="#" class="btn btn-default btn-flat">Logout</a>
+                                            <a href="<?= Url::to(['/logout'])?>" data-method="post" class="btn btn-default btn-flat">Logout</a>                                           
                                         </div>
                                     </li>
                                 </ul>
