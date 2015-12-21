@@ -13,6 +13,7 @@ use app\components\UserService;
 use app\components\PhotoService;
 
 /* @var $this yii\web\View */
+
 ?>
 
 <section class="content">
@@ -154,7 +155,7 @@ use app\components\PhotoService;
                                     <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments (<?php echo(PostsService::getNumberOfComments($row['post_id'])); ?>)</a></li>
                             </ul>
 
-                            <input class="form-control input-sm" type="text" placeholder="Type a comment" post_id="<?=$row['post_id']?>" onKeyPress="return sf(this,event);">
+                            <input class="form-control input-sm send-form-input" type="text" placeholder="Type a comment" post_id="<?=$row['post_id']?>" >
                             
                             <div class="direct-chat-msg" style="margin-top: 10px;">
                       <div class="direct-chat-info clearfix">
@@ -363,3 +364,22 @@ use app\components\PhotoService;
     <!-- /.row -->
 
 </section>
+
+<?php
+$js = <<< JS
+       $('.send-form-input').on('keypress', function(e) {
+            if (e.charCode==13) { 
+                $.ajax({
+                    url: '/action/addcomment?id='+$(this).attr('post_id'),
+                    type: 'post',
+                    data: {
+                        text: $(this).val()
+                    },
+                    success: function(r) {
+                    }
+                });
+            }
+       });
+        
+JS;
+$this->registerJs($js);

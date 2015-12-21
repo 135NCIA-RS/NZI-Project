@@ -28,5 +28,10 @@ class ActionController extends Controller
         Yii::$app->getResponse()->getCookies()->add($cookie);
         return $this->redirect(Yii::$app->request->referrer);
     }
-
+    public function actionAddcomment($id)
+    {
+        $request = Yii::$app->request;
+        $text = $request->post('text');
+        var_dump($text);
+    }
 }
