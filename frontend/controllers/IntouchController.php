@@ -171,7 +171,12 @@ class IntouchController extends Controller
         ///////////////////////////
         $this->getUserData();
         $this->layout = 'logged';
-        return $this->render('aboutEdit', ['education' => $education, 'about' => $about, 'city' => $city, 'birth' => $birth]);
+        return $this->render('aboutEdit', [
+                    'education' => $education,
+                    'about' => $about,
+                    'city' => $city,
+                    'birth' => $birth
+        ]);
     }
 
     private function getUserData($id = -1)

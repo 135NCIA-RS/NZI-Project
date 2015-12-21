@@ -38,13 +38,13 @@
         foreach ($users as $user)
         {
             ?>
-            <div class = "userbox">
-            <img class = "direct-chat-img" src = "<?= $user['photo'] ?>" alt = "message user image" style = "margin-right: 10px;">
+            <div class="userbox">
+                <img class="direct-chat-img" src="<?= $user['photo'] ?>" alt="message user image" style="margin-right: 10px;">
 
-            <p><?= $user['name'] ?></p>
-            <a href="<?= $user['link'] ?>">Profile</a>
+                <p><?= $user['name'] ?></p>
+                <a href="<?= $user['link'] ?>">Profile</a>
             </div>
-        <?php
+            <?php
         }
         ?>
 

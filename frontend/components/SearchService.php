@@ -67,15 +67,7 @@ class SearchService
     {
         if (is_array($array))
         {
-            $cnt = count($array);
-            if ($cnt <= 1)
-            {
-                return $array;
-            }
-            else
-            {
-                $array = array_map("unserialize", array_unique(array_map("serialize", $array)));
-            } 
+            $array = array_map("unserialize", array_unique(array_map("serialize", $array)));
         }
         else
         {
