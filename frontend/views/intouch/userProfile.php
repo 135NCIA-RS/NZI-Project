@@ -8,6 +8,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 ?>
@@ -24,7 +25,15 @@ use yii\helpers\Url;
                     <h3 class="profile-username text-center"><?= $this->params['userInfo']['user_name'] . " " . $this->params['userInfo']['user_surname'] ?></h3>
 
                     <p class="text-muted text-center">Software Engineer</p>
-
+                    <?php
+                    $script = <<< JS
+$(document).ready(function() {
+    setInterval(function(){ $("#refr").click(); }, 1000);
+});
+JS;
+                    $this->registerJs($script);
+                    ?>
+                    <?php Pjax::begin(); ?>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
                             <b>Followers</b> <a class="pull-right"><?= $followers ?></a>
@@ -36,8 +45,39 @@ use yii\helpers\Url;
                             <b>Friends</b> <a class="pull-right"><?= $friends ?></a>
                         </li>
                     </ul>
+                    <style>
+                        .btnodst{
+                            margin-top: 5px;
+                        }
+                    </style>
+                    <?php
+                    echo Html::beginForm("", 'post', ['data-pjax' => '']);
+                    if (!$UserFollowState)
+                    {
+                        echo Html::submitButton("Follow", ['class' => 'btn btn-primary btn-block btnodst', 'name' => 'follow-btn']);
+                    }
+                    else
+                    {
+                        echo Html::submitButton("Unfollow", ['class' => 'btn btn-default btn-block btn-sm btnodst', 'name' => 'unfollow-btn']);
+                    }
+                    echo Html::endForm();
 
-                    <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
+                    echo Html::beginForm("", 'post', ['data-pjax' => '']);
+                    if (!$UserFriendshipState)
+                    {
+                        echo Html::submitButton("Request Friendship", ['class' => 'btn btn-primary btn-block btnodst', 'name' => 'friend-btn']);
+                    }
+                    else
+                    {
+
+                        echo Html::submitButton("Unfriend", ['class' => 'btn btn-default btn-block btn-sm btnodst', 'name' => 'unfriend-btn']);
+                    }
+                    echo Html::endForm();
+
+                    echo Html::a("Refresh", [''], ['class' => 'hidden', 'id' => 'refr']);
+
+                    Pjax::end();
+                    ?>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -47,7 +87,7 @@ use yii\helpers\Url;
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">About Me</h3>
-                    
+
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -87,7 +127,7 @@ use yii\helpers\Url;
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#activity" data-toggle="tab">Activity</a></li>
                     <li><a href="#timeline" data-toggle="tab">Timeline</a></li>
-                    
+
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
@@ -97,7 +137,7 @@ use yii\helpers\Url;
                                 <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image">
                                 <span class="username">
                                     <a href="#">Jonathan Burke Jr.</a>
-                                   
+
                                 </span>
                                 <span class="description">Shared publicly - 7:30 PM today</span>
                             </div>
@@ -128,7 +168,7 @@ use yii\helpers\Url;
                                 <img class="img-circle img-bordered-sm" src="../../dist/img/user7-128x128.jpg" alt="User Image">
                                 <span class="username">
                                     <a href="#">Sarah Ross</a>
-                                    
+
                                 </span>
                                 <span class="description">Sent you a message - 3 days ago</span>
                             </div>
@@ -160,7 +200,7 @@ use yii\helpers\Url;
                                 <img class="img-circle img-bordered-sm" src="../../dist/img/user6-128x128.jpg" alt="User Image">
                                 <span class="username">
                                     <a href="#">Adam Jones</a>
-                                    
+
                                 </span>
                                 <span class="description">Posted 5 photos - 5 days ago</span>
                             </div>
@@ -232,7 +272,7 @@ use yii\helpers\Url;
                                     </div>
                                     <div class="timeline-footer">
                                         <a class="btn btn-primary btn-xs">Read more</a>
-                                        
+
                                     </div>
                                 </div>
                             </li>
@@ -299,7 +339,7 @@ use yii\helpers\Url;
                             </li>
                         </ul>
                     </div>
-                    
+
                 </div>
                 <!-- /.tab-content -->
             </div>

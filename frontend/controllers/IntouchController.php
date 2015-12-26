@@ -215,7 +215,9 @@ class IntouchController extends Controller
 
     public function actionUserprofile()
     {
+        /////////////////////////--- Profile Infos ---//////////////////////////
         $id = Yii::$app->session->get("viewID");
+        $myId = Yii::$app->user->getId();
         $education = UserService::getUserEducation($id);
         $about = UserService::getUserAbout($id);
         $city = UserService::getUserCity($id);
@@ -226,21 +228,52 @@ class IntouchController extends Controller
         $followers = count(RelationService::getUsersWhoFollowMe($id));
         $following = count(RelationService::getUsersWhoIFollow($id));
         $friends = count(RelationService::getFriendsList($id));
-        //////////////////////////////////////////////////////////////////////////
+        /////$$$$$ FORMS $$$$$///////////////
+        if (Yii::$app->request->isPjax)
+        {
+            $request = Yii::$app->request;
+            if (!is_null($request->post('follow-btn')))
+            {
+                RelationService::setRelation($myId, $id, RelationType::Follower);
+            }
+            if (!is_null($request->post('friend-btn')))
+            {
+                RelationService::setRelation($myId, $id, RelationType::Friend);
+            }
+            if (!is_null($request->post('unfriend-btn')))
+            {
+                RelationService::removeRelation($myId, $id, RelationType::Friend);
+            }
+            if (!is_null($request->post('unfollow-btn')))
+            {
+                RelationService::removeRelation($myId, $id, RelationType::Follower);
+            }
+        }
+
+
+        ////////////////////////////--- Other stuff ---/////////////////////////
+        $UserRelations = RelationService::getRelations($myId, $id);
+        $isFriend = $UserRelations[RelationType::Friend];
+        $IFollow = $UserRelations[RelationType::Follower];
+        //***Do not add anything new below this line (except for the render)****
         $this->getUserData($id);
         $this->layout = 'logged';
-        return $this->render('userProfile', [
-                    'name' => $name,
-                    'surname' => $surname,
-                    'email' => $email,
-                    'education' => $education,
-                    'about' => $about,
-                    'city' => $city,
-                    'birth' => $birth,
-                    'followers' => $followers,
-                    'following' => $following,
-                    'friends' => $friends,
-        ]);
+        $shared = [
+            'name' => $name,
+            'surname' => $surname,
+            'email' => $email,
+            'education' => $education,
+            'about' => $about,
+            'city' => $city,
+            'birth' => $birth,
+            'followers' => $followers,
+            'following' => $following,
+            'friends' => $friends,
+            'UserFollowState' => $IFollow,
+            'UserFriendshipState' => $isFriend,
+        ];
+            return $this->render('userProfile', $shared);
+        
     }
 
     public function actionSearch($q)

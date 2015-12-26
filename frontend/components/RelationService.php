@@ -293,6 +293,38 @@ class RelationService
         }
         return $arr;
     }
+    
+    public static function removeRelation($user1_id, $user2_id, $rel_type)
+    {
+        if (!RelationType::validate($rel_type))
+        {
+            throw new InvalidRelationException("Error. Something went wrong. Use RelationType class instead of value");
+        }
+
+        if (!(UserService::existUser($user1_id) && UserService::existUser($user2_id)))
+        {
+            throw new InvalidUserException("User1 or User2 or both cannot be found");
+        }
+        
+        $dt = Relationship::find()->where([
+            'user1_id' => $user1_id,
+            'user2_id' => $user2_id,
+            'relation_type' => $rel_type
+                ])->one();
+        $dt->delete();
+        
+        if(RelationMode::getMode($rel_type) == RelationMode::TwoWay)
+        {
+            $dt1 = $dt = Relationship::find()->where([
+            'user1_id' => $user2_id,
+            'user2_id' => $user1_id,
+            'relation_type' => $rel_type
+                ])->one();
+            $dt1->delete();
+        }
+        
+        
+    }
 
     /**
      * Do not use that function (Only for setRelation purposes)
