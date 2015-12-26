@@ -20,10 +20,10 @@ AppAsset::register($this);
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
-<?php $this->head() ?>
+        <?php $this->head() ?>
     </head>
     <body class="hold-transition skin-blue sidebar-mini">
-<?php $this->beginBody() ?>
+        <?php $this->beginBody() ?>
         <div class="wrapper">
 
             <header class="main-header">
@@ -42,21 +42,41 @@ AppAsset::register($this);
                     </a>
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
-
+                            <!-- Notifications: style can be found in dropdown.less -->
+                            <li class="dropdown notifications-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-bell-o"></i>
+                                    <span class="label label-warning">1</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="header">You have 1 notification</li>
+                                    <li>
+                                        <!-- inner menu: contains the actual data -->
+                                        <ul class="menu">
+                                            <li>
+                                                <a href="#">
+                                                    <i class="fa fa-users text-aqua"></i> New friend request
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="footer"><a href="#">View all</a></li>
+                                </ul>
+                            </li>
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 
                                     <!-- <?php echo Html::img('@web/dist/img/guest.png', ['class' => "user-image"]) ?>-->
                                     <i class="fa fa-sign-in"></i>
-                                    <span class="hidden-xs">Control</span>
+                                    <span class="hidden-xs">Account</span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
 
                                     <li class="user-header">
 
-<?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
+                                        <?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
                                         <p style='color:black; font-weight:bold'><?= $this->params['userInfo']['user_name'] . ' ' . $this->params['userInfo']['user_surname'] ?></p>
                                         <p>
                                             You're InTouch now.
@@ -96,7 +116,7 @@ AppAsset::register($this);
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
-<?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
+                            <?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
                         </div>
                         <div class="pull-left info">
                             <p><?= $this->params['userInfo']['user_name'] . ' ' . $this->params['userInfo']['user_surname'] ?></p>
@@ -134,12 +154,12 @@ AppAsset::register($this);
                 <!-- Main content -->
                 <section class="content">
                     <?= Alert::widget() ?>
-<?= $content ?>
+                    <?= $content ?>
                 </section>
             </div>
 
 
-<?php $this->endBody() ?>
+            <?php $this->endBody() ?>
     </body>
 </html>
 <?php $this->endPage() ?>
