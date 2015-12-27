@@ -225,6 +225,11 @@ class IntouchController extends Controller
         $birth = UserService::getBirthDate($id);
         $name = UserService::getName($id);
         $surname = UserService::getSurname($id);
+        if(strlen($name) ==0 || strlen($surname) == 0)
+        {
+            $name = "Dane nie uzupełnione";
+            $surname = "";
+        }
         $email = UserService::getEmail($id);
         $followers = count(RelationService::getUsersWhoFollowMe($id));
         $following = count(RelationService::getUsersWhoIFollow($id));
