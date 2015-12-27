@@ -25,7 +25,7 @@ class SearchService
 
     private static function createUserObjByID($id)
     {
-        $photo = PhotoService::getProfilePhoto($id);
+        $photo = PhotoService::getProfilePhoto($id,true,true);
         if ($photo === false)
         {
             $photo = "/dist/img/guest.png";
