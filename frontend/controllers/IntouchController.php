@@ -14,6 +14,7 @@ use common\models\User;
 use app\components\RelationService;
 use app\components\RelationMode;
 use app\components\RelationType;
+use app\components\PhotoService;
 
 class IntouchController extends Controller
 {
@@ -179,9 +180,9 @@ class IntouchController extends Controller
         ]);
     }
 
-    private function getUserData($id = -1)
+    private function getUserData()
     {
-        $id = ($id == -1) ? Yii::$app->user->getId() : $id;
+        $id =  Yii::$app->user->getId();
 
         $photo = \app\components\PhotoService::getProfilePhoto($id);
 
@@ -228,6 +229,7 @@ class IntouchController extends Controller
         $followers = count(RelationService::getUsersWhoFollowMe($id));
         $following = count(RelationService::getUsersWhoIFollow($id));
         $friends = count(RelationService::getFriendsList($id));
+        $photo = PhotoService::getProfilePhoto($id, true, true);
         /////$$$$$ FORMS $$$$$//////////////////////////////////////////////////
         if (Yii::$app->request->isPjax)
         {
@@ -273,6 +275,7 @@ class IntouchController extends Controller
             'UserFollowState' => $IFollow,
             'UserFriendshipState' => $isFriend,
             'UserName' => $uname,
+            'UserProfilePhoto' => $photo,
         ];
             return $this->render('userProfile', $shared);
         
