@@ -27,11 +27,15 @@ use yii\widgets\Pjax;
                     <p class="text-muted text-center">Software Engineer</p>
                     <?php
                     $script = <<< JS
-$(document).ready(function() {
-    setInterval(function(){ $("#refr").click(); }, 1000);
+$('body').on('click', '.pjaxButton', function() {
+        setTimeout(
+            function() {
+                $("#refr").click();
+            },
+            1250);
 });
 JS;
-                    $this->registerJs($script);
+                    $this->registerJs($script, yii\web\View::POS_READY);
                     ?>
                     <?php Pjax::begin(); ?>
                     <ul class="list-group list-group-unbordered">
@@ -54,27 +58,38 @@ JS;
                     echo Html::beginForm("", 'post', ['data-pjax' => '']);
                     if (!$UserFollowState)
                     {
-                        echo Html::submitButton("Follow", ['class' => 'btn btn-primary btn-block btnodst', 'name' => 'follow-btn']);
+                        echo Html::submitButton("Follow", [
+                            'class' => 'btn btn-primary btn-block btnodst pjaxButton',
+                            'name' => 'follow-btn',
+                            ]);
                     }
                     else
                     {
-                        echo Html::submitButton("Unfollow", ['class' => 'btn btn-default btn-block btn-sm btnodst', 'name' => 'unfollow-btn']);
+                        echo Html::submitButton("Unfollow", [
+                            'class' => 'btn btn-default btn-block btn-sm btnodst pjaxButton',
+                            'name' => 'unfollow-btn',
+                            ]);
                     }
                     echo Html::endForm();
 
                     echo Html::beginForm("", 'post', ['data-pjax' => '']);
                     if (!$UserFriendshipState)
                     {
-                        echo Html::submitButton("Request Friendship", ['class' => 'btn btn-primary btn-block btnodst', 'name' => 'friend-btn']);
+                        echo Html::submitButton("Request Friendship", [
+                            'class' => 'btn btn-primary btn-block btnodst pjaxButton',
+                            'name' => 'friend-btn',
+                            ]);
                     }
                     else
                     {
-
-                        echo Html::submitButton("Unfriend", ['class' => 'btn btn-default btn-block btn-sm btnodst', 'name' => 'unfriend-btn']);
+                        echo Html::submitButton("Unfriend", [
+                            'class' => 'btn btn-default btn-block btn-sm btnodst pjaxButton',
+                            'name' => 'unfriend-btn',
+                            ]);
                     }
                     echo Html::endForm();
 
-                    echo Html::a("Refresh", [''], ['class' => 'hidden', 'id' => 'refr']);
+                    echo Html::a("Refresh", [""], ['class' => 'hidden', 'id' => 'refr']);
 
                     Pjax::end();
                     ?>

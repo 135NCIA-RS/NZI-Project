@@ -228,7 +228,7 @@ class IntouchController extends Controller
         $followers = count(RelationService::getUsersWhoFollowMe($id));
         $following = count(RelationService::getUsersWhoIFollow($id));
         $friends = count(RelationService::getFriendsList($id));
-        /////$$$$$ FORMS $$$$$///////////////
+        /////$$$$$ FORMS $$$$$//////////////////////////////////////////////////
         if (Yii::$app->request->isPjax)
         {
             $request = Yii::$app->request;
@@ -255,6 +255,7 @@ class IntouchController extends Controller
         $UserRelations = RelationService::getRelations($myId, $id);
         $isFriend = $UserRelations[RelationType::Friend];
         $IFollow = $UserRelations[RelationType::Follower];
+        $uname = UserService::getUserName($id);
         //***Do not add anything new below this line (except for the render)****
         $this->getUserData($id);
         $this->layout = 'logged';
@@ -271,6 +272,7 @@ class IntouchController extends Controller
             'friends' => $friends,
             'UserFollowState' => $IFollow,
             'UserFriendshipState' => $isFriend,
+            'UserName' => $uname,
         ];
             return $this->render('userProfile', $shared);
         
