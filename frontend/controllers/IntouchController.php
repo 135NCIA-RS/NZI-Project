@@ -79,7 +79,6 @@ class IntouchController extends Controller
     public function actionIndex()
     {
         $this->getUserData();
-        $this->AccessService->check(Permission::CreateAccount, Location::MyProfiePage);
         $zdjecie = new \app\models\Photo();
         $dane = $zdjecie->find()->all();
         //UserService::setBirthDate(1, "28-04-1993");
