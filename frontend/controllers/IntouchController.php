@@ -11,13 +11,33 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\components\UserService;
 use common\models\User;
+use app\components;
 use app\components\RelationService;
 use app\components\RelationMode;
 use app\components\RelationType;
 use app\components\PhotoService;
+use app\components\AccessService;
+use app\components\Permission;
 
 class IntouchController extends Controller
 {
+
+    private $AccessService = null;
+    private $PhotoService = null;
+    private $PostService = null;
+    private $RelationService = null;
+    private $SearchService = null;
+
+    public function __construct($id, $module, $config = [])
+    {
+        $this->AccessService = new AccessService();
+        $this->PhotoService = new PhotoService();
+        $this->PostService = new components\PostsService();
+        $this->RelationService = new RelationService();
+        $this->SearchService = new components\SearchService();
+
+        parent::__construct($id, $module, $config);
+    }
 
     public function behaviors()
     {
@@ -59,7 +79,7 @@ class IntouchController extends Controller
     public function actionIndex()
     {
         $this->getUserData();
-
+        $this->AccessService->check(Permission::CreateAccount, Location::MyProfiePage);
         $zdjecie = new \app\models\Photo();
         $dane = $zdjecie->find()->all();
         //UserService::setBirthDate(1, "28-04-1993");
@@ -182,7 +202,7 @@ class IntouchController extends Controller
 
     private function getUserData()
     {
-        $id =  Yii::$app->user->getId();
+        $id = Yii::$app->user->getId();
 
         $photo = \app\components\PhotoService::getProfilePhoto($id);
 
@@ -225,7 +245,7 @@ class IntouchController extends Controller
         $birth = UserService::getBirthDate($id);
         $name = UserService::getName($id);
         $surname = UserService::getSurname($id);
-        if(strlen($name) ==0 || strlen($surname) == 0)
+        if (strlen($name) == 0 || strlen($surname) == 0)
         {
             $name = "Dane nie uzupełnione";
             $surname = "";
@@ -238,22 +258,29 @@ class IntouchController extends Controller
         /////$$$$$ FORMS $$$$$//////////////////////////////////////////////////
         if (Yii::$app->request->isPjax)
         {
-            $request = Yii::$app->request;
-            if (!is_null($request->post('follow-btn')))
+            if ($this->AccessService->check(Permission::ManageUserRelations))
             {
-                RelationService::setRelation($myId, $id, RelationType::Follower);
+                $request = Yii::$app->request;
+                if (!is_null($request->post('follow-btn')))
+                {
+                    RelationService::setRelation($myId, $id, RelationType::Follower);
+                }
+                if (!is_null($request->post('friend-btn')))
+                {
+                    RelationService::setRelation($myId, $id, RelationType::Friend);
+                }
+                if (!is_null($request->post('unfriend-btn')))
+                {
+                    RelationService::removeRelation($myId, $id, RelationType::Friend);
+                }
+                if (!is_null($request->post('unfollow-btn')))
+                {
+                    RelationService::removeRelation($myId, $id, RelationType::Follower);
+                }
             }
-            if (!is_null($request->post('friend-btn')))
+            else
             {
-                RelationService::setRelation($myId, $id, RelationType::Friend);
-            }
-            if (!is_null($request->post('unfriend-btn')))
-            {
-                RelationService::removeRelation($myId, $id, RelationType::Friend);
-            }
-            if (!is_null($request->post('unfollow-btn')))
-            {
-                RelationService::removeRelation($myId, $id, RelationType::Follower);
+                $this->redirect("intouch/accessdenied");
             }
         }
 
@@ -282,22 +309,36 @@ class IntouchController extends Controller
             'UserName' => $uname,
             'UserProfilePhoto' => $photo,
         ];
-            return $this->render('userProfile', $shared);
-        
+        return $this->render('userProfile', $shared);
     }
 
     public function actionSearch($q)
     {
+        if ($this->AccessService->check(Permission::UseSearch))
+        {
+            $id = Yii::$app->user->getId();
+            $this->getUserData($id);
+            $this->layout = 'logged';
+            $users = \app\components\SearchService::findUsers($q);
+            $resultsCnt = count($users);
+            return $this->render('searchResults', [
+                        'query' => $q,
+                        'count' => $resultsCnt,
+                        'users' => $users,
+            ]);
+        }
+        else
+        {
+            $this->redirect("/intouch/accessdenied");
+        }
+    }
+
+    public function actionAccessdenied()
+    {
         $id = Yii::$app->user->getId();
         $this->getUserData($id);
         $this->layout = 'logged';
-        $users = \app\components\SearchService::findUsers($q);
-        $resultsCnt = count($users);
-        return $this->render('searchResults', [
-                    'query' => $q,
-                    'count' => $resultsCnt,
-                    'users' => $users,
-        ]);
+        return $this->render('accessDenied');
     }
 
 }
