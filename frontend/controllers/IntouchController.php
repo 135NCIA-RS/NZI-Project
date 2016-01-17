@@ -307,6 +307,7 @@ class IntouchController extends Controller
             'UserFriendshipState' => $isFriend,
             'UserName' => $uname,
             'UserProfilePhoto' => $photo,
+            'id' => $id,
         ];
         return $this->render('userProfile', $shared);
     }
