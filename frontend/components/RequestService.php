@@ -23,6 +23,14 @@ class RequestService
      */
     public static function createRequest($user1_id, $user2_id, $req_type, $date)
     {
+        
+        $check = Request::find()
+                ->select('req_id')
+                ->where(['user1_id' => $user1_id, 'user2_id' => $user2_id])
+                ->one();
+        if (!is_null($check))
+            return true;
+        
         if(!RequestType::isValid($req_type))
         {
             throw new InvalidEnumKeyException("ERROR, VAL: " . $req_type);
