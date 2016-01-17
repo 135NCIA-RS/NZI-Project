@@ -1,6 +1,7 @@
 <?php
 
 namespace app\components;
+
 use app\models\Request;
 use app\components\RelationService;
 use app\components\RelationType;
@@ -23,15 +24,15 @@ class RequestService
      */
     public static function createRequest($user1_id, $user2_id, $req_type, $date)
     {
-        
+
         $check = Request::find()
                 ->select('req_id')
                 ->where(['user1_id' => $user1_id, 'user2_id' => $user2_id])
                 ->one();
         if (!is_null($check))
             return true;
-        
-        if(!RequestType::isValid($req_type))
+
+        if (!RequestType::isValid($req_type))
         {
             throw new InvalidEnumKeyException("ERROR, VAL: " . $req_type);
         }
@@ -61,10 +62,18 @@ class RequestService
         if ($answer)
         {
             $user1_id = RequestService::getUser1Id($req_id);
-            $user2_id = RequestService::getUser1Id($req_id);
+            $user2_id = RequestService::getUser2Id($req_id);
             RelationService::setRelation($user1_id, $user2_id, RelationType::Friend);
         }
         self::dropRequest($req_id);
+        $check = Request::find()
+                ->select('req_id')
+                ->where(['user1_id' => $user2_id, 'user2_id' => $user1_id, 'req_type' => 'friend'])
+                ->one();
+        if (!is_null($check))
+        {
+            self::dropRequest($check['req_id']);
+        }
     }
 
     /**
@@ -75,6 +84,38 @@ class RequestService
     {
         $data = Request::findOne($req_id);
         $data->delete();
+    }
+
+    public static function getMyRequests($user2_id) //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!DONT WORK
+    {
+        /* Kawlek kodu od grzesia z Discorda
+         * $dane = [];
+          foreach(...)
+          {
+          $dane[] = createReqObj(...);
+          }
+
+          return $dane;
+         */
+        $arr = [];
+        $rel = Request::find()
+                ->where([
+                    'user2_id' => $user2_id,
+                    'relation_type' => RequestType::FriendRequest
+                ])
+                ->all();
+        foreach ($rel as $var)
+        {
+            $arr[] = $var['user1_id'];
+        }
+        die(var_dump($arr));
+        return $arr;
+    }
+
+    private static function createReqObj($user1_id, $date, $req_id, $req_type)
+    {
+        $uname = UserService::getUserName($user1_id);
+        return ['type' => $req_type, 'id' => $req_id, 'senderUName' => $uname, 'date' => $date];
     }
 
     /**
@@ -123,7 +164,9 @@ class RequestService
 
 class RequestType extends Enum
 {
+
     const FriendRequest = "friend";
+
 }
 
 /*
