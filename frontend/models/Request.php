@@ -49,13 +49,4 @@ class Request extends \yii\db\ActiveRecord
             'date' => 'Date',
         ];
     }
-
-    /**
-     * @inheritdoc
-     * @return RequestQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new RequestQuery(get_called_class());
-    }
 }

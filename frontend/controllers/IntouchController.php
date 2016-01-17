@@ -17,6 +17,7 @@ use app\components\RelationMode;
 use app\components\RelationType;
 use app\components\PhotoService;
 use app\components\AccessService;
+use app\components\RequestService;
 use app\components\Permission;
 
 class IntouchController extends Controller
@@ -266,7 +267,8 @@ class IntouchController extends Controller
                 }
                 if (!is_null($request->post('friend-btn')))
                 {
-                    RelationService::setRelation($myId, $id, RelationType::Friend);
+                    RequestService::createRequest($myId, $id, RequestType::FriendRequest, date('Y-m-d H:i:s')); //to tutaj
+                    //RelationService::setRelation($myId, $id, RelationType::Friend);
                 }
                 if (!is_null($request->post('unfriend-btn')))
                 {

@@ -9,7 +9,7 @@ class m160117_152452_create_request_table extends Migration
     public function up()
     {
         $sql = "CREATE TABLE `request` (" .
-                "`req_id` int(255) NOT NULL," .
+                "`req_id` int(255) NOT NULL AUTO_INCREMENT," .
                 "`user1_id` int(255) NOT NULL," .
                 "`user2_id` int(255) NOT NULL," .
                 "`req_type` varchar(255) NOT NULL," .
