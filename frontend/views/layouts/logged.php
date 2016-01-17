@@ -10,6 +10,8 @@ use frontend\assets\AppAsset;
 use common\widgets\Alert;
 use yii\helpers\Url;
 
+
+
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -25,6 +27,7 @@ AppAsset::register($this);
     <body class="hold-transition skin-blue sidebar-mini">
         <?php $this->beginBody() ?>
         <div class="wrapper">
+            
 
             <header class="main-header">
                 <!-- Logo -->

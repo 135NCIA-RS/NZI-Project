@@ -22,7 +22,7 @@ class DynamicProfileLinksBootstrap implements BootstrapInterface
             $app->getUrlManager()->addRules([
                 strtolower($user['username']) => 'intouch/userprofile',
                 $user['username'] => 'intouch/userprofile'
-                    ], false);
+                    ], true);
         }
     }
 

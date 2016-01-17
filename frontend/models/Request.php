@@ -12,6 +12,9 @@ use Yii;
  * @property integer $user2_id
  * @property string $req_type
  * @property string $date
+ *
+ * @property User $user2
+ * @property User $user1
  */
 class Request extends \yii\db\ActiveRecord
 {
@@ -29,8 +32,8 @@ class Request extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['req_id', 'user1_id', 'user2_id', 'req_type', 'date'], 'required'],
-            [['req_id', 'user1_id', 'user2_id'], 'integer'],
+            [['user1_id', 'user2_id', 'req_type', 'date'], 'required'],
+            [['user1_id', 'user2_id'], 'integer'],
             [['date'], 'safe'],
             [['req_type'], 'string', 'max' => 255]
         ];
@@ -48,6 +51,22 @@ class Request extends \yii\db\ActiveRecord
             'req_type' => 'Req Type',
             'date' => 'Date',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser2()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user2_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser1()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user1_id']);
     }
 
     /**
