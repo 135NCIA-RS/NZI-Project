@@ -14,9 +14,14 @@ class m160117_152452_create_request_table extends Migration
                 "`user2_id` int(255) NOT NULL," .
                 "`req_type` varchar(255) NOT NULL," .
                 "`date` datetime NOT NULL," .
-                "PRIMARY KEY (`req_id`)" .
-                ") ENGINE=InnoDB DEFAULT CHARSET=utf8" ;
-                $this->execute($sql);
+                "PRIMARY KEY (`req_id`)," .
+                "KEY `user1_id` (`user1_id`)," .
+                "KEY `user2_id` (`user2_id`)," .
+                "CONSTRAINT `request_ibfk_2` FOREIGN KEY (`user2_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE," .
+                "CONSTRAINT `request_ibfk_1` FOREIGN KEY (`user1_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE" .
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8";
+
+        $this->execute($sql);
     }
 
     public function down()
