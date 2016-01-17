@@ -97,14 +97,14 @@ use app\components\PhotoService;
                         <!-- Post -->
                         <?php
                         $id = Yii::$app->user->getId();
-                        $posts = PostsService::getPosts($id);
+                        
                         foreach ($posts as $row) {
                             ?>
                         <div class="post">
                             <div class="user-block">
-                                <img class="img-circle img-bordered-sm" src="../../dist/content/images/<?php echo PhotoService::getProfilePhoto($id);?>" alt="user image">
+                                <img class="img-circle img-bordered-sm" src="../../dist/content/images/<?php echo $photo;?>" alt="user image">
                                 <span class="username">
-                                    <a href="#"><?php echo(UserService::getName($id)." ".UserService::getSurname($id)); ?></a>
+                                    <a href="#"><?php echo($name." ".$surname); ?></a>
                                     <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
                                 </span>
                                 <span class="description"><?php if($row['post_visibility']=="visible") echo "Post public"; else echo "Post hidden"; ?> - <?php echo(PostsService::getPostDate($row['post_id'])); ?></span>

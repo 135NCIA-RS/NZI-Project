@@ -18,6 +18,7 @@ use app\components\RelationType;
 use app\components\PhotoService;
 use app\components\AccessService;
 use app\components\Permission;
+use app\components\PostsService;
 
 class IntouchController extends Controller
 {
@@ -139,6 +140,8 @@ class IntouchController extends Controller
         $followers = count(RelationService::getUsersWhoFollowMe($id));
         $following = count(RelationService::getUsersWhoIFollow($id));
         $friends = count(RelationService::getFriendsList($id));
+        $posts = PostsService::getPosts($id);
+        $photo = PhotoService::getProfilePhoto($id);
         //////////////////////////////////////////////////////////////////////////
         $this->getUserData();
         $this->layout = 'logged';
@@ -153,6 +156,8 @@ class IntouchController extends Controller
                     'followers' => $followers,
                     'following' => $following,
                     'friends' => $friends,
+                    'posts' => $posts,
+                    'photo' => $photo,
         ]);
     }
 
