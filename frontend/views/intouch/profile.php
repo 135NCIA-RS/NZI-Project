@@ -100,6 +100,7 @@ use app\components\PhotoService;
                         $posts = PostsService::getPosts($id);
                         foreach ($posts as $row) {
                             ?>
+                       
                         <div class="post">
                             <div class="user-block">
                                 <img class="img-circle img-bordered-sm" src="../../dist/content/images/<?php echo PhotoService::getProfilePhoto($id);?>" alt="user image">
@@ -147,6 +148,7 @@ use app\components\PhotoService;
                                 }
                                 ?>
                             </p>
+                            
                             <ul class="list-inline">
                                 <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
                                 <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
@@ -183,7 +185,18 @@ use app\components\PhotoService;
                         }
                         ?>
                         <!-- /.post -->
-
+                         <form class="form-horizontal">
+                                <div class="form-group margin-bottom-none">
+                                    <div class="col-sm-9">
+                                        <input class="form-control input-sm" padding="40px" placeholder="Post">
+                                    </div>
+                                    <div class="col-sm-3" >
+                                        <button type="submit" class="btn btn-danger pull-right btn-block btn-sm" >Publish</button> 
+                                    </div>
+                                    <hr>
+                                    <hr>
+                                </div>
+                            </form>
                         <!-- Post -->
                         <div class="post clearfix">
                             <div class="user-block">
@@ -209,7 +222,7 @@ use app\components\PhotoService;
                                         <input class="form-control input-sm" placeholder="Response">
                                     </div>
                                     <div class="col-sm-3">
-                                        <button type="submit" class="btn btn-danger pull-right btn-block btn-sm">Send</button>
+                                        <button type="submit" class="btn btn-danger pull-right btn-block btn-sm">Send</button>  
                                     </div>
                                 </div>
                             </form>
