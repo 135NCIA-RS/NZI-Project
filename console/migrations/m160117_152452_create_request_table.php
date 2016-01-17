@@ -15,7 +15,7 @@ class m160117_152452_create_request_table extends Migration
                 "`req_type` varchar(255) NOT NULL," .
                 "`date` datetime NOT NULL," .
                 "PRIMARY KEY (`req_id`)" .
-                ") ENGINE=InnoDB DEFAULT CHARSET=utf8" .
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8" ;
                 $this->execute($sql);
     }
 
