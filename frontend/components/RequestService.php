@@ -7,6 +7,8 @@ use app\components\RelationType;
 use common\models\User;
 use app\components\exceptions\InvalidDateException;
 use app\components\exceptions\InvalidUserException;
+use app\components\exceptions\InvalidEnumKeyException;
+use MyCLabs\Enum\Enum;
 
 class RequestService
 {
@@ -19,10 +21,12 @@ class RequestService
      * @param type $date date of added
      * @return boolean false if reqtype is null, 
      */
-    public static function createRequest($user1_id, $user2_id, RequestType $req_type, $date)
+    public static function createRequest($user1_id, $user2_id, $req_type, $date)
     {
-        if (is_null($req_type))
-            return false;
+        if(!RequestType::isValid($req_type))
+        {
+            throw new InvalidEnumKeyException("ERROR, VAL: " . $req_type);
+        }
         $data = new Request();
         $data->req_type = $req_type;
         $data->user1_id = $user1_id;
