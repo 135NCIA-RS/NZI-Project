@@ -11,29 +11,24 @@ use MyCLabs\Enum\Enum;
 class AccessService
 {
 
-    private $LocationsPermissions;
-    private $location;
+    private static $LocationsPermissions;
+    private static $location;
 
-    public function __construct()
-    {
-        $this->SetLocationsPermissions();
-    }
-
-    public function check($perm)
+    public static function check($perm)
     {
         if(!(Permission::isValid($perm)))
         {
             throw new InvalidEnumKeyException();
         }
-        $this->matchLocation();
+        self::matchLocation();
         $userID = Yii::$app->user->getId();
         
-        $value = $this->judgePermission($perm);
+        $value = self::judgePermission($perm);
 
         return $value;
     }
 
-    private function matchLocation()
+    private static function matchLocation()
     {
         $controller = \Yii::$app->controller->id;
         $action = \Yii::$app->controller->action->id;
@@ -47,20 +42,21 @@ class AccessService
         }
         
         $locs = Location::toArray();
-        $this->location = $locs[$key];
+        self::$location = $locs[$key];
         
     }
-    private function judgePermission($valueToCheck)
+    private static function judgePermission($valueToCheck)
     {
-        if (in_array($valueToCheck, $this->locations[Location::GLOBAL_ALL]))
+        self::SetLocationsPermissions();
+        if (in_array($valueToCheck, self::$LocationsPermissions[Location::GLOBAL_ALL]))
         {
             return true;
         }
-        if (in_array($valueToCheck, $this->locations[$this->location]))
+        if (in_array($valueToCheck, self::$LocationsPermissions[self::$location]))
         {
             return true;
         }
-        if (in_array($valueToCheck, $this->locations[(Yii::$app->user->isGuest == true ? Location::GLOBAL_notLogged : Location::GLOBAL_logged)]))
+        if (in_array($valueToCheck, self::$LocationsPermissions[(Yii::$app->user->isGuest == true ? Location::GLOBAL_notLogged : Location::GLOBAL_logged)]))
         {
             return true;
         }
@@ -69,45 +65,45 @@ class AccessService
         return false;
     }
 
-    private function SetLocationsPermissions()
+    private static function SetLocationsPermissions()
     {
-        $this->locations = Location::values();
-        $this->locations = $this->ResizeOneDimensionalToTwoDimensionalArray($this->locations);
+        self::$LocationsPermissions = Location::values();
+        self::$LocationsPermissions = self::ResizeOneDimensionalToTwoDimensionalArray(self::$LocationsPermissions);
         ////////////////////////////////////////////////////////////////////////
 
-        $this->locations[Location::GLOBAL_ALL] = [
+        self::$LocationsPermissions[Location::GLOBAL_ALL] = [
             Permission::UseSearch,
         ];
-        $this->locations[Location::GLOBAL_logged] = [
+        self::$LocationsPermissions[Location::GLOBAL_logged] = [
             Permission::SendPrivateMessage,
             Permission::RemovePostOwnComment,
             Permission::ChangePostOwnComment,
             Permission::ChangeOwnPost,
         ];
 
-        $this->locations[Location::GLOBAL_notLogged] = [
+        self::$LocationsPermissions[Location::GLOBAL_notLogged] = [
             Permission::CreateAccount,
             Permission::LoginPermission,
         ];
 
-        $this->locations[Location::ActionChangeLanguage] = [
+        self::$LocationsPermissions[Location::ActionChangeLanguage] = [
             Permission::ChangeLanguage,
         ];
 
-        $this->locations[Location::ForgotPasswordPage] = [
+        self::$LocationsPermissions[Location::ForgotPasswordPage] = [
         ];
 
-        $this->locations[Location::HomePage] = [
+        self::$LocationsPermissions[Location::HomePage] = [
             Permission::LoginPermission,
         ];
 
-        $this->locations[Location::LoggedHomePage] = [
+        self::$LocationsPermissions[Location::LoggedHomePage] = [
         ];
 
-        $this->locations[Location::LoginPage] = [
+        self::$LocationsPermissions[Location::LoginPage] = [
         ];
 
-        $this->locations[Location::MyProfiePage] = [
+        self::$LocationsPermissions[Location::MyProfiePage] = [
             Permission::ChangeAccountInfo,
             Permission::AddPost,
             Permission::AddPostComment,
@@ -119,11 +115,11 @@ class AccessService
             Permission::RemovePostComment,
         ];
 
-        $this->locations[Location::RegisterPage] = [
+        self::$LocationsPermissions[Location::RegisterPage] = [
             Permission::CreateAccount,
         ];
 
-        $this->locations[Location::UserProfilePage] = [
+        self::$LocationsPermissions[Location::UserProfilePage] = [
             Permission::AddPost,
             Permission::AddPostComment,
             Permission::ChangePostOwnComment,
@@ -131,7 +127,7 @@ class AccessService
         ];
     }
 
-    private function ResizeOneDimensionalToTwoDimensionalArray($Array)
+    private static function ResizeOneDimensionalToTwoDimensionalArray($Array)
     {
         $array = array();
         foreach (array_reverse($Array) as $arr)

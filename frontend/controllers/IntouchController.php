@@ -25,25 +25,6 @@ use app\components\RequestType;
 class IntouchController extends Controller
 {
 
-    private $AccessService = null;
-    private $PhotoService = null;
-    private $PostService = null;
-    private $RelationService = null;
-    private $SearchService = null;
-    private $RequestService = null;
-
-    public function __construct($id, $module, $config = [])
-    {
-        $this->AccessService = new AccessService();
-        $this->PhotoService = new PhotoService();
-        $this->PostService = new components\PostsService();
-        $this->RelationService = new RelationService();
-        $this->SearchService = new components\SearchService();
-        $this->RequestService = new components\RequestService();
-
-        parent::__construct($id, $module, $config);
-    }
-
     public function behaviors()
     {
         return [
@@ -272,7 +253,7 @@ class IntouchController extends Controller
         /////$$$$$ FORMS $$$$$//////////////////////////////////////////////////
         if (Yii::$app->request->isPjax)
         {
-            if ($this->AccessService->check(Permission::ManageUserRelations))
+            if (AccessService::check(Permission::ManageUserRelations))
             {
                 $request = Yii::$app->request;
                 if (!is_null($request->post('follow-btn')))
@@ -281,7 +262,7 @@ class IntouchController extends Controller
                 }
                 if (!is_null($request->post('friend-btn')))
                 {
-                    $t = $this->RequestService->createRequest($myId, $id, RequestType::FriendRequest, date('Y-m-d H:i:s')); //to tutaj
+                    $t = RequestService::createRequest($myId, $id, RequestType::FriendRequest, date('Y-m-d H:i:s')); //to tutaj
                     //RelationService::setRelation($myId, $id, RelationType::Friend);
                     //TODO State -> Request Sent
                 }
@@ -331,7 +312,7 @@ class IntouchController extends Controller
 
     public function actionSearch($q)
     {
-        if ($this->AccessService->check(Permission::UseSearch))
+        if (AccessService::check(Permission::UseSearch))
         {
             $id = Yii::$app->user->getId();
             $this->getUserData($id);
