@@ -94,6 +94,13 @@ use app\components\PhotoService;
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
+                        <!-- Add post -->
+                        <form class="form-horizontal">
+                            <input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post" >
+                            <button style="width:20%; margin-top:5px;" type="submit" class="btn btn-danger btn-block" >Publish</button>
+                            <hr>
+                        </form>
+                        <!-- /Add post-->
                         <!-- Post -->
                         <?php
                         $id = Yii::$app->user->getId();
@@ -166,7 +173,7 @@ use app\components\PhotoService;
                       <?php $comments = PostsService::getComments($row['post_id']);
                       foreach ($comments as $comment) {
                       ?>
-                      <div style="background-color: #EDF5F7; padding: 10px 10px 1px 10px; border-radius: 10px; margin-left: 30px; margin-bottom:5px">
+                      <div style="background-color: #EDF5F7; padding: 10px 10px 1px 10px; border-radius: 10px; margin-left: 30px; margin-bottom:-20px;">
                       <img class="direct-chat-img" src="../../dist/content/images/<?php echo PhotoService::getProfilePhoto($comment['author_id']);?>" alt="message user image" style="margin-right: 10px;"><!-- /.direct-chat-img -->
                       <p class="message" >
                   <a href="#" class="name">
@@ -185,18 +192,7 @@ use app\components\PhotoService;
                         }
                         ?>
                         <!-- /.post -->
-                         <form class="form-horizontal">
-                                <div class="form-group margin-bottom-none">
-                                    <div class="col-sm-9">
-                                        <input class="form-control input-sm" padding="40px" placeholder="Post">
-                                    </div>
-                                    <div class="col-sm-3" >
-                                        <button type="submit" class="btn btn-danger pull-right btn-block btn-sm" >Publish</button> 
-                                    </div>
-                                    <hr>
-                                    <hr>
-                                </div>
-                            </form>
+                        
                         <!-- Post -->
                         <div class="post clearfix">
                             <div class="user-block">
