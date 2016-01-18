@@ -86,6 +86,11 @@ class RequestService
         $data->delete();
     }
 
+    /**
+     * 
+     * @param type $user2_id user who is logged.
+     * @return table with request to logged user.
+     */
     public static function getMyRequests($user2_id) //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!DONT WORK
     {
         /* Kawlek kodu od grzesia z Discorda
@@ -101,21 +106,24 @@ class RequestService
         $rel = Request::find()
                 ->where([
                     'user2_id' => $user2_id,
-                    'relation_type' => RequestType::FriendRequest
+                    'req_type' => RequestType::FriendRequest
                 ])
                 ->all();
+        if (is_null($rel))
+        {
+            return [];
+        }
         foreach ($rel as $var)
         {
-            $arr[] = $var['user1_id'];
+            $arr[] = self::createReqObj($var['user1_id'], $var['date'], $var['req_id'], $var['req_type']);
         }
-        die(var_dump($arr));
         return $arr;
     }
 
     private static function createReqObj($user1_id, $date, $req_id, $req_type)
     {
         $uname = UserService::getUserName($user1_id);
-        return ['type' => $req_type, 'id' => $req_id, 'senderUName' => $uname, 'date' => $date];
+        return ['type' => $req_type, 'req_id' => $req_id, 'senderUserName' => $uname, 'date' => $date];
     }
 
     /**
