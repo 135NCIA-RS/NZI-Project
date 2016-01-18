@@ -1,12 +1,15 @@
 <?php
 
 namespace app\components;
+
 use app\models\Request;
 use app\components\RelationService;
 use app\components\RelationType;
 use common\models\User;
 use app\components\exceptions\InvalidDateException;
 use app\components\exceptions\InvalidUserException;
+use app\components\exceptions\InvalidEnumKeyException;
+use MyCLabs\Enum\Enum;
 
 class RequestService
 {
@@ -19,10 +22,20 @@ class RequestService
      * @param type $date date of added
      * @return boolean false if reqtype is null, 
      */
-    public static function createRequest($user1_id, $user2_id, RequestType $req_type, $date)
+    public static function createRequest($user1_id, $user2_id, $req_type, $date)
     {
-        if (is_null($req_type))
-            return false;
+
+        $check = Request::find()
+                ->select('req_id')
+                ->where(['user1_id' => $user1_id, 'user2_id' => $user2_id])
+                ->one();
+        if (!is_null($check))
+            return true;
+
+        if (!RequestType::isValid($req_type))
+        {
+            throw new InvalidEnumKeyException("ERROR, VAL: " . $req_type);
+        }
         $data = new Request();
         $data->req_type = $req_type;
         $data->user1_id = $user1_id;
@@ -49,10 +62,18 @@ class RequestService
         if ($answer)
         {
             $user1_id = RequestService::getUser1Id($req_id);
-            $user2_id = RequestService::getUser1Id($req_id);
+            $user2_id = RequestService::getUser2Id($req_id);
             RelationService::setRelation($user1_id, $user2_id, RelationType::Friend);
         }
         self::dropRequest($req_id);
+        $check = Request::find()
+                ->select('req_id')
+                ->where(['user1_id' => $user2_id, 'user2_id' => $user1_id, 'req_type' => 'friend'])
+                ->one();
+        if (!is_null($check))
+        {
+            self::dropRequest($check['req_id']);
+        }
     }
 
     /**
@@ -63,6 +84,46 @@ class RequestService
     {
         $data = Request::findOne($req_id);
         $data->delete();
+    }
+
+    /**
+     * 
+     * @param type $user2_id user who is logged.
+     * @return table with request to logged user.
+     */
+    public static function getMyRequests($user2_id) //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!DONT WORK
+    {
+        /* Kawlek kodu od grzesia z Discorda
+         * $dane = [];
+          foreach(...)
+          {
+          $dane[] = createReqObj(...);
+          }
+
+          return $dane;
+         */
+        $arr = [];
+        $rel = Request::find()
+                ->where([
+                    'user2_id' => $user2_id,
+                    'req_type' => RequestType::FriendRequest
+                ])
+                ->all();
+        if (is_null($rel))
+        {
+            return [];
+        }
+        foreach ($rel as $var)
+        {
+            $arr[] = self::createReqObj($var['user1_id'], $var['date'], $var['req_id'], $var['req_type']);
+        }
+        return $arr;
+    }
+
+    private static function createReqObj($user1_id, $date, $req_id, $req_type)
+    {
+        $uname = UserService::getUserName($user1_id);
+        return ['type' => $req_type, 'req_id' => $req_id, 'senderUserName' => $uname, 'date' => $date];
     }
 
     /**
@@ -111,7 +172,9 @@ class RequestService
 
 class RequestType extends Enum
 {
+
     const FriendRequest = "friend";
+
 }
 
 /*

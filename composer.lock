@@ -712,13 +712,13 @@
             "version": "v0.10.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/twitter/typeahead.js.git",
-                "reference": "5f198b87d1af845da502ea9df93a5e84801ce742"
+                "url": "git@github.com:twitter/typeahead.js.git",
+                "reference": "35f486cfe2d63c05989ee38a0a10122795661458"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twitter/typeahead.js/zipball/5f198b87d1af845da502ea9df93a5e84801ce742",
-                "reference": "5f198b87d1af845da502ea9df93a5e84801ce742",
+                "url": "https://api.github.com/repos/twitter/typeahead.js/zipball/35f486cfe2d63c05989ee38a0a10122795661458",
+                "reference": "35f486cfe2d63c05989ee38a0a10122795661458",
                 "shasum": ""
             },
             "require": {

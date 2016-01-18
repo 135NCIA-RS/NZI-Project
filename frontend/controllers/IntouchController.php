@@ -19,6 +19,8 @@ use app\components\PhotoService;
 use app\components\AccessService;
 use app\components\RequestService;
 use app\components\Permission;
+use app\components\PostsService;
+use app\components\RequestType;
 
 class IntouchController extends Controller
 {
@@ -28,6 +30,7 @@ class IntouchController extends Controller
     private $PostService = null;
     private $RelationService = null;
     private $SearchService = null;
+    private $RequestService = null;
 
     public function __construct($id, $module, $config = [])
     {
@@ -36,6 +39,7 @@ class IntouchController extends Controller
         $this->PostService = new components\PostsService();
         $this->RelationService = new RelationService();
         $this->SearchService = new components\SearchService();
+        $this->RequestService = new components\RequestService();
 
         parent::__construct($id, $module, $config);
     }
@@ -140,6 +144,8 @@ class IntouchController extends Controller
         $followers = count(RelationService::getUsersWhoFollowMe($id));
         $following = count(RelationService::getUsersWhoIFollow($id));
         $friends = count(RelationService::getFriendsList($id));
+        $posts = PostsService::getPosts($id);
+        $photo = PhotoService::getProfilePhoto($id);
         //////////////////////////////////////////////////////////////////////////
         $this->getUserData();
         $this->layout = 'logged';
@@ -154,6 +160,8 @@ class IntouchController extends Controller
                     'followers' => $followers,
                     'following' => $following,
                     'friends' => $friends,
+                    'posts' => $posts,
+                    'photo' => $photo,
         ]);
     }
 
@@ -232,6 +240,12 @@ class IntouchController extends Controller
         }
 
         $this->view->params['userInfo'] = $userinfo;
+        ////////////////////////////////////////////////////// request service
+
+        $notification = RequestService::getMyRequests($id);
+        $tablelength = count($notification);
+        $this->view->params['notification_data'] = $notification;
+        $this->view->params['notification_count'] = $tablelength;
     }
 
     public function actionUserprofile()
@@ -267,8 +281,9 @@ class IntouchController extends Controller
                 }
                 if (!is_null($request->post('friend-btn')))
                 {
-                    RequestService::createRequest($myId, $id, RequestType::FriendRequest, date('Y-m-d H:i:s')); //to tutaj
+                    $t = $this->RequestService->createRequest($myId, $id, RequestType::FriendRequest, date('Y-m-d H:i:s')); //to tutaj
                     //RelationService::setRelation($myId, $id, RelationType::Friend);
+                    //TODO State -> Request Sent
                 }
                 if (!is_null($request->post('unfriend-btn')))
                 {
@@ -343,4 +358,11 @@ class IntouchController extends Controller
         return $this->render('accessDenied');
     }
 
+    public function actionNotifications()
+    {
+        $id = Yii::$app->user->getId();
+        $this->getUserData($id);
+        $this->layout = 'logged';
+        return $this->render('allRequests');
+    }
 }
