@@ -240,6 +240,12 @@ class IntouchController extends Controller
         }
 
         $this->view->params['userInfo'] = $userinfo;
+        ////////////////////////////////////////////////////// request service
+
+        $notification = RequestService::getMyRequests($id);
+        $tablelength = count($notification);
+        $this->view->params['notification_data'] = $notification;
+        $this->view->params['notification_count'] = $tablelength;
     }
 
     public function actionUserprofile()
@@ -352,4 +358,11 @@ class IntouchController extends Controller
         return $this->render('accessDenied');
     }
 
+    public function actionNotifications()
+    {
+        $id = Yii::$app->user->getId();
+        $this->getUserData($id);
+        $this->layout = 'logged';
+        return $this->render('allRequests');
+    }
 }

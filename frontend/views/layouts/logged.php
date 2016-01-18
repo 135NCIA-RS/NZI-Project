@@ -49,21 +49,28 @@ AppAsset::register($this);
                             <li class="dropdown notifications-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-bell-o"></i>
-                                    <span class="label label-warning">1</span>
+                                    <span class="label label-warning"><?= $this->params['notification_count']?></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li class="header">You have 1 notification</li>
+                                    <li class="header">You have <?= $this->params['notification_count']?> notification(s)</li>
                                     <li>
                                         <!-- inner menu: contains the actual data -->
                                         <ul class="menu">
                                             <li>
-                                                <a href="#">
+                                                <?php 
+                                                if($this->params['notification_count']>0)
+                                                {
+                                                    ?>
+                                                <a href="/notifications">
                                                     <i class="fa fa-users text-aqua"></i> New friend request
                                                 </a>
+                                                <?php
+                                                }
+                                                ?>
                                             </li>
                                         </ul>
                                     </li>
-                                    <li class="footer"><a href="#">View all</a></li>
+                                    <li class="footer"><a href="/notifications">View all</a></li>
                                 </ul>
                             </li>
                             <!-- User Account: style can be found in dropdown.less -->
@@ -104,10 +111,7 @@ AppAsset::register($this);
                                     </li>
                                 </ul>
                             </li>
-                            <!-- Control Sidebar Toggle Button -->
-                            <li>
-                                <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-                            </li>
+                           
                         </ul>
                     </div>
                 </nav>
