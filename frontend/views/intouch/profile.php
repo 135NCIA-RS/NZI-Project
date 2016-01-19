@@ -17,18 +17,14 @@ use app\components\PhotoService;
 ?>
 
 <section class="content">
-
     <div class="row">
         <div class="col-md-3">
-
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
                     <?= Html::img($this->params['userProfilePhoto'], ['class' => 'profile-user-img img-responsive img-circle', 'alt' => 'User profile image']) ?>
                     <h3 class="profile-username text-center"><?= $this->params['userInfo']['user_name'] . " " . $this->params['userInfo']['user_surname'] ?></h3>
-
                     <p class="text-muted text-center">Software Engineer</p>
-
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
                             <b>Followers</b> <a class="pull-right"><?= $followers ?></a>
@@ -40,12 +36,10 @@ use app\components\PhotoService;
                             <b>Friends</b> <a class="pull-right"><?= $friends ?></a>
                         </li>
                     </ul>
-
                 </div>
                 <!-- /.box-body -->
             </div>
             <!-- /.box -->
-
             <!-- About Me Box -->
             <div class="box box-primary">
                 <div class="box-header with-border">
@@ -55,17 +49,12 @@ use app\components\PhotoService;
                 <!-- /.box-header -->
                 <div class="box-body">
                     <strong><i class="fa fa-book margin-r-5"></i> Education</strong>
-
                     <p class="text-muted">
                         <?= $education ?>
                     </p>
-
                     <hr>
-
                     <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
-
                     <p class="text-muted"><?= $city ?></p>
-
                     <hr>
 
                     <strong><i class="fa fa-birthday-cake margin-r-5"></i> Date of birth</strong>
@@ -97,17 +86,15 @@ use app\components\PhotoService;
                         <!-- Add post -->
                         <form class="form-horizontal">
                             <input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post" >
-                            <button style="width:20%; margin-top:5px;" type="submit" class="btn btn-danger btn-block" >Publish</button>
+                            <button style="width:20%; margin-top:5px;" type="submit" class="btn btn-danger btn-block btn-sm" >Publish</button>
                             <hr>
                         </form>
                         <!-- /Add post-->
                         <!-- Post -->
                         <?php
                         $id = Yii::$app->user->getId();
-                        
                         foreach ($posts as $row) {
                             ?>
-                       
                         <div class="post">
                             <div class="user-block">
                                 <img class="img-circle img-bordered-sm" src="../../dist/content/images/<?php echo $photo;?>" alt="user image">
@@ -154,8 +141,7 @@ use app\components\PhotoService;
                                 <?php 
                                 }
                                 ?>
-                            </p>
-                            
+                            </p>                            
                             <ul class="list-inline">
                                 <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
                                 <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
@@ -163,9 +149,7 @@ use app\components\PhotoService;
                                 <li class="pull-right">
                                     <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments (<?php echo(PostsService::getNumberOfComments($row['post_id'])); ?>)</a></li>
                             </ul>
-
                             <input class="form-control input-sm send-form-input" type="text" placeholder="Type a comment" post_id="<?=$row['post_id']?>" >
-                            
                             <div class="direct-chat-msg" style="margin-top: 10px;">
                       <div class="direct-chat-info clearfix">
                       </div>
@@ -173,7 +157,7 @@ use app\components\PhotoService;
                       <?php $comments = PostsService::getComments($row['post_id']);
                       foreach ($comments as $comment) {
                       ?>
-                      <div style="background-color: #EDF5F7; padding: 10px 10px 1px 10px; border-radius: 10px; margin-left: 30px; margin-bottom:-20px;">
+                      <div style="background-color: #EDF5F7; padding: 10px 10px 1px 10px; border-radius: 10px; margin-left: 30px; margin-bottom:5px;">
                       <img class="direct-chat-img" src="../../dist/content/images/<?php echo PhotoService::getProfilePhoto($comment['author_id']);?>" alt="message user image" style="margin-right: 10px;"><!-- /.direct-chat-img -->
                       <p class="message" >
                   <a href="#" class="name">
@@ -186,13 +170,11 @@ use app\components\PhotoService;
                           <?php } ?>
                       <!-- /.direct-chat-text -->
                     </div>
-                        </div>
-                        
+                        </div>                        
                         <?php
                         }
                         ?>
-                        <!-- /.post -->
-                        
+                        <!-- /.post -->                        
                         <!-- Post -->
                         <div class="post clearfix">
                             <div class="user-block">
@@ -211,7 +193,6 @@ use app\components\PhotoService;
                                 tools to help create filler text for everyone from bacon lovers
                                 to Charlie Sheen fans.
                             </p>
-
                             <form class="form-horizontal">
                                 <div class="form-group margin-bottom-none">
                                     <div class="col-sm-9">
@@ -239,12 +220,9 @@ use app\components\PhotoService;
                             <!-- timeline item -->
                             <li>
                                 <i class="fa fa-envelope bg-blue"></i>
-
                                 <div class="timeline-item">
                                     <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-
                                     <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
                                     <div class="timeline-body">
                                         Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
                                         weebly ning heekya handango imeem plugg dopplr jibjab, movity
