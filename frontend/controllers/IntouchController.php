@@ -342,8 +342,39 @@ class IntouchController extends Controller
     public function actionNotifications()
     {
         $id = Yii::$app->user->getId();
+        
+
+        if (Yii::$app->request->isPost)
+        {
+            if (!is_null(Yii::$app->request->post('accept-btn')) || !is_null(Yii::$app->request->post('dismiss-btn')))
+            {
+                $answer = false;
+                if (!is_null(Yii::$app->request->post('accept-btn')))
+                {
+                    $answer = true;
+                }
+                try
+                {
+                    $request_id = (int) Yii::$app->request->post('request_id');
+                    if (AccessService::isItOwner($request_id, components\ObjectCheckType::Request))
+                    {
+                        RequestService::answerRequest($request_id, $answer);
+                    }
+                    else
+                    {
+                        Yii::$app->session->setFlash('error', 'Access Denied');
+                    }
+                }
+                catch (Exception $ex)
+                {
+                    Yii::$app->session->setFlash('warning', 'Something went wrong, contact Administrator');
+                }
+            }
+        }
+
         $this->getUserData($id);
         $this->layout = 'logged';
         return $this->render('allRequests');
     }
+
 }

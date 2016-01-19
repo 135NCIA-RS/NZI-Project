@@ -3,6 +3,7 @@
 namespace app\components;
 
 use Yii;
+use app\components;
 use app\components\exceptions\InvalidUserException;
 use app\components\exceptions\InvalidEnumKeyException;
 use app\components\exceptions\InvalidLocationException;
@@ -26,6 +27,32 @@ class AccessService
         $value = self::judgePermission($perm);
 
         return $value;
+    }
+    
+    public static function isItOwner($check_id, $objectCheckType)
+    {
+        if(!ObjectCheckType::isValid($objectCheckType))
+        {
+            throw new InvalidEnumKeyException();
+        }
+        
+        $myId = Yii::$app->user->getId();
+        
+        switch($objectCheckType)
+        {
+            case ObjectCheckType::Request:
+                return self::__ownerCheck_typeRequest($check_id);
+                break;
+            default:
+                throw new exceptions\FeatureNotImplemented("Check Type: " . $objectCheckType . ". That function cannot check that data object yet");
+        }
+    }
+    
+    private static function __ownerCheck_typeRequest($check_id)
+    {
+        return false;
+        //waiting for Przemek's Validation function
+        
     }
 
     private static function matchLocation()
@@ -191,6 +218,14 @@ class Location extends Enum
     const UserProfilePage = "intouch|userprofile";
     const LoggedHomePage = "intouch|index";
     const SearchLogged = "intouch|search";
-    
 
+}
+
+class ObjectCheckType extends Enum
+{
+    const Post = "PostService|Post";
+    const PostComment = "PostService|Comment";
+    const Relation = "RelationService|Relation";
+    const Request = "RequestService|Request";
+    const Photo = "PhotoService|Photo";
 }
