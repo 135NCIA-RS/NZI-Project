@@ -187,6 +187,21 @@ class RequestService
                 ->one();
         return isset($data['date']) ? $data['date'] : false;
     }
+    
+    public static function isRequestBetween($user1_id, $user2_id, $req_type)
+    {
+        if(!UserService::existUser($user1_id))
+            throw new InvalidUserException("User: " . $user1_id);
+        if(!UserService::existUser($user2_id))
+            throw new InvalidUserException("User: " . $user2_id);
+        if(!(RequestType::isValid($req_type)))
+            throw new InvalidEnumKeyException("Value: " . $req_type);
+        
+        return Request::find()
+                ->where(['user1_id' => $user1_id, 'user2_id' => $user2_id])
+                ->orWhere(['user1_id' => $user2_id, 'user2_id' => $user1_id])
+                ->exists();
+    }
 
 }
 

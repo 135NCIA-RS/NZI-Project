@@ -12,6 +12,7 @@ use yii\widgets\Pjax;
 use app\components\PostsService;
 use app\components\UserService;
 use app\components\PhotoService;
+
 /* @var $this yii\web\View */
 ?>
 
@@ -23,7 +24,7 @@ use app\components\PhotoService;
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <?= Html::img($UserProfilePhoto, ['class' => 'profile-user-img img-responsive img-circle', 'alt' => 'User profile image']) ?>
+<?= Html::img($UserProfilePhoto, ['class' => 'profile-user-img img-responsive img-circle', 'alt' => 'User profile image']) ?>
                     <h3 class="profile-username text-center"><?= $name . " " . $surname ?></h3>
 
                     <p class="text-muted text-center">Software Engineer</p>
@@ -39,7 +40,7 @@ $('body').on('click', '.pjaxButton', function() {
 JS;
                     $this->registerJs($script, yii\web\View::POS_READY);
                     ?>
-                    <?php Pjax::begin(); ?>
+<?php Pjax::begin(); ?>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
                             <b>Followers</b> <a class="pull-right"><?= $followers ?></a>
@@ -58,39 +59,46 @@ JS;
                     </style>
                     <?php
                     echo Html::beginForm("", 'post', ['data-pjax' => '']);
+
                     if (!$UserFollowState)
                     {
                         echo Html::submitButton("Follow", [
                             'class' => 'btn btn-primary btn-block btnodst pjaxButton',
                             'name' => 'follow-btn',
-                            ]);
+                        ]);
                     }
                     else
                     {
                         echo Html::submitButton("Unfollow", [
                             'class' => 'btn btn-default btn-block btn-sm btnodst pjaxButton',
                             'name' => 'unfollow-btn',
-                            ]);
+                        ]);
                     }
                     echo Html::endForm();
 
-                    echo Html::beginForm("", 'post', ['data-pjax' => '']);
-                    if (!$UserFriendshipState)
+                    if (is_bool($UserFriendshipState))
                     {
-                        echo Html::submitButton("Request Friendship", [
-                            'class' => 'btn btn-primary btn-block btnodst pjaxButton',
-                            'name' => 'friend-btn',
+                        echo Html::beginForm("", 'post', ['data-pjax' => '']);
+                        if (!$UserFriendshipState)
+                        {
+                            echo Html::submitButton("Request Friendship", [
+                                'class' => 'btn btn-primary btn-block btnodst pjaxButton',
+                                'name' => 'friend-btn',
                             ]);
+                        }
+                        else
+                        {
+                            echo Html::submitButton("Unfriend", [
+                                'class' => 'btn btn-default btn-block btn-sm btnodst pjaxButton',
+                                'name' => 'unfriend-btn',
+                            ]);
+                        }
+                        echo Html::endForm();
                     }
                     else
                     {
-                        echo Html::submitButton("Unfriend", [
-                            'class' => 'btn btn-default btn-block btn-sm btnodst pjaxButton',
-                            'name' => 'unfriend-btn',
-                            ]);
+                        echo "<button class='btn btn-default btn-block btn-sm'>Friend Request Sent</button>";
                     }
-                    echo Html::endForm();
-
                     echo Html::a("Refresh", [""], ['class' => 'hidden', 'id' => 'refr']);
 
                     Pjax::end();
@@ -111,7 +119,7 @@ JS;
                     <strong><i class="fa fa-book margin-r-5"></i> Education</strong>
 
                     <p class="text-muted">
-                        <?= $education ?>
+<?= $education ?>
                     </p>
 
                     <hr>
@@ -125,7 +133,7 @@ JS;
                     <strong><i class="fa fa-birthday-cake margin-r-5"></i> Date of birth</strong>
 
                     <p>
-                        <?= $birth ?>
+<?= $birth ?>
                     </p>
 
                     <hr>
@@ -148,108 +156,113 @@ JS;
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
-                        <?php if(true) {?>
-                        <!-- Add post -->
-                        <?= Html::beginForm("", 'post', []) ?>
+                        <?php if (true)
+                        { ?>
+                            <!-- Add post -->
+    <?= Html::beginForm("", 'post', []) ?>
                             <input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post" name="inputText">
                             <input type="hidden" name="type" value="newpost">
                             <button style="width:20%; margin-top:5px;" type="submit" class="btn btn-danger btn-block btn-sm" >Publish</button>
                             <hr>
-                        <?= Html::endForm() ?>
-                        <!-- /Add post-->
+                            <?= Html::endForm() ?>
+                            <!-- /Add post-->
                         <?php } ?>
                         <!-- Post -->
                         <?php
-                        
-                        foreach ($posts as $row) {
-                            if($row['post_visibility']=="visible")
+                        foreach ($posts as $row)
+                        {
+                            if ($row['post_visibility'] == "visible")
                             {
-                            ?>
-                        <div class="post">
-                            <div class="user-block">
-                                <img class="img-circle img-bordered-sm" src="<?php echo $row['photo'];?>" alt="user image">
-                                <span class="username">
-                                    <a href="#"><?php echo($row['name']." ".$row['surname']); ?></a>
-                                    <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
-                                </span>
-                                <span class="description"><?php if($row['post_visibility']=="visible") echo "Post public"; else echo "Post hidden"; ?> - <?php echo($row['post_date']); ?></span>
-                            </div>
-                            <!-- /.user-block -->
-                            <p>
-                                <?php 
-                                $attachments = $row['attachments'];
-                                if($row['post_type']=="text")
-                                    echo $row['post_text']; 
-                                else if($row['post_type']=="gallery")
-                                {
-                                    echo $row['post_text']."<br>";
-                                    ?>
-                                    <div class="row margin-bottom">
-                                    <div class="col-sm-6">
-                                        <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[0]['file']; ?>" alt="Photo">
+                                ?>
+                                <div class="post">
+                                    <div class="user-block">
+                                        <img class="img-circle img-bordered-sm" src="<?php echo $row['photo']; ?>" alt="user image">
+                                        <span class="username">
+                                            <a href="#"><?php echo($row['name'] . " " . $row['surname']); ?></a>
+                                            <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
+                                        </span>
+                                        <span class="description"><?php if ($row['post_visibility'] == "visible") echo "Post public";
+                                else echo "Post hidden"; ?> - <?php echo($row['post_date']); ?></span>
                                     </div>
-                                    <!-- /.col -->
-                                    <div class="col-sm-6">
-                                        <div class="row">
+                                    <!-- /.user-block -->
+                                    <p>
+                                        <?php
+                                        $attachments = $row['attachments'];
+                                        if ($row['post_type'] == "text")
+                                            echo $row['post_text'];
+                                        else if ($row['post_type'] == "gallery")
+                                        {
+                                            echo $row['post_text'] . "<br>";
+                                            ?>
+                                        <div class="row margin-bottom">
                                             <div class="col-sm-6">
-                                                <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>" alt="Photo">
-                                                <br>
-                                                <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[2]['file']; ?>" alt="Photo">
+                                                <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[0]['file']; ?>" alt="Photo">
                                             </div>
                                             <!-- /.col -->
                                             <div class="col-sm-6">
-                                                <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[3]['file']; ?>" alt="Photo">
-                                                <br>
-                                                <?php if(isset($attachments[4]['file'])) { ?><img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>" alt="Photo"> <?php } ?>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>" alt="Photo">
+                                                        <br>
+                                                        <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[2]['file']; ?>" alt="Photo">
+                                                    </div>
+                                                    <!-- /.col -->
+                                                    <div class="col-sm-6">
+                                                        <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[3]['file']; ?>" alt="Photo">
+                                                        <br>
+            <?php if (isset($attachments[4]['file']))
+            { ?><img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>" alt="Photo"> <?php } ?>
+                                                    </div>
+                                                    <!-- /.col -->
+                                                </div>
+                                                <!-- /.row -->
                                             </div>
                                             <!-- /.col -->
                                         </div>
-                                        <!-- /.row -->
+            <?php
+        }
+        ?>
+                                    </p>                            
+                                    <ul class="list-inline">
+                                        <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
+                                        <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
+                                        </li>
+                                        <li class="pull-right">
+                                            <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments (<?php echo(count($row['comments'])); ?>)</a></li>
+                                    </ul>
+                                    <?= Html::beginForm("", 'post', []) ?>
+                                    <input class="form-control input-sm send-form-input" type="text" placeholder="Type a comment" name="inputText">
+                                    <input type="hidden" name="type" value="newcomment">
+                                    <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
+                                    <button style="width:20%; margin-top:5px;" type="submit" class="btn btn-danger btn-block btn-sm hidden" ></button>
+                                        <?= Html::endForm() ?>
+                                    <div class="direct-chat-msg" style="margin-top: 10px;">
+                                        <div class="direct-chat-info clearfix">
+                                        </div>
+                                        <!-- /.direct-chat-info -->
+        <?php
+        foreach ($row['comments'] as $comment)
+        {
+            ?>
+                                            <div style="background-color: #EDF5F7; padding: 10px 10px 1px 10px; border-radius: 10px; margin-left: 30px; margin-bottom:5px;">
+                                                <img class="direct-chat-img" src="<?php echo $comment['photo']; ?>" alt="message user image" style="margin-right: 10px;"><!-- /.direct-chat-img -->
+                                                <p class="message" >
+                                                    <a href="#" class="name">
+                                                        <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> <?php echo $comment['comment_date']; ?></small>
+                                            <?php echo($comment['name'] . " " . $comment['surname']); ?><br>
+                                                    </a>
+            <?php echo $comment['comment_text']; ?>
+                                                </p>
+                                            </div> 
+                                <?php } ?>
+                                        <!-- /.direct-chat-text -->
                                     </div>
-                                    <!-- /.col -->
-                                    </div>
-                                <?php 
-                                }
-                                ?>
-                            </p>                            
-                            <ul class="list-inline">
-                                <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
-                                <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
-                                </li>
-                                <li class="pull-right">
-                                    <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments (<?php echo(count($row['comments'])); ?>)</a></li>
-                            </ul>
-                            <?= Html::beginForm("", 'post', []) ?>
-                                <input class="form-control input-sm send-form-input" type="text" placeholder="Type a comment" name="inputText">
-                                <input type="hidden" name="type" value="newcomment">
-                                <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
-                                <button style="width:20%; margin-top:5px;" type="submit" class="btn btn-danger btn-block btn-sm hidden" ></button>
-                             <?= Html::endForm() ?>
-                            <div class="direct-chat-msg" style="margin-top: 10px;">
-                      <div class="direct-chat-info clearfix">
-                      </div>
-                      <!-- /.direct-chat-info -->
-                      <?php
-                      foreach ($row['comments'] as $comment) {
-                      ?>
-                      <div style="background-color: #EDF5F7; padding: 10px 10px 1px 10px; border-radius: 10px; margin-left: 30px; margin-bottom:5px;">
-                      <img class="direct-chat-img" src="<?php echo $comment['photo'];?>" alt="message user image" style="margin-right: 10px;"><!-- /.direct-chat-img -->
-                      <p class="message" >
-                  <a href="#" class="name">
-                    <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> <?php echo $comment['comment_date']; ?></small>
-                    <?php echo($comment['name']." ".$comment['surname']); ?><br>
-                  </a>
-                  <?php echo $comment['comment_text']; ?>
-                </p>
-                      </div> 
-                          <?php } ?>
-                      <!-- /.direct-chat-text -->
-                    </div>
-                        </div> 
-                        
-                        <?php
-                            }}
-                        ?>
+                                </div> 
+
+        <?php
+    }
+}
+?>
                         <!-- /.post -->
                     </div>
                     <!-- /.tab-pane -->

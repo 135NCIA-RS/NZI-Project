@@ -123,7 +123,7 @@ class IntouchController extends Controller
                     case 'newpost':
                         PostsService::createPost($id, Yii::$app->request->post('inputText'));
                         break;
-                    
+
                     case 'newcomment':
                         PostsService::createComment(Yii::$app->request->post('post_id'), Yii::$app->request->post('inputText'));
                         break;
@@ -278,9 +278,7 @@ class IntouchController extends Controller
                 }
                 if (!is_null($request->post('friend-btn')))
                 {
-                    $t = RequestService::createRequest($myId, $id, RequestType::FriendRequest, date('Y-m-d H:i:s')); //to tutaj
-                    //RelationService::setRelation($myId, $id, RelationType::Friend);
-                    //TODO State -> Request Sent
+                    RequestService::createRequest($myId, $id, RequestType::FriendRequest, date('Y-m-d H:i:s')); //to tutaj
                 }
                 if (!is_null($request->post('unfriend-btn')))
                 {
@@ -296,7 +294,7 @@ class IntouchController extends Controller
                 $this->redirect("intouch/accessdenied");
             }
         }
-                if (Yii::$app->request->isPost)
+        if (Yii::$app->request->isPost)
         {
             if (!is_null(Yii::$app->request->post('type')))
             {
@@ -305,7 +303,7 @@ class IntouchController extends Controller
                     case 'newpost':
                         PostsService::createPost($id, Yii::$app->request->post('inputText'));
                         break;
-                    
+
                     case 'newcomment':
                         PostsService::createComment(Yii::$app->request->post('post_id'), Yii::$app->request->post('inputText'));
                         break;
@@ -316,6 +314,13 @@ class IntouchController extends Controller
         ////////////////////////////--- Other stuff ---/////////////////////////
         $UserRelations = RelationService::getRelations($myId, $id);
         $isFriend = $UserRelations[RelationType::Friend];
+        if (!$isFriend)
+        {
+            if (RequestService::isRequestBetween($id, $myId, RequestType::FriendRequest))
+            {
+                $isFriend = "Friend Request Sent";
+            }
+        }
         $IFollow = $UserRelations[RelationType::Follower];
         $uname = UserService::getUserName($id);
         //***Do not add anything new below this line (except for the render)****
@@ -340,7 +345,7 @@ class IntouchController extends Controller
             'id' => $id,
             'posts' => $posts,
             'photo' => $photo,
-            'myId' =>$myId,
+            'myId' => $myId,
         ];
         return $this->render('userProfile', $shared);
     }
@@ -389,7 +394,7 @@ class IntouchController extends Controller
                     $answer = true;
                 }
                 $request_id = Yii::$app->request->post('request_id');
-                RequestService::answerRequest($request_id, $answer);    
+                RequestService::answerRequest($request_id, $answer);
             }
         }
 
