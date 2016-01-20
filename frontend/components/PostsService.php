@@ -16,11 +16,21 @@ class PostsService
     public static function getPosts($id)
     {
         $data = Post::find()->where(['user_id'=>$id])->all();
-        //die(var_dump($data));
-        //$connection = \Yii::$app->db;
-        //$model = $connection->createCommand('SELECT * FROM post ORDER BY post_id DESC WHERE user_id='.$id);
-        //$data = $model->queryAll();
-        return isset($data) ? $data : false;
+        $counter=0;
+        foreach ($data as $row) {
+            $refined_data[$counter]['post_id'] = (int)$row['post_id'];
+            $refined_data[$counter]['name'] = UserService::getName($row['user_id']);
+            $refined_data[$counter]['surname'] = UserService::getSurname($row['user_id']);
+            $refined_data[$counter]['post_visibility'] = $row['post_visibility'];
+            $refined_data[$counter]['post_date'] = $row['post_date'];
+            $refined_data[$counter]['post_type'] = $row['post_type'];
+            $refined_data[$counter]['post_text'] = $row['post_text'];
+            $refined_data[$counter]['comments'] = PostsService::getComments($row['post_id']);
+            $refined_data[$counter]['attachments'] = PostsService::getAttachments($row['post_id']);
+            $counter++;
+        }
+        
+        return isset($refined_data) ? $refined_data : false;
     }
     
     public static function getNumberOfComments($post_id)
@@ -46,10 +56,17 @@ class PostsService
     public static function getComments($post_id)
     {
         $data = Comment::find()->where(['post_id'=>$post_id])->all();
-        //$connection = \Yii::$app->db;
-        //$model = $connection->createCommand('SELECT * FROM comment WHERE post_id='.$post_id.' ORDER BY comment_date');
-        //$data = $model->queryAll();
-        return isset($data) ? $data : false;
+        $counter=0;
+        $refined_data = [];
+        foreach ($data as $row) {
+            $refined_data[$counter]['comment_text'] = $row['comment_text'];
+            $refined_data[$counter]['name'] = UserService::getName($row['author_id']);
+            $refined_data[$counter]['surname'] = UserService::getSurname($row['author_id']);
+            $refined_data[$counter]['comment_date'] = $row['comment_date'];
+            $refined_data[$counter]['photo'] = PhotoService::getProfilePhoto($row['author_id']);
+            $counter++;
+        }
+        return isset($refined_data) ? $refined_data : false;
     }
     
     public static function getAttachments($post_id)

@@ -143,6 +143,7 @@ class IntouchController extends Controller
                     'friends' => $friends,
                     'posts' => $posts,
                     'photo' => $photo,
+                    'id' => $id,
         ]);
     }
 

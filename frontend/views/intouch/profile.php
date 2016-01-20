@@ -92,22 +92,21 @@ use app\components\PhotoService;
                         <!-- /Add post-->
                         <!-- Post -->
                         <?php
-                        $id = Yii::$app->user->getId();
                         foreach ($posts as $row) {
                             ?>
                         <div class="post">
                             <div class="user-block">
                                 <img class="img-circle img-bordered-sm" src="../../dist/content/images/<?php echo $photo;?>" alt="user image">
                                 <span class="username">
-                                    <a href="#"><?php echo($name." ".$surname); ?></a>
+                                    <a href="#"><?php echo($row['name']." ".$row['surname']); ?></a>
                                     <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
                                 </span>
-                                <span class="description"><?php if($row['post_visibility']=="visible") echo "Post public"; else echo "Post hidden"; ?> - <?php echo(PostsService::getPostDate($row['post_id'])); ?></span>
+                                <span class="description"><?php if($row['post_visibility']=="visible") echo "Post public"; else echo "Post hidden"; ?> - <?php echo($row['post_date']); ?></span>
                             </div>
                             <!-- /.user-block -->
                             <p>
                                 <?php 
-                                $attachments = PostsService::getAttachments($row['post_id']);
+                                $attachments = $row['attachments'];
                                 if($row['post_type']=="text")
                                     echo $row['post_text']; 
                                 else if($row['post_type']=="gallery")
@@ -147,22 +146,22 @@ use app\components\PhotoService;
                                 <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
                                 </li>
                                 <li class="pull-right">
-                                    <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments (<?php echo(PostsService::getNumberOfComments($row['post_id'])); ?>)</a></li>
+                                    <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments (<?php echo(count($row['comments'])); ?>)</a></li>
                             </ul>
                             <input class="form-control input-sm send-form-input" type="text" placeholder="Type a comment" post_id="<?=$row['post_id']?>" >
                             <div class="direct-chat-msg" style="margin-top: 10px;">
                       <div class="direct-chat-info clearfix">
                       </div>
                       <!-- /.direct-chat-info -->
-                      <?php $comments = PostsService::getComments($row['post_id']);
-                      foreach ($comments as $comment) {
+                      <?php
+                      foreach ($row['comments'] as $comment) {
                       ?>
                       <div style="background-color: #EDF5F7; padding: 10px 10px 1px 10px; border-radius: 10px; margin-left: 30px; margin-bottom:5px;">
-                      <img class="direct-chat-img" src="../../dist/content/images/<?php echo PhotoService::getProfilePhoto($comment['author_id']);?>" alt="message user image" style="margin-right: 10px;"><!-- /.direct-chat-img -->
+                      <img class="direct-chat-img" src="../../dist/content/images/<?php echo $comment['photo'];?>" alt="message user image" style="margin-right: 10px;"><!-- /.direct-chat-img -->
                       <p class="message" >
                   <a href="#" class="name">
                     <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> <?php echo $comment['comment_date']; ?></small>
-                    <?php echo(UserService::getName($comment['author_id'])." ".UserService::getSurname($comment['author_id'])); ?><br>
+                    <?php echo($comment['name']." ".$comment['surname']); ?><br>
                   </a>
                   <?php echo $comment['comment_text']; ?>
                 </p>
@@ -175,37 +174,6 @@ use app\components\PhotoService;
                         }
                         ?>
                         <!-- /.post -->                        
-                        <!-- Post -->
-                        <div class="post clearfix">
-                            <div class="user-block">
-                                <img class="img-circle img-bordered-sm" src="../../dist/img/user7-128x128.jpg" alt="User Image">
-                                <span class="username">
-                                    <a href="#">Sarah Ross</a>
-                                    <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
-                                </span>
-                                <span class="description">Sent you a message - 3 days ago</span>
-                            </div>
-                            <!-- /.user-block -->
-                            <p>
-                                Lorem ipsum represents a long-held tradition for designers,
-                                typographers and the like. Some people hate it and argue for
-                                its demise, but others ignore the hate as they create awesome
-                                tools to help create filler text for everyone from bacon lovers
-                                to Charlie Sheen fans.
-                            </p>
-                            <form class="form-horizontal">
-                                <div class="form-group margin-bottom-none">
-                                    <div class="col-sm-9">
-                                        <input class="form-control input-sm" placeholder="Response">
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <button type="submit" class="btn btn-danger pull-right btn-block btn-sm">Send</button>  
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    <!-- /.tab-pane -->
-                        <!-- /.post -->
                     </div>
                     <div class="tab-pane" id="timeline">
                         <!-- The timeline -->
