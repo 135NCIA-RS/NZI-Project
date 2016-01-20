@@ -50,7 +50,7 @@ class AccessService
     
     private static function __ownerCheck_typeRequest($check_id)
     {
-        return false;
+        return true;
         //waiting for Przemek's Validation function
         
     }

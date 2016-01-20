@@ -148,6 +148,16 @@ JS;
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
+                        <?php if(true) {?>
+                        <!-- Add post -->
+                        <?= Html::beginForm("", 'post', []) ?>
+                            <input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post" name="inputText">
+                            <input type="hidden" name="type" value="newpost">
+                            <button style="width:20%; margin-top:5px;" type="submit" class="btn btn-danger btn-block btn-sm" >Publish</button>
+                            <hr>
+                        <?= Html::endForm() ?>
+                        <!-- /Add post-->
+                        <?php } ?>
                         <!-- Post -->
                         <?php
                         
@@ -157,7 +167,7 @@ JS;
                             ?>
                         <div class="post">
                             <div class="user-block">
-                                <img class="img-circle img-bordered-sm" src="<?php echo $photo;?>" alt="user image">
+                                <img class="img-circle img-bordered-sm" src="<?php echo $row['photo'];?>" alt="user image">
                                 <span class="username">
                                     <a href="#"><?php echo($row['name']." ".$row['surname']); ?></a>
                                     <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
@@ -209,7 +219,12 @@ JS;
                                 <li class="pull-right">
                                     <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments (<?php echo(count($row['comments'])); ?>)</a></li>
                             </ul>
-                            <input class="form-control input-sm send-form-input" type="text" placeholder="Type a comment" post_id="<?=$row['post_id']?>" >
+                            <?= Html::beginForm("", 'post', []) ?>
+                                <input class="form-control input-sm send-form-input" type="text" placeholder="Type a comment" name="inputText">
+                                <input type="hidden" name="type" value="newcomment">
+                                <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
+                                <button style="width:20%; margin-top:5px;" type="submit" class="btn btn-danger btn-block btn-sm hidden" ></button>
+                             <?= Html::endForm() ?>
                             <div class="direct-chat-msg" style="margin-top: 10px;">
                       <div class="direct-chat-info clearfix">
                       </div>
