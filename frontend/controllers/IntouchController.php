@@ -126,7 +126,7 @@ class IntouchController extends Controller
         $following = count(RelationService::getUsersWhoIFollow($id));
         $friends = count(RelationService::getFriendsList($id));
         $posts = PostsService::getPosts($id);
-        $photo = PhotoService::getProfilePhoto($id);
+        $photo = PhotoService::getProfilePhoto($id, true, true);
         //////////////////////////////////////////////////////////////////////////
         $this->getUserData();
         $this->layout = 'logged';
@@ -291,6 +291,7 @@ class IntouchController extends Controller
         //***Do not add anything new below this line (except for the render)****
         $this->getUserData($id);
         $this->layout = 'logged';
+        $posts = PostsService::getPosts($id);
         $shared = [
             'name' => $name,
             'surname' => $surname,
@@ -307,6 +308,8 @@ class IntouchController extends Controller
             'UserName' => $uname,
             'UserProfilePhoto' => $photo,
             'id' => $id,
+            'posts' => $posts,
+            'photo' => $photo,
         ];
         return $this->render('userProfile', $shared);
     }

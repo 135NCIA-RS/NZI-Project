@@ -63,7 +63,7 @@ class PostsService
             $refined_data[$counter]['name'] = UserService::getName($row['author_id']);
             $refined_data[$counter]['surname'] = UserService::getSurname($row['author_id']);
             $refined_data[$counter]['comment_date'] = $row['comment_date'];
-            $refined_data[$counter]['photo'] = PhotoService::getProfilePhoto($row['author_id']);
+            $refined_data[$counter]['photo'] = PhotoService::getProfilePhoto($row['author_id'], true, true);
             $counter++;
         }
         return isset($refined_data) ? $refined_data : false;

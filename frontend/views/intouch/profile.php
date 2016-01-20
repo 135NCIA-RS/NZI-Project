@@ -96,7 +96,7 @@ use app\components\PhotoService;
                             ?>
                         <div class="post">
                             <div class="user-block">
-                                <img class="img-circle img-bordered-sm" src="../../dist/content/images/<?php echo $photo;?>" alt="user image">
+                                <img class="img-circle img-bordered-sm" src="<?php echo $photo;?>" alt="user image">
                                 <span class="username">
                                     <a href="#"><?php echo($row['name']." ".$row['surname']); ?></a>
                                     <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
@@ -157,7 +157,7 @@ use app\components\PhotoService;
                       foreach ($row['comments'] as $comment) {
                       ?>
                       <div style="background-color: #EDF5F7; padding: 10px 10px 1px 10px; border-radius: 10px; margin-left: 30px; margin-bottom:5px;">
-                      <img class="direct-chat-img" src="../../dist/content/images/<?php echo $comment['photo'];?>" alt="message user image" style="margin-right: 10px;"><!-- /.direct-chat-img -->
+                      <img class="direct-chat-img" src="<?php echo $comment['photo'];?>" alt="message user image" style="margin-right: 10px;"><!-- /.direct-chat-img -->
                       <p class="message" >
                   <a href="#" class="name">
                     <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> <?php echo $comment['comment_date']; ?></small>

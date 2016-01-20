@@ -150,24 +150,24 @@ JS;
                     <div class="active tab-pane" id="activity">
                         <!-- Post -->
                         <?php
-                        $posts = PostsService::getPosts($id);
+                        
                         foreach ($posts as $row) {
                             if($row['post_visibility']=="visible")
                             {
                             ?>
                         <div class="post">
                             <div class="user-block">
-                                <img class="img-circle img-bordered-sm" src="../../dist/content/images/<?php echo PhotoService::getProfilePhoto($id);?>" alt="user image">
+                                <img class="img-circle img-bordered-sm" src="<?php echo $photo;?>" alt="user image">
                                 <span class="username">
-                                    <a href="#"><?php echo(UserService::getName($id)." ".UserService::getSurname($id)); ?></a>
+                                    <a href="#"><?php echo($row['name']." ".$row['surname']); ?></a>
                                     <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
                                 </span>
-                                <span class="description"><?php if($row['post_visibility']=="visible") echo "Post public"; else echo "Post hidden"; ?> - <?php echo(PostsService::getPostDate($row['post_id'])); ?></span>
+                                <span class="description"><?php if($row['post_visibility']=="visible") echo "Post public"; else echo "Post hidden"; ?> - <?php echo($row['post_date']); ?></span>
                             </div>
                             <!-- /.user-block -->
                             <p>
                                 <?php 
-                                $attachments = PostsService::getAttachments($row['post_id']);
+                                $attachments = $row['attachments'];
                                 if($row['post_type']=="text")
                                     echo $row['post_text']; 
                                 else if($row['post_type']=="gallery")
@@ -199,33 +199,30 @@ JS;
                                     <!-- /.col -->
                                     </div>
                                 <?php 
-                                
                                 }
                                 ?>
-                            </p>
+                            </p>                            
                             <ul class="list-inline">
                                 <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
                                 <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
                                 </li>
                                 <li class="pull-right">
-                                    <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments (<?php echo(PostsService::getNumberOfComments($row['post_id'])); ?>)</a></li>
+                                    <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments (<?php echo(count($row['comments'])); ?>)</a></li>
                             </ul>
-
                             <input class="form-control input-sm send-form-input" type="text" placeholder="Type a comment" post_id="<?=$row['post_id']?>" >
-                            
                             <div class="direct-chat-msg" style="margin-top: 10px;">
                       <div class="direct-chat-info clearfix">
                       </div>
                       <!-- /.direct-chat-info -->
-                      <?php $comments = PostsService::getComments($row['post_id']);
-                      foreach ($comments as $comment) {
+                      <?php
+                      foreach ($row['comments'] as $comment) {
                       ?>
-                      <div style="background-color: #EDF5F7; padding: 10px 10px 1px 10px; border-radius: 10px; margin-left: 30px; margin-bottom:5px">
-                      <img class="direct-chat-img" src="../../dist/content/images/<?php echo PhotoService::getProfilePhoto($comment['author_id']);?>" alt="message user image" style="margin-right: 10px;"><!-- /.direct-chat-img -->
+                      <div style="background-color: #EDF5F7; padding: 10px 10px 1px 10px; border-radius: 10px; margin-left: 30px; margin-bottom:5px;">
+                      <img class="direct-chat-img" src="<?php echo $comment['photo'];?>" alt="message user image" style="margin-right: 10px;"><!-- /.direct-chat-img -->
                       <p class="message" >
                   <a href="#" class="name">
                     <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> <?php echo $comment['comment_date']; ?></small>
-                    <?php echo(UserService::getName($comment['author_id'])." ".UserService::getSurname($comment['author_id'])); ?><br>
+                    <?php echo($comment['name']." ".$comment['surname']); ?><br>
                   </a>
                   <?php echo $comment['comment_text']; ?>
                 </p>
@@ -233,7 +230,7 @@ JS;
                           <?php } ?>
                       <!-- /.direct-chat-text -->
                     </div>
-                        </div>
+                        </div> 
                         
                         <?php
                             }}
