@@ -17,28 +17,28 @@ class AccessService
 
     public static function check($perm)
     {
-        if(!(Permission::isValid($perm)))
+        if (!(Permission::isValid($perm)))
         {
             throw new InvalidEnumKeyException();
         }
         self::matchLocation();
         $userID = Yii::$app->user->getId();
-        
+
         $value = self::judgePermission($perm);
 
         return $value;
     }
-    
+
     public static function hasAccess($check_id, $objectCheckType)
     {
-        if(!ObjectCheckType::isValid($objectCheckType))
+        if (!ObjectCheckType::isValid($objectCheckType))
         {
             throw new InvalidEnumKeyException();
         }
-        
+
         $myId = Yii::$app->user->getId();
-        
-        switch($objectCheckType)
+
+        switch ($objectCheckType)
         {
             case ObjectCheckType::Request:
                 return self::__ownerCheck_typeRequest($check_id);
@@ -50,39 +50,40 @@ class AccessService
                 throw new exceptions\FeatureNotImplemented("Check Type: " . $objectCheckType . ". That function cannot check that data object yet");
         }
     }
-    
+
     private static function __ownerCheck_typeRequest($check_id)
     {
         $user = Yii::$app->user->getId();
         return ($check_id === $user);
     }
-    
+
     private static function __ownerCheck_typePost($receiver_id)
     {
         $user = Yii::$app->user->getId();
-        if($user == $receiver_id)
+        if ($user == $receiver_id)
         {
             return true;
         }
-        
+
         return RelationService::isFriend($user, $receiver_id);
     }
-    
+
     private static function __ownerCheck_typePostComment($post_id)
     {
         $post = \app\models\Post::find()
-                ->select(['user_id', 'owner_id'])
+                ->select(['user_id'])
                 ->where(['post_id' => $post_id])
                 ->one();
-        if(!is_null($post))
+        if (!is_null($post))
         {
-            if($post['user_id'] == $post['owner_id'])
+            $user = Yii::$app->user->getId();
+            if ($post['user_id'] === $user) // owner can be null.
             {
                 return true;
             }
             else
             {
-                return RelationService::isFriend($post['user_id'], $post['owner_id']);
+                return RelationService::isFriend($post['user_id'], $user);
             }
         }
         else
@@ -95,19 +96,19 @@ class AccessService
     {
         $controller = \Yii::$app->controller->id;
         $action = \Yii::$app->controller->action->id;
-        
+
         $searchRegex = $controller . "|" . $action;
         $key = Location::search($searchRegex);
-        
-        if(!is_string($key))
+
+        if (!is_string($key))
         {
             throw new InvalidLocationException("Error: Regex: " . $searchRegex);
         }
-        
+
         $locs = Location::toArray();
         self::$location = $locs[$key];
-        
     }
+
     private static function judgePermission($valueToCheck)
     {
         self::SetLocationsPermissions();
@@ -123,8 +124,8 @@ class AccessService
         {
             return true;
         }
-        
-        
+
+
         return false;
     }
 
@@ -237,6 +238,7 @@ class Permission extends Enum
  */
 class Location extends Enum
 {
+
     const GLOBAL_logged = "GLOBAL.L";
     const GLOBAL_notLogged = "GLOBAL.NL";
     const GLOBAL_ALL = "GLOBAL";
@@ -247,9 +249,8 @@ class Location extends Enum
     const ForgotPasswordPage = "Site|requestPasswordReset"; //TODO it needs to be checked
     //MIXED
     const ActionChangeLanguage = "action|lang";
-    
     //LOGGED
-    
+
     const MyProfiePage = "intouch|profile";
     const UserProfilePage = "intouch|userprofile";
     const LoggedHomePage = "intouch|index";
@@ -259,9 +260,11 @@ class Location extends Enum
 
 class ObjectCheckType extends Enum
 {
+
     const Post = "PostService|Post";
     const PostComment = "PostService|Comment";
     const Relation = "RelationService|Relation";
     const Request = "RequestService|Request";
     const Photo = "PhotoService|Photo";
+
 }

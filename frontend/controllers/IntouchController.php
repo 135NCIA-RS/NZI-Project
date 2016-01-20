@@ -67,11 +67,22 @@ class IntouchController extends Controller
         $this->getUserData();
         $zdjecie = new \app\models\Photo();
         $dane = $zdjecie->find()->all();
-        //UserService::setBirthDate(1, "28-04-1993");
-        //UserService::setPassword(1, "pass");
-        //////////////////////////////////
         $this->layout = 'logged';
         return $this->render('index', ['dane' => $dane]);
+    }
+
+    public function actionTestmail()
+    {
+        $email = UserService::getEmail(1);
+        $s = Yii::$app->mailer->compose()
+                ->setFrom('noreply@yii2.local')
+                ->setTo($email)
+                ->setSubject('InTouch')
+                ->setTextBody('Hello')
+                ->setHtmlBody('<b>Html Hello</b>')
+                ->send();
+        die(var_dump($s));
+        //
     }
 
     public function actionProfile()
