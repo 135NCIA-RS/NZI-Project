@@ -10,6 +10,7 @@ use app\components\exceptions\InvalidDateException;
 use app\components\exceptions\InvalidUserException;
 use app\components\exceptions\InvalidEnumKeyException;
 use MyCLabs\Enum\Enum;
+use app\components\AccessService;
 
 class RequestService
 {
@@ -59,13 +60,32 @@ class RequestService
      */
     public static function answerRequest($req_id, $answer)
     {
+        $user1_id = RequestService::getUser1Id($req_id);
+        $user2_id = RequestService::getUser2Id($req_id);
+
+        ///AccessService
+        try
+        {
+            if (!AccessService::hasAccess($user2_id, ObjectCheckType::Request))
+            {
+                Yii::$app->session->setFlash('error', 'Access Denied');
+                return false;
+            }
+        }
+        catch (Exception $ex)
+        {
+            Yii::$app->session->setFlash('warning', 'Something went wrong, contact Administrator');
+            return false;
+        }
+        ///end AccessService
+
         if ($answer)
         {
-            $user1_id = RequestService::getUser1Id($req_id);
-            $user2_id = RequestService::getUser2Id($req_id);
             RelationService::setRelation($user1_id, $user2_id, RelationType::Friend);
         }
         self::dropRequest($req_id);
+
+        //TODO Przemek popraw to!
         $check = Request::find()
                 ->select('req_id')
                 ->where(['user1_id' => $user2_id, 'user2_id' => $user1_id, 'req_type' => 'friend'])

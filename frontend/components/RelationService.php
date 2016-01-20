@@ -30,7 +30,7 @@ class RelationService
         {
             throw new InvalidUserException("User1 or User2 or both cannot be found");
         }
-
+        
         $rel1 = Relationship::find()
                 ->where([
                     'user1_id' => $user1_id,

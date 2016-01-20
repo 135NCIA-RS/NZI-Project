@@ -29,7 +29,7 @@ class AccessService
         return $value;
     }
     
-    public static function isItOwner($check_id, $objectCheckType)
+    public static function hasAccess($check_id, $objectCheckType)
     {
         if(!ObjectCheckType::isValid($objectCheckType))
         {
@@ -42,7 +42,10 @@ class AccessService
         {
             case ObjectCheckType::Request:
                 return self::__ownerCheck_typeRequest($check_id);
-                break;
+            case ObjectCheckType::Post:
+                return self::__ownerCheck_typePost($check_id);
+            case ObjectCheckType::PostComment:
+                return self::__ownerCheck_typePostComment($check_id);
             default:
                 throw new exceptions\FeatureNotImplemented("Check Type: " . $objectCheckType . ". That function cannot check that data object yet");
         }
@@ -50,9 +53,42 @@ class AccessService
     
     private static function __ownerCheck_typeRequest($check_id)
     {
-        return true;
-        //waiting for Przemek's Validation function
+        $user = Yii::$app->user->getId();
+        return ($check_id === $user);
+    }
+    
+    private static function __ownerCheck_typePost($receiver_id)
+    {
+        $user = Yii::$app->user->getId();
+        if($user == $receiver_id)
+        {
+            return true;
+        }
         
+        return RelationService::isFriend($user, $receiver_id);
+    }
+    
+    private static function __ownerCheck_typePostComment($post_id)
+    {
+        $post = \app\models\Post::find()
+                ->select(['user_id', 'owner_id'])
+                ->where(['post_id' => $post_id])
+                ->one();
+        if(!is_null($post))
+        {
+            if($post['user_id'] == $post['owner_id'])
+            {
+                return true;
+            }
+            else
+            {
+                return RelationService::isFriend($post['user_id'], $post['owner_id']);
+            }
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private static function matchLocation()

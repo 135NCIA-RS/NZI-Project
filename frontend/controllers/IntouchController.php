@@ -388,22 +388,8 @@ class IntouchController extends Controller
                 {
                     $answer = true;
                 }
-                try
-                {
-                    $request_id = (int) Yii::$app->request->post('request_id');
-                    if (AccessService::isItOwner($request_id, components\ObjectCheckType::Request))
-                    {
-                        RequestService::answerRequest($request_id, $answer);
-                    }
-                    else
-                    {
-                        Yii::$app->session->setFlash('error', 'Access Denied');
-                    }
-                }
-                catch (Exception $ex)
-                {
-                    Yii::$app->session->setFlash('warning', 'Something went wrong, contact Administrator');
-                }
+                $request_id = Yii::$app->request->post('request_id');
+                RequestService::answerRequest($request_id, $answer);    
             }
         }
 

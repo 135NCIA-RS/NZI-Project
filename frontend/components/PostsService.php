@@ -44,7 +44,7 @@ class PostsService
             $counter++;
         }
 
-        return isset($refined_data) ? $refined_data : false;
+        return isset($refined_data) ? $refined_data : [];
     }
 
     public static function createPost($receiver_id, $text)
@@ -52,7 +52,7 @@ class PostsService
         $author_id = Yii::$app->user->getId();
         try
         {
-            if (!AccessService::isItOwner($receiver_id, ObjectCheckType::Post))
+            if (!AccessService::hasAccess($receiver_id, ObjectCheckType::Post))
             {
                 Yii::$app->session->setFlash('error', 'Access Denied');
                 return false;
@@ -80,7 +80,7 @@ class PostsService
     {
         try
         {
-            if (!AccessService::isItOwner($post_id, ObjectCheckType::PostComment))
+            if (!AccessService::hasAccess($post_id, ObjectCheckType::PostComment))
             {
                 Yii::$app->session->setFlash('error', 'Access Denied');
                 return false;
