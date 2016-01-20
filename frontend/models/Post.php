@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $post_id
  * @property integer $user_id
+ * @property integer $owner_id
  * @property string $post_type
  * @property string $post_text
  * @property integer $post_ref
@@ -20,6 +21,7 @@ use Yii;
  * @property Comment[] $comments
  * @property Like[] $likes
  * @property User $user
+ * @property User $owner
  * @property PostAttachment[] $postAttachments
  */
 class Post extends \yii\db\ActiveRecord
@@ -39,7 +41,7 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'post_type', 'post_text', 'post_date'], 'required'],
-            [['user_id', 'post_ref'], 'integer'],
+            [['user_id', 'owner_id', 'post_ref'], 'integer'],
             [['post_date', 'post_editdate'], 'safe'],
             [['post_type', 'post_visibility'], 'string', 'max' => 20],
             [['post_text'], 'string', 'max' => 2048],
@@ -55,6 +57,7 @@ class Post extends \yii\db\ActiveRecord
         return [
             'post_id' => 'Post ID',
             'user_id' => 'User ID',
+            'owner_id' => 'Owner ID',
             'post_type' => 'Post Type',
             'post_text' => 'Post Text',
             'post_ref' => 'Post Ref',
@@ -87,6 +90,14 @@ class Post extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOwner()
+    {
+        return $this->hasOne(User::className(), ['id' => 'owner_id']);
     }
 
     /**
