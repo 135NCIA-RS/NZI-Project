@@ -57,6 +57,7 @@ return [
                 'profile/aboutedit' => 'intouch/aboutedit',
                 'search' => 'intouch/search',
                 'notifications' => 'intouch/notifications',
+                'myFriends' => 'intouch/myfriends',
             ],
         ],
     ],

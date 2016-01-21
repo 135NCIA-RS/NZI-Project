@@ -413,5 +413,14 @@ class IntouchController extends Controller
         $this->layout = 'logged';
         return $this->render('allRequests');
     }
+    
+    public function actionMyfriends()
+    {
+        $id = Yii::$app->user->getId();
+
+        $this->getUserData($id);
+        $this->layout = 'logged';
+        return $this->render('myFriends');
+    }
 
 }

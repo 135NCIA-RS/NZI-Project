@@ -19,7 +19,7 @@ return [
     'Retype Password'=>'Powtorz haslo',
     'Register a new membership'=>'Utworz konto',
     'I already have a membership'=>'Jestem już uzytkownikiem',
-    
+    'Friends' => 'Znajomi',
     
 ];
 

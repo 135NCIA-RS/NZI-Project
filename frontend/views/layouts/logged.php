@@ -10,8 +10,6 @@ use frontend\assets\AppAsset;
 use common\widgets\Alert;
 use yii\helpers\Url;
 
-
-
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -20,14 +18,14 @@ AppAsset::register($this);
     <head>
         <meta charset="<?= Yii::$app->charset ?>">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <?= Html::csrfMetaTags() ?>
+<?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
     </head>
     <body class="hold-transition skin-blue sidebar-mini">
-        <?php $this->beginBody() ?>
+<?php $this->beginBody() ?>
         <div class="wrapper">
-            
+
 
             <header class="main-header">
                 <!-- Logo -->
@@ -49,24 +47,24 @@ AppAsset::register($this);
                             <li class="dropdown notifications-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-bell-o"></i>
-                                    <span class="label label-warning"><?= $this->params['notification_count']?></span>
+                                    <span class="label label-warning"><?= $this->params['notification_count'] ?></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li class="header">You have <?= $this->params['notification_count']?> notification(s)</li>
+                                    <li class="header">You have <?= $this->params['notification_count'] ?> notification(s)</li>
                                     <li>
                                         <!-- inner menu: contains the actual data -->
                                         <ul class="menu">
                                             <li>
-                                                <?php 
-                                                if($this->params['notification_count']>0)
-                                                {
-                                                    ?>
-                                                <a href="/notifications">
-                                                    <i class="fa fa-users text-aqua"></i> New friend request
-                                                </a>
-                                                <?php
-                                                }
-                                                ?>
+<?php
+if ($this->params['notification_count'] > 0)
+{
+    ?>
+                                                    <a href="/notifications">
+                                                        <i class="fa fa-users text-aqua"></i> New friend request
+                                                    </a>
+    <?php
+}
+?>
                                             </li>
                                         </ul>
                                     </li>
@@ -86,7 +84,7 @@ AppAsset::register($this);
 
                                     <li class="user-header">
 
-                                        <?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
+<?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
                                         <p style='color:black; font-weight:bold'><?= $this->params['userInfo']['user_name'] . ' ' . $this->params['userInfo']['user_surname'] ?></p>
                                         <p>
                                             You're InTouch now.
@@ -111,7 +109,7 @@ AppAsset::register($this);
                                     </li>
                                 </ul>
                             </li>
-                           
+
                         </ul>
                     </div>
                 </nav>
@@ -123,7 +121,7 @@ AppAsset::register($this);
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
+<?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
                         </div>
                         <div class="pull-left info">
                             <p><?= $this->params['userInfo']['user_name'] . ' ' . $this->params['userInfo']['user_surname'] ?></p>
@@ -149,7 +147,11 @@ AppAsset::register($this);
                                 <i class="fa fa-user"></i> <span><?= Yii::t('app', 'Profile') ?></span> 
                             </a>
                         </li>
-
+                        <li>
+                            <a href="/myFriends">
+                                <i class="fa fa-users"></i> <span><?= Yii::t('app', 'Friends') ?></span> 
+                            </a>
+                        </li>
 
                     </ul>
                 </section>
@@ -160,13 +162,13 @@ AppAsset::register($this);
                 <!-- Content Header (Page header) -->
                 <!-- Main content -->
                 <section class="content">
-                    <?= Alert::widget() ?>
+<?= Alert::widget() ?>
                     <?= $content ?>
                 </section>
             </div>
 
 
-            <?php $this->endBody() ?>
+<?php $this->endBody() ?>
     </body>
 </html>
 <?php $this->endPage() ?>
