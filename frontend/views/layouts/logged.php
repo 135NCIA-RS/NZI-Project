@@ -18,12 +18,12 @@ AppAsset::register($this);
     <head>
         <meta charset="<?= Yii::$app->charset ?>">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-<?= Html::csrfMetaTags() ?>
+        <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
     </head>
     <body class="hold-transition skin-blue sidebar-mini">
-<?php $this->beginBody() ?>
+        <?php $this->beginBody() ?>
         <div class="wrapper">
 
 
@@ -55,16 +55,16 @@ AppAsset::register($this);
                                         <!-- inner menu: contains the actual data -->
                                         <ul class="menu">
                                             <li>
-<?php
-if ($this->params['notification_count'] > 0)
-{
-    ?>
+                                                <?php
+                                                if ($this->params['notification_count'] > 0)
+                                                {
+                                                    ?>
                                                     <a href="/notifications">
                                                         <i class="fa fa-users text-aqua"></i> New friend request
                                                     </a>
-    <?php
-}
-?>
+                                                    <?php
+                                                }
+                                                ?>
                                             </li>
                                         </ul>
                                     </li>
@@ -84,7 +84,7 @@ if ($this->params['notification_count'] > 0)
 
                                     <li class="user-header">
 
-<?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
+                                        <?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
                                         <p style='color:black; font-weight:bold'><?= $this->params['userInfo']['user_name'] . ' ' . $this->params['userInfo']['user_surname'] ?></p>
                                         <p>
                                             You're InTouch now.
@@ -121,7 +121,7 @@ if ($this->params['notification_count'] > 0)
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
-<?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
+                            <?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
                         </div>
                         <div class="pull-left info">
                             <p><?= $this->params['userInfo']['user_name'] . ' ' . $this->params['userInfo']['user_surname'] ?></p>
@@ -152,6 +152,22 @@ if ($this->params['notification_count'] > 0)
                                 <i class="fa fa-users"></i> <span><?= Yii::t('app', 'Friends') ?></span> 
                             </a>
                         </li>
+                        <li class="header"><?= Yii::t('app', 'ACTIONS') ?></li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-language"></i> <span><?= Yii::t('app', 'Language') . '&nbsp;' ?>
+                                </span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <?php
+                                foreach (\Yii::$app->params['languages'] as $key => $lang)
+                                {
+                                    echo '<li><a href="/action/lang?lang=' . $key . '"><i class="flag-icon flag-icon-' . $key . '"></i>' . ' | ' . $lang . '</a></li>';
+                                }
+                                ?>
+                            </ul>
+                        </li>
 
                     </ul>
                 </section>
@@ -162,13 +178,13 @@ if ($this->params['notification_count'] > 0)
                 <!-- Content Header (Page header) -->
                 <!-- Main content -->
                 <section class="content">
-<?= Alert::widget() ?>
+                    <?= Alert::widget() ?>
                     <?= $content ?>
                 </section>
             </div>
 
 
-<?php $this->endBody() ?>
+            <?php $this->endBody() ?>
     </body>
 </html>
 <?php $this->endPage() ?>
