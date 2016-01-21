@@ -10,7 +10,7 @@ $count = $this->params['notification_count'];
 foreach ($data as $var)
 {
     ?>
-    <div style="background-color: #dcebef; padding: 10px 10px 10px 10px; border-radius: 10px;  margin-bottom:5px;">
+    <div style="background-color: #dcebef; padding: 15px 10px 15px 10px; border-radius: 10px;  margin-bottom:5px;">
         <div>
             <?= Html::beginForm("", 'post', []) ?>
             <?php
