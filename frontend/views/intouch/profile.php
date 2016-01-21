@@ -83,6 +83,24 @@ use app\components\PhotoService;
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
                         <!-- Add post -->
+                        <div class="tab-content">
+                    <div class="active tab-pane" id="activity">
+                        <!-- Add post -->
+
+                        <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Default Modal</h4>
+              </div>
+              <div class="modal-body">
+                <p>One fine body…</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
                         <?= Html::beginForm("", 'post', []) ?>
                         <input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post" name="inputText">
                         <input type="hidden" name="type" value="newpost">
