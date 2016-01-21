@@ -144,7 +144,8 @@ class RequestService
     private static function createReqObj($user1_id, $date, $req_id, $req_type)
     {
         $uname = UserService::getUserName($user1_id);
-        return ['type' => $req_type, 'req_id' => $req_id, 'senderUserName' => $uname, 'date' => $date];
+        $fullname= UserService::getNameLong($user1_id);
+        return ['type' => $req_type, 'req_id' => $req_id, 'senderUserName' => $uname, 'date' => $date, 'fullname'=>$fullname];
     }
 
     /**

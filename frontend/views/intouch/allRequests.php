@@ -18,7 +18,7 @@ foreach ($data as $var)
             {
                 ?>
 
-                <?= $var['date'] ?> | <?= $var['senderUserName'] ?> sent you an friendship request.
+                <?= $var['date'] ?> | <?= $var['fullname'].' ('. $var['senderUserName'].')' ?> sent you an friendship request.
                 <?php
             }
             ?>
