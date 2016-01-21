@@ -18,7 +18,7 @@ foreach ($data as $var)
             {
                 ?>
 
-                <?= $var['date'] ?> | <?= $var['fullname'].' ('. $var['senderUserName'].')' ?> sent you an friendship request.
+                <?= $var['date'] ?> | <a href="/<?=$var['senderUserName']?>"><?= $var['fullname'] . ' (' . $var['senderUserName'] . ')' ?></a> sent you an friendship request.
                 <?php
             }
             ?>
@@ -26,7 +26,7 @@ foreach ($data as $var)
             <button type="submit" name="accept-btn" style=" width: 100px; margin-top: -5px;" class="btn btn-success pull-right btn-sm">Accept</button>
             <input type="hidden" name="request_id" value="<?= $var['req_id'] ?>">
             <?= Html::endForm() ?>
-            
+
         </div>
     </div>
     <?php
