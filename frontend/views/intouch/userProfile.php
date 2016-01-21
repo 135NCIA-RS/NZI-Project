@@ -27,7 +27,7 @@ use app\components\PhotoService;
 <?= Html::img($UserProfilePhoto, ['class' => 'profile-user-img img-responsive img-circle', 'alt' => 'User profile image']) ?>
                     <h3 class="profile-username text-center"><?= $name . " " . $surname ?></h3>
 
-                    <p class="text-muted text-center">Software Engineer</p>
+                    <p class="text-muted text-center">InTouch User</p>
                     <?php
                     $script = <<< JS
 $('body').on('click', '.pjaxButton', function() {
