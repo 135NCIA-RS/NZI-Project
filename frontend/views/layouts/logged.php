@@ -95,7 +95,7 @@ AppAsset::register($this);
                                     <li class="user-body">
 
                                         <div class="col-xs-4 text-center">
-                                            <a href="#">Friends</a>
+                                            <a href="/myFriends">Friends</a>
                                         </div>
                                     </li>
                                     <!-- Menu Footer-->
