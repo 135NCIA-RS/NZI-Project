@@ -39,7 +39,11 @@ foreach ($friends as $friend)
         <img class="direct-chat-img" src="<?= $friend['photo'] ?>" alt="message user image" style="margin-right: 10px;">
 
         <p><?= $friend['name'] . " " . $friend['surname'] . " (" . $friend['username'] . ")" ?></p>
-        <a href="/<?= $friend['username'] ?>">Profile</a>
+        <div>
+            <a href="/<?= $friend['username'] ?>">Profile</a>
+            |
+            <a href="mailto:<?=$friend['email']?>">Send Mail</a>
+        </div>
     </div>
     <?php
 }
