@@ -32,6 +32,20 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+if (count($friends) == 0)
+{
+    echo "You don't have friends. Invite someone :)";
+    ?>
+    <br/>
+    <center>
+    <div>
+        <center><img src='/dist/img/forever_alone.png'/></center>
+    
+    <img src='/dist/img/forever_alone_text.png'/>
+    </div>
+    </center>
+        <?php
+}
 foreach ($friends as $friend)
 {
     ?>
@@ -42,7 +56,7 @@ foreach ($friends as $friend)
         <div>
             <a href="/<?= $friend['username'] ?>">Profile</a>
             |
-            <a href="mailto:<?=$friend['email']?>">Send Mail</a>
+            <a href="mailto:<?= $friend['email'] ?>">Send Mail</a>
         </div>
     </div>
     <?php
