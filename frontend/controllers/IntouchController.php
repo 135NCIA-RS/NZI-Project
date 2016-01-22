@@ -261,6 +261,10 @@ class IntouchController extends Controller
         /////////////////////////--- Profile Infos ---//////////////////////////
         $id = Yii::$app->session->get("viewID");
         $myId = Yii::$app->user->getId();
+        if ($id == $myId)
+        {
+            return $this->redirect('/profile');
+        }
         $education = UserService::getUserEducation($id);
         $about = UserService::getUserAbout($id);
         $city = UserService::getUserCity($id);
