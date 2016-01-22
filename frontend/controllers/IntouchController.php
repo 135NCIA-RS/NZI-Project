@@ -417,10 +417,12 @@ class IntouchController extends Controller
     public function actionMyfriends()
     {
         $id = Yii::$app->user->getId();
-
+        ///////
+        $friends = RelationService::getFriendsList($id, true);
+        ///////
         $this->getUserData($id);
         $this->layout = 'logged';
-        return $this->render('myFriends');
+        return $this->render('myFriends',['friends' => $friends]);
     }
 
 }

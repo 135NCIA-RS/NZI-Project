@@ -30,7 +30,7 @@ class RelationService
         {
             throw new InvalidUserException("User1 or User2 or both cannot be found");
         }
-        
+
         $rel1 = Relationship::find()
                 ->where([
                     'user1_id' => $user1_id,
@@ -99,7 +99,7 @@ class RelationService
         {
             throw new InvalidUserException("User1 or User2 or both cannot be found");
         }
-        
+
         $rel = Relationship::find()
                 ->where([
                     'user1_id' => $user1_id,
@@ -112,7 +112,7 @@ class RelationService
                     'relation_type' => RelationType::Friend,
                 ])
                 ->one();
-        if($rel == null)
+        if ($rel == null)
         {
             return false;
         }
@@ -121,7 +121,7 @@ class RelationService
             return true;
         }
     }
-    
+
     /**
      * Checks if User1 is followed by user2
      * @param int $user1_id User1's ID
@@ -135,7 +135,7 @@ class RelationService
         {
             throw new InvalidUserException("User1 or User2 or both cannot be found");
         }
-        
+
         $rel = Relationship::find()
                 ->where([
                     'user1_id' => $user1_id,
@@ -143,7 +143,7 @@ class RelationService
                     'relation_type' => RelationType::Follower,
                 ])
                 ->one();
-        if($rel == null)
+        if ($rel == null)
         {
             return false;
         }
@@ -152,7 +152,7 @@ class RelationService
             return true;
         }
     }
-    
+
     /**
      * Checks if User1 is blocked by user2
      * @param int $user1_id User1's ID
@@ -166,7 +166,7 @@ class RelationService
         {
             throw new InvalidUserException("User1 or User2 or both cannot be found");
         }
-        
+
         $rel = Relationship::find()
                 ->where([
                     'user1_id' => $user1_id,
@@ -174,8 +174,8 @@ class RelationService
                     'relation_type' => RelationType::Blocked,
                 ])
                 ->one();
-        
-        if($rel == null)
+
+        if ($rel == null)
         {
             return false;
         }
@@ -184,7 +184,7 @@ class RelationService
             return true;
         }
     }
-    
+
     /**
      * Returns an Array of All Relations betweeen user1 and user2 (OneWay + isFriend)
      * @param int $user1_id User1's ID
@@ -199,13 +199,13 @@ class RelationService
         $ret[RelationType::Friend] = self::isFriend($user1_id, $user2_id);
         return $ret;
     }
-    
+
     /**
      * Returns an array of friends of User1
      * @param int $user1_id User's ID
      * @return int[] Array of User's ID
      */
-    public static function getFriendsList($user1_id)
+    public static function getFriendsList($user1_id, $includeBasicProfileData = false)
     {
         $arr = [];
         $rel = Relationship::find()
@@ -220,17 +220,26 @@ class RelationService
                     'relation_type' => RelationType::Friend,
                 ])
                 ->all();
-        foreach($rel as $var)
+        foreach ($rel as $var)
         {
             $arr[] = $var['user2_id'];
         }
-        foreach($rel2 as $var)
+        foreach ($rel2 as $var)
         {
             $arr[] = $var['user1_id'];
         }
+        if ($includeBasicProfileData)
+        {
+            $arr1 = [];
+            foreach ($arr as $user)
+            {
+                $arr1[] = UserService::createBasicUserInfoObj($user);
+            }
+            $arr = $arr1;
+        }
         return $arr;
     }
-    
+
     /**
      * Returns List of Users who follow User1
      * @param int $user1_id User's ID
@@ -245,13 +254,13 @@ class RelationService
                     'relation_type' => RelationType::Follower,
                 ])
                 ->all();
-        foreach($rel as $var)
+        foreach ($rel as $var)
         {
             $arr[] = $var['user1_id'];
         }
         return $arr;
     }
-    
+
     /**
      * Returns an array of users who User1 follow
      * @param type $user1_id
@@ -266,13 +275,13 @@ class RelationService
                     'relation_type' => RelationType::Follower,
                 ])
                 ->all();
-        foreach($rel as $var)
+        foreach ($rel as $var)
         {
             $arr[] = $var['user2_id'];
         }
         return $arr;
     }
-    
+
     /**
      * Returns array of Users who are blocked by User1
      * @param int $user1_id User1's ID
@@ -287,13 +296,13 @@ class RelationService
                     'relation_type' => RelationType::Blocked,
                 ])
                 ->all();
-        foreach($rel as $var)
+        foreach ($rel as $var)
         {
             $arr[] = $var['user2_id'];
         }
         return $arr;
     }
-    
+
     public static function removeRelation($user1_id, $user2_id, $rel_type)
     {
         if (!RelationType::validate($rel_type))
@@ -305,25 +314,23 @@ class RelationService
         {
             throw new InvalidUserException("User1 or User2 or both cannot be found");
         }
-        
+
         $dt = Relationship::find()->where([
-            'user1_id' => $user1_id,
-            'user2_id' => $user2_id,
-            'relation_type' => $rel_type
+                    'user1_id' => $user1_id,
+                    'user2_id' => $user2_id,
+                    'relation_type' => $rel_type
                 ])->one();
         $dt->delete();
-        
-        if(RelationMode::getMode($rel_type) == RelationMode::TwoWay)
+
+        if (RelationMode::getMode($rel_type) == RelationMode::TwoWay)
         {
             $dt1 = $dt = Relationship::find()->where([
-            'user1_id' => $user2_id,
-            'user2_id' => $user1_id,
-            'relation_type' => $rel_type
-                ])->one();
+                        'user1_id' => $user2_id,
+                        'user2_id' => $user1_id,
+                        'relation_type' => $rel_type
+                    ])->one();
             $dt1->delete();
         }
-        
-        
     }
 
     /**
@@ -390,7 +397,7 @@ class RelationMode
      */
     public static function getMode($relation_type)
     {
-        switch($relation_type)
+        switch ($relation_type)
         {
             case RelationType::Friend:
                 return self::TwoWay;

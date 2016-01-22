@@ -474,5 +474,18 @@ class UserService
             return true;
         }
     }
+    
+    public static function createBasicUserInfoObj($id)
+    {
+        $arr = [];
+        $arr['username'] = self::getUserName($id);
+        $arr['name'] = self::getName($id);
+        $arr['surname'] = self::getSurname($id);
+        $arr['email'] = self::getEmail($id);
+        $arr['id'] = $id;
+        $arr['photo'] = PhotoService::getProfilePhoto($id, true, true);
+        
+        return $arr;
+    }
 
 }
