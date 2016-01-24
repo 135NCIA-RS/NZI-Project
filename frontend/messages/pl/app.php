@@ -36,7 +36,6 @@ return [
     'Repeat password' => 'Powtórz hasło',
     'Change profile picture' => 'Zmień zdjęcie profilowe',
     'Must be less than 300kb and in one of the following formats: png, jpg.' => 'Musi mieć mniej niż 300kb i być w jednym z następujących formatów: png, jpg.',
-    'Save changes' => 'Zapisz zmiany',
     'Follow' => 'Obserwuj',
     'Unfollow' => 'Nie obserwuj',
     'Send a friend request' => 'Zaproś do znajomych',
@@ -74,6 +73,9 @@ return [
     'Register a new account' => 'Zarejestruj nowe konto',
     'I already have an account' => 'Mam już konto',
     'My friends' => 'Moi znajomi',
+    'Request password reset' => 'Zresetuj hasło.',
+    'Send' => 'Wyślij',
+    'Save' => 'Zapisz',
 ];
 
 
