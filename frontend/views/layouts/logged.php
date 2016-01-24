@@ -141,7 +141,7 @@ AppAsset::register($this);
                     <!-- /.search form -->
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
-                        <li class="header">MAIN NAVIGATION</li>
+                        <li class="header"><?= Yii::t('app','MAIN NAVIGATION'); ?></li>
                         <li>
                             <a href="/profile">
                                 <i class="fa fa-user"></i> <span><?= Yii::t('app', 'Profile') ?></span> 

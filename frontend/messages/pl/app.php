@@ -82,6 +82,12 @@ return [
     'Unfriend' => 'Usuń ze znajomych',
     'Type a comment' => 'Wpisz komentarz',
     'Account' => 'Konto',
+    'Hello!' => 'Witaj!',
+    'Get In Touch with your friends!' => 'Skontaktuj się ze swoimi znajomymi!',
+    'Username' => 'Użytkownik',
+    'Sign in to start your session' => 'Zaloguj się by rozpocząć.',
+    'I forgot my password' => 'Nie pamiętam hasła',
+    'ACTIONS' => 'CZYNNOŚCI',
 ];
 
 

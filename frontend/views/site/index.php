@@ -12,7 +12,7 @@ $this->title = 'My Yii Application';
 
       <!--  <p class="lead"><?php var_dump(Yii::$app->language); ?></p> -->
 
-        <p><a class="btn btn-lg btn-success" href="/register">Touch It</a></p>
+        <p><a class="btn btn-lg btn-success" href="/register"><?=Yii::t('app', 'Register')?></a></p>
     </div>
 
     <div class="body-content">
