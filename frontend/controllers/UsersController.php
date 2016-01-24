@@ -44,9 +44,35 @@ class UsersController extends Controller
             ],
         ];
     }
-
-    public function actionView($uname)
+    
+    public function actions()
     {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
+        ];
+    }
+
+    public function actionView($uname = null)
+    {
+        
+//        if($uname == null)
+//        {
+//            $uname = Yii::$app->session->get('lastProfile');
+//            if($uname == null)
+//            {
+//                throw new \yii\web\HttpException("Invalid Data");
+//            }
+//        }
+//        else
+//        {
+//            Yii::$app->session->set("lastProfile", $uname);
+//        }
         /////////////////////////--- Profile Infos ---//////////////////////////
         $id = UserService::getUserIdByName($uname);
         if($id === false)
@@ -58,23 +84,6 @@ class UsersController extends Controller
         {
             return $this->redirect('/profile');
         }
-        $education = UserService::getUserEducation($id);
-        $about = UserService::getUserAbout($id);
-        $city = UserService::getUserCity($id);
-        $birth = UserService::getBirthDate($id);
-        $name = UserService::getName($id);
-        $surname = UserService::getSurname($id);
-        if (strlen($name) == 0 || strlen($surname) == 0)
-        {
-            $name = "Dane nie uzupełnione";
-            $surname = "";
-        }
-        $email = UserService::getEmail($id);
-        $followers = count(RelationService::getUsersWhoFollowMe($id));
-        $following = count(RelationService::getUsersWhoIFollow($id));
-        $friends = count(RelationService::getFriendsList($id));
-        $photo = PhotoService::getProfilePhoto($id, true, true);
-        /////$$$$$ FORMS $$$$$//////////////////////////////////////////////////
         if (Yii::$app->request->isPjax)
         {
             if (AccessService::check(Permission::ManageUserRelations))
@@ -102,6 +111,27 @@ class UsersController extends Controller
                 $this->redirect("intouch/accessdenied");
             }
         }
+        
+        
+        
+        $education = UserService::getUserEducation($id);
+        $about = UserService::getUserAbout($id);
+        $city = UserService::getUserCity($id);
+        $birth = UserService::getBirthDate($id);
+        $name = UserService::getName($id);
+        $surname = UserService::getSurname($id);
+        if (strlen($name) == 0 || strlen($surname) == 0)
+        {
+            $name = "Dane nie uzupełnione";
+            $surname = "";
+        }
+        $email = UserService::getEmail($id);
+        $followers = count(RelationService::getUsersWhoFollowMe($id));
+        $following = count(RelationService::getUsersWhoIFollow($id));
+        $friends = count(RelationService::getFriendsList($id));
+        $photo = PhotoService::getProfilePhoto($id, true, true);
+        /////$$$$$ FORMS $$$$$//////////////////////////////////////////////////
+        
         if (Yii::$app->request->isPost)
         {
             if (!is_null(Yii::$app->request->post('type')))
@@ -154,6 +184,7 @@ class UsersController extends Controller
             'posts' => $posts,
             'photo' => $photo,
             'myId' => $myId,
+            'myUname' => UserService::getUserName($myId),
         ];
         
         $this->getUserData();

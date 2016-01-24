@@ -252,7 +252,7 @@ class Location extends Enum
     //LOGGED
 
     const MyProfiePage = "intouch|profile";
-    const UserProfilePage = "intouch|userprofile";
+    const UserProfilePage = "users|view";
     const LoggedHomePage = "intouch|index";
     const SearchLogged = "intouch|search";
 

@@ -12,7 +12,6 @@ use yii\widgets\Pjax;
 use app\components\PostsService;
 use app\components\UserService;
 use app\components\PhotoService;
-
 /* @var $this yii\web\View */
 ?>
 
@@ -24,23 +23,14 @@ use app\components\PhotoService;
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-<?= Html::img($UserProfilePhoto, ['class' => 'profile-user-img img-responsive img-circle', 'alt' => 'User profile image']) ?>
+                    <?= Html::img($UserProfilePhoto, ['class' => 'profile-user-img img-responsive img-circle', 'alt' => 'User profile image']) ?>
                     <h3 class="profile-username text-center"><?= $name . " " . $surname ?></h3>
 
                     <p class="text-muted text-center">InTouch User</p>
+                    
                     <?php
-                    $script = <<< JS
-$('body').on('click', '.pjaxButton', function() {
-        setTimeout(
-            function() {
-                $("#refr").click();
-            },
-            1250);
-});
-JS;
-                    $this->registerJs($script, yii\web\View::POS_READY);
+                    Pjax::begin();
                     ?>
-<?php Pjax::begin(); ?>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
                             <b>Followers</b> <a class="pull-right"><?= $followers ?></a>
@@ -58,7 +48,7 @@ JS;
                         }
                     </style>
                     <?php
-                    echo Html::beginForm("", 'post', ['data-pjax' => '']);
+                    echo Html::beginForm(["users/view" , 'uname' => $UserName], 'post', ['data-pjax' => '']);
 
                     if (!$UserFollowState)
                     {
@@ -78,7 +68,7 @@ JS;
 
                     if (is_bool($UserFriendshipState))
                     {
-                        echo Html::beginForm("", 'post', ['data-pjax' => '']);
+                        echo Html::beginForm(["users/view" , 'uname' => $UserName], 'post', ['data-pjax' => '']);
                         if (!$UserFriendshipState)
                         {
                             echo Html::submitButton("Request Friendship", [
@@ -99,8 +89,7 @@ JS;
                     {
                         echo "<button class='btn btn-default btn-block btn-sm'>Friend Request Sent</button>";
                     }
-                    echo Html::a("Refresh", [""], ['class' => 'hidden', 'id' => 'refr']);
-
+                    
                     Pjax::end();
                     ?>
                 </div>
@@ -156,8 +145,10 @@ JS;
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
-                        <?php if (true)
-                        { ?>
+                        <?php
+                        if (true)
+                        {
+                            ?>
                             <!-- Add post -->
     <?= Html::beginForm("", 'post', []) ?>
                             <input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post" name="inputText">
@@ -181,8 +172,12 @@ JS;
                                             <a href="#"><?php echo($row['name'] . " " . $row['surname']); ?></a>
                                             <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
                                         </span>
-                                        <span class="description"><?php if ($row['post_visibility'] == "visible") echo "Post public";
-                                else echo "Post hidden"; ?> - <?php echo($row['post_date']); ?></span>
+                                        <span class="description"><?php
+                                            if ($row['post_visibility'] == "visible")
+                                                echo "Post public";
+                                            else
+                                                echo "Post hidden";
+                                            ?> - <?php echo($row['post_date']); ?></span>
                                     </div>
                                     <!-- /.user-block -->
                                     <p>
@@ -210,8 +205,10 @@ JS;
                                                     <div class="col-sm-6">
                                                         <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[3]['file']; ?>" alt="Photo">
                                                         <br>
-            <?php if (isset($attachments[4]['file']))
-            { ?><img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>" alt="Photo"> <?php } ?>
+            <?php
+            if (isset($attachments[4]['file']))
+            {
+                ?><img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>" alt="Photo"> <?php } ?>
                                                     </div>
                                                     <!-- /.col -->
                                                 </div>
