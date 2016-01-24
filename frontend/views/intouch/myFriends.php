@@ -23,7 +23,7 @@
     }
 </style>
 <div>
-    <font size ="5">My friends</font>
+    <font size ="5"><?= Yii::t('app','My friends'); ?></font>
     <div class="hr" id="hr1">.</div>
 </div>
 <br/>
@@ -34,7 +34,7 @@ use yii\widgets\ActiveForm;
 
 if (count($friends) == 0)
 {
-    echo "You don't have friends. Invite someone :)";
+    echo Yii::t('app','You don\'t have friends. Invite someone :)' );;
     ?>
     <br/>
     <center>
@@ -54,9 +54,9 @@ foreach ($friends as $friend)
 
         <p><?= $friend['name'] . " " . $friend['surname'] . " (" . $friend['username'] . ")" ?></p>
         <div>
-            <a href="/user/<?= $friend['username'] ?>">Profile</a>
+            <a href="/user/<?= $friend['username'] ?>"><?= Yii::t('app','Profile'); ?></a>
             |
-            <a href="mailto:<?= $friend['email'] ?>">Send Mail</a>
+            <a href="mailto:<?= $friend['email'] ?>"><?= Yii::t('app','Send e-mail'); ?></a>
         </div>
     </div>
     <?php

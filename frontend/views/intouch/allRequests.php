@@ -18,12 +18,12 @@ foreach ($data as $var)
             {
                 ?>
 
-                <?= $var['date'] ?> | <a href="/user/<?=$var['senderUserName']?>"><?= $var['fullname'] . ' (' . $var['senderUserName'] . ')' ?></a> sent you an friendship request.
+                <?= $var['date'] ?> | <a href="/user/<?=$var['senderUserName']?>"><?= $var['fullname'] . ' (' . $var['senderUserName'] . ')' ?></a> <?= Yii::t('app',' has sent you a friend request.'); ?>
                 <?php
             }
             ?>
-            <button type="submit" name="dismiss-btn" style=" width: 100px; margin-left: 5px; margin-top: -5px;" class="btn btn-danger pull-right btn-sm">Dismiss</button>
-            <button type="submit" name="accept-btn" style=" width: 100px; margin-top: -5px;" class="btn btn-success pull-right btn-sm">Accept</button>
+            <button type="submit" name="dismiss-btn" style=" width: 100px; margin-left: 5px; margin-top: -5px;" class="btn btn-danger pull-right btn-sm"><?= Yii::t('app','Reject'); ?></button>
+            <button type="submit" name="accept-btn" style=" width: 100px; margin-top: -5px;" class="btn btn-success pull-right btn-sm"><?= Yii::t('app','Accept'); ?></button>
             <input type="hidden" name="request_id" value="<?= $var['req_id'] ?>">
             <?= Html::endForm() ?>
 

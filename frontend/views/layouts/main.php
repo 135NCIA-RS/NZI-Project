@@ -38,7 +38,7 @@ AppAsset::register($this);
                     <!-- Sidebar toggle button-->
                     <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
                     
-                        <span class="sr-only"><?= Yii::t('app','Toogle navigation') ?></span>
+                        <span class="sr-only"><?= Yii::t('app','Toggle navigation') ?></span>
                     </a>
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
@@ -56,7 +56,7 @@ AppAsset::register($this);
                                     <li class="user-header">
                                         <?php echo Html::img('@web/dist/img/guest.png', ['class' => "img-circle"]) ?>
                                         <p>
-                                            <?= Yii::t('app',"You've not signed in") ?>
+                                            <?= Yii::t('app',"You're not signed in.") ?>
                                         </p>
                                     </li>
 
@@ -66,7 +66,7 @@ AppAsset::register($this);
                                             <a href="/register" class="btn btn-default btn-flat"><?= Yii::t('app','Register') ?></a>
                                         </div>
                                         <div class="pull-right">
-                                            <a href="/login" class="btn btn-default btn-flat"><?= Yii::t('app','LogIn') ?></a>
+                                            <a href="/login" class="btn btn-default btn-flat"><?= Yii::t('app','Log in') ?></a>
                                         </div>
                                     </li>
                                 </ul>

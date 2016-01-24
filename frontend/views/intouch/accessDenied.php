@@ -9,7 +9,7 @@ use yii\helpers\Html;
 <div class="box box-danger" style="max-width: 60%; left: 50%; transform: translateX(-50%)">
     <div class="box-header with-border">
         <i class="fa fa-warning"></i>
-        <h3 class="box-title">You are not allowed to do this task.</h3>
+        <h3 class="box-title"><?= Yii::t('app','You are not allowed to perform this task.'); ?></h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body" style="padding: 60px">

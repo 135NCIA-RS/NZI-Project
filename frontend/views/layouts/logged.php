@@ -50,7 +50,7 @@ AppAsset::register($this);
                                     <span class="label label-warning"><?= $this->params['notification_count'] ?></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li class="header">You have <?= $this->params['notification_count'] ?> notification(s)</li>
+                                    <li class="header"><?= Yii::t('app','You have'); ?> <?= $this->params['notification_count'] ?> <?= Yii::t('app','notification(s)'); ?></li>
                                     <li>
                                         <!-- inner menu: contains the actual data -->
                                         <ul class="menu">
@@ -60,7 +60,7 @@ AppAsset::register($this);
                                                 {
                                                     ?>
                                                     <a href="/notifications">
-                                                        <i class="fa fa-users text-aqua"></i> New friend request
+                                                        <i class="fa fa-users text-aqua"></i> <?= Yii::t('app','New friend request'); ?>
                                                     </a>
                                                     <?php
                                                 }
@@ -68,7 +68,7 @@ AppAsset::register($this);
                                             </li>
                                         </ul>
                                     </li>
-                                    <li class="footer"><a href="/notifications">View all</a></li>
+                                    <li class="footer"><a href="/notifications"><?= Yii::t('app','View all'); ?></a></li>
                                 </ul>
                             </li>
                             <!-- User Account: style can be found in dropdown.less -->
@@ -77,7 +77,7 @@ AppAsset::register($this);
 
                                     <!-- <?php echo Html::img('@web/dist/img/guest.png', ['class' => "user-image"]) ?>-->
                                     <i class="fa fa-sign-in"></i>
-                                    <span class="hidden-xs">Account</span>
+                                    <span class="hidden-xs"><?= Yii::t('app','Account'); ?></span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
@@ -87,7 +87,7 @@ AppAsset::register($this);
                                         <?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
                                         <p style='color:black; font-weight:bold'><?= $this->params['userInfo']['user_name'] . ' ' . $this->params['userInfo']['user_surname'] ?></p>
                                         <p>
-                                            You're InTouch now.
+                                            <?= Yii::t('app','You\'re InTouch now.'); ?>
                                         </p>
 
                                     </li>
@@ -95,16 +95,16 @@ AppAsset::register($this);
                                     <li class="user-body">
 
                                         <div class="col-xs-4 text-center">
-                                            <a href="/myFriends">Friends</a>
+                                            <a href="/myFriends"><?= Yii::t('app','Friends'); ?></a>
                                         </div>
                                     </li>
                                     <!-- Menu Footer-->
                                     <li class="user-footer">
                                         <div class="pull-left">
-                                            <a href="/profile" class="btn btn-default btn-flat">Profile</a>
+                                            <a href="/profile" class="btn btn-default btn-flat"><?= Yii::t('app','Profile'); ?></a>
                                         </div>
                                         <div class="pull-right">
-                                            <a href="<?= Url::to(['/logout']) ?>" data-method="post" class="btn btn-default btn-flat">Logout</a>                                           
+                                            <a href="<?= Url::to(['/logout']) ?>" data-method="post" class="btn btn-default btn-flat"><?= Yii::t('app','Log out'); ?></a>                                           
                                         </div>
                                     </li>
                                 </ul>
@@ -125,14 +125,14 @@ AppAsset::register($this);
                         </div>
                         <div class="pull-left info">
                             <p><?= $this->params['userInfo']['user_name'] . ' ' . $this->params['userInfo']['user_surname'] ?></p>
-                            <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                            <a href="#"><i class="fa fa-circle text-success"></i> <?= Yii::t('app','Online'); ?></a>
                         </div>
 
                     </div>
                     <!-- search form -->
                     <form action="/search" method="get" class="sidebar-form">
                         <div class="input-group">
-                            <input type="text" name="q" class="form-control" placeholder="Search...">
+                            <input type="text" name="q" class="form-control" placeholder=<?= Yii::t('app','Search...'); ?>>
                             <span class="input-group-btn">
                                 <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
                             </span>
