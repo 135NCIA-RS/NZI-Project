@@ -58,21 +58,8 @@ class UsersController extends Controller
         ];
     }
 
-    public function actionView($uname = null)
+    public function actionView($uname)
     {
-        
-//        if($uname == null)
-//        {
-//            $uname = Yii::$app->session->get('lastProfile');
-//            if($uname == null)
-//            {
-//                throw new \yii\web\HttpException("Invalid Data");
-//            }
-//        }
-//        else
-//        {
-//            Yii::$app->session->set("lastProfile", $uname);
-//        }
         /////////////////////////--- Profile Infos ---//////////////////////////
         $id = UserService::getUserIdByName($uname);
         if($id === false)
@@ -84,7 +71,7 @@ class UsersController extends Controller
         {
             return $this->redirect('/profile');
         }
-        if (Yii::$app->request->isPjax)
+        if (Yii::$app->request->post())
         {
             if (AccessService::check(Permission::ManageUserRelations))
             {

@@ -191,7 +191,13 @@ class IntouchController extends Controller
 
             try
             {
-                UserService::setBirthDate($id, Yii::$app->request->post('inputDate'));
+                $bdate = Yii::$app->request->post('inputDate');
+                if(strtotime($bdate) - time() > 0)
+                {
+                    Yii::$app->session->setFlash('error', 'Hello! It\'s date from future!');
+                return $this->redirect('/profile/aboutedit');
+                }
+                UserService::setBirthDate($id, $bdate);
             }
             catch (\app\components\exceptions\InvalidDateException $e)
             {
