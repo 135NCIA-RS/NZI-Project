@@ -20,7 +20,7 @@ $txt_password2 = Yii::t('app', 'Retype Password');
         </div>
 
         <div class="register-box-body">
-            <p class="login-box-msg"><?= Yii::t('app', 'Register a new membership') ?></p>
+            <p class="login-box-msg"><?= Yii::t('app', 'Register a new account') ?></p>
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
             <div class="form-group has-feedback">
@@ -57,7 +57,7 @@ $txt_password2 = Yii::t('app', 'Retype Password');
 
 
                <?php 
-        $lost= Yii::t('app', 'I already have a membership');
+        $lost= Yii::t('app', 'I already have an account');
         ?>
         <?= Html::a($lost, ['site/login']) ?>.
         </div><!-- /.form-box -->

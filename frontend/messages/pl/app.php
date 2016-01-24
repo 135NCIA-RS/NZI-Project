@@ -1,25 +1,6 @@
 <?php
 
 return [
-    /*'Congratulations!'  => 'Gratulacje!',
-    'Language'          => 'Język',
-    'Toogle navigation' => 'Przełącz nawigacje',
-    'Sign in' => 'Zaloguj się',
-    "You're not signed in" => 'Nie jesteś zalogowany',
-    'Register'=> 'Zarejestruj się',
-    'LogIn'=> 'Zaloguj sie',
-    'Navigation' =>'Pasek nawigacji',
-    'Home' =>'Strona glowna',
-    'Sign in to start your session' =>'Zaloguj sie zeby korzystać z serwisu',
-    'I forgot my password' => 'Zapomnialem hasla',
-    'Request password reset' => 'zadanie resetowania hasla',
-    'Please choose your new password'=> 'Prosze wpisac nowe haslo',
-    'Username'=>'Nazwa uzytkownika',
-    'Password'=>'Haslo',
-    'Retype Password'=>'Powtorz haslo',
-    'Register a new membership'=>'Utworz konto',
-    'I already have a membership'=>'Jestem już uzytkownikiem',
-    'Friends' => 'Znajomi',*/
     'Edit your about section' => 'Edytuj informacje o sobie',
     'Education' => 'Wykształcenie',
     'Location' => 'Lokacja',
@@ -27,7 +8,7 @@ return [
     'Miscellaneous' => 'Różne',
     'Save changes' => 'Zapisz zmiany',
     'You are not allowed to perform this task.' => 'Nie wolno ci wykonać tej czynności.',
-    ' has sent you a friend request.' => ' wysłał ci zaproszenie do znajomych.',
+    ' has sent you a friend request.' => ' wysłał(a) ci zaproszenie do znajomych.',
     'Accept' => 'Zaakceptuj',
     'Reject' => 'Odrzuć',
     'You don\'t have friends. Invite someone :)' => 'Nie masz przyjaciół. Zaproś kogoś :)',
@@ -88,6 +69,11 @@ return [
     'Sign in to start your session' => 'Zaloguj się by rozpocząć.',
     'I forgot my password' => 'Nie pamiętam hasła',
     'ACTIONS' => 'CZYNNOŚCI',
+    'The above error occurred while the Web server was processing your request.' => 'Powyższy błąd wystąpił podczas przetwarzania twojego zapytania przez serwer.',
+    'Please contact us if you think this is a server error. Thank you.' => 'Skontaktuj się z nami, jeśli myślisz że to błąd serwera. Dziękujemy.',
+    'Register a new account' => 'Zarejestruj nowe konto',
+    'I already have an account' => 'Mam już konto',
+    'My friends' => 'Moi znajomi',
 ];
 
 
