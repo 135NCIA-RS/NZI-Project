@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\controllers;
 
 use Yii;
@@ -12,12 +13,25 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use app\components\UserService;
+use common\models\User;
+use app\components;
+use app\components\RelationService;
+use app\components\RelationMode;
+use app\components\RelationType;
+use app\components\PhotoService;
+use app\components\AccessService;
+use app\components\RequestService;
+use app\components\Permission;
+use app\components\PostsService;
+use app\components\RequestType;
 
 /**
  * Site controller
  */
 class SiteController extends Controller
 {
+
     /**
      * @inheritdoc
      */
@@ -65,6 +79,66 @@ class SiteController extends Controller
         ];
     }
 
+    public function beforeAction($action)
+    {
+        if (parent::beforeAction($action))
+        {
+            if ($action->id == 'error')
+            {
+                if (!Yii::$app->user->isGuest)
+                {
+                    $this->getUserData();
+                    $this->layout = "logged";
+                }
+            }
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private function getUserData()
+    {
+        $id = Yii::$app->user->getId();
+
+        $photo = \app\components\PhotoService::getProfilePhoto($id);
+
+        if (is_string($photo))
+        {
+            $location = "@web/dist/content/images/";
+            //TODO set chmod for that directory(php init)
+            $this->view->params['userProfilePhoto'] = $location . $photo;
+        }
+        else
+        {
+            $location = "@web/dist/img/guest.png";
+            //TODO add that file
+            $this->view->params['userProfilePhoto'] = $location;
+        }
+
+        $userinfo = array();
+        $userinfo['user_name'] = UserService::getName($id);
+        $userinfo['user_surname'] = UserService::getSurname($id);
+        if ($userinfo['user_name'] == false)
+        {
+            $userinfo['user_name'] = "Uzupełnij";
+        }
+        if ($userinfo['user_surname'] == false)
+        {
+            $userinfo['user_surname'] = "swoje dane";
+        }
+
+        $this->view->params['userInfo'] = $userinfo;
+        ////////////////////////////////////////////////////// request service
+
+        $notification = RequestService::getMyRequests($id);
+        $tablelength = count($notification);
+        $this->view->params['notification_data'] = $notification;
+        $this->view->params['notification_count'] = $tablelength;
+    }
+
     /**
      * Displays homepage.
      *
@@ -72,7 +146,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        if (!\Yii::$app->user->isGuest) {
+        if (!\Yii::$app->user->isGuest)
+        {
             return $this->redirect('/intouch/index');
         }
         return $this->render('index');
@@ -85,18 +160,22 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (!\Yii::$app->user->isGuest) {
+        if (!\Yii::$app->user->isGuest)
+        {
             //return $this->goHome();
             // user is logged in
             return $this->redirect('/intouch/index');
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        if ($model->load(Yii::$app->request->post()) && $model->login())
+        {
             return $this->goBack();
-        } else {
+        }
+        else
+        {
             return $this->render('login', [
-                'model' => $model,
+                        'model' => $model,
             ]);
         }
     }
@@ -120,21 +199,28 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
-        if (!\Yii::$app->user->isGuest) {
+        if (!\Yii::$app->user->isGuest)
+        {
             return $this->redirect('/intouch/index');
         }
         $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate())
+        {
+            if ($model->sendEmail(Yii::$app->params['adminEmail']))
+            {
                 Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-            } else {
+            }
+            else
+            {
                 Yii::$app->session->setFlash('error', 'There was an error sending email.');
             }
 
             return $this->refresh();
-        } else {
+        }
+        else
+        {
             return $this->render('contact', [
-                'model' => $model,
+                        'model' => $model,
             ]);
         }
     }
@@ -146,7 +232,8 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
-        if (!\Yii::$app->user->isGuest) {
+        if (!\Yii::$app->user->isGuest)
+        {
             return $this->redirect('/intouch/index');
         }
         return $this->render('about');
@@ -159,20 +246,24 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
-        if (!\Yii::$app->user->isGuest) {
+        if (!\Yii::$app->user->isGuest)
+        {
             return $this->redirect('/intouch/index');
         }
         $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
+        if ($model->load(Yii::$app->request->post()))
+        {
+            if ($user = $model->signup())
+            {
+                if (Yii::$app->getUser()->login($user))
+                {
                     return $this->goHome();
                 }
             }
         }
 
         return $this->render('signup', [
-            'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -183,22 +274,27 @@ class SiteController extends Controller
      */
     public function actionRequestPasswordReset()
     {
-        if (!\Yii::$app->user->isGuest) {
+        if (!\Yii::$app->user->isGuest)
+        {
             return $this->redirect('/intouch/index');
         }
         $model = new PasswordResetRequestForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate())
+        {
+            if ($model->sendEmail())
+            {
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
 
                 return $this->goHome();
-            } else {
+            }
+            else
+            {
                 Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
             }
         }
 
         return $this->render('requestPasswordResetToken', [
-            'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -211,24 +307,29 @@ class SiteController extends Controller
      */
     public function actionResetPassword($token)
     {
-        if (!\Yii::$app->user->isGuest) {
+        if (!\Yii::$app->user->isGuest)
+        {
             return $this->redirect('/intouch/index');
         }
-        try {
+        try
+        {
             $model = new ResetPasswordForm($token);
-        } catch (InvalidParamException $e) {
+        }
+        catch (InvalidParamException $e)
+        {
             throw new BadRequestHttpException($e->getMessage());
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword())
+        {
             Yii::$app->session->setFlash('success', 'New password was saved.');
 
             return $this->goHome();
         }
 
         return $this->render('resetPassword', [
-            'model' => $model,
+                    'model' => $model,
         ]);
     }
-    
+
 }

@@ -54,7 +54,7 @@ foreach ($friends as $friend)
 
         <p><?= $friend['name'] . " " . $friend['surname'] . " (" . $friend['username'] . ")" ?></p>
         <div>
-            <a href="/<?= $friend['username'] ?>">Profile</a>
+            <a href="/user/<?= $friend['username'] ?>">Profile</a>
             |
             <a href="mailto:<?= $friend['email'] ?>">Send Mail</a>
         </div>

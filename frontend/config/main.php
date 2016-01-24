@@ -9,7 +9,7 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => [
         'log',
-    'app\components\DynamicProfileLinksBootstrap',
+    //'app\components\DynamicProfileLinksBootstrap',
     ],
     'controllerNamespace' => 'frontend\controllers',
     'language' => 'us',
@@ -48,7 +48,9 @@ return [
         'urlManager' => [
             'enablePrettyUrl' => 'true',
             'showScriptName' => 'false',
+            //'enableStrictParsing' => 'true',
             'rules' => [
+                'user/<uname>' => 'users/view',
                 'logout' => 'site/logout',
                 'register' => 'site/signup',
                 'login' => 'site/login',
@@ -66,6 +68,7 @@ return [
     ],
     'on beforeAction' => function ($event)
     {
+        return; // no more needed. stays for education reason.
         //$route = $event->sender->requestedRoute; //if DynamicProfileLinkBootstrap is disabled
         $route = substr(Yii::$app->request->url, 1); // because of /
         $users = \common\models\User::find()
