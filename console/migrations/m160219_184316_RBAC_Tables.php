@@ -9,7 +9,9 @@ class m160219_184316_RBAC_Tables extends Migration
     public function up()
     {
         $sql = <<< KONIEC
-CREATE TABLE IF NOT EXISTS `auth_rule` (
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";		
+CREATE TABLE `auth_rule` (
  `name` varchar(64) NOT NULL,
  `data` text,
  `created_at` int(11) DEFAULT NULL,
@@ -17,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `auth_rule` (
  PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
-CREATE TABLE IF NOT EXISTS `auth_item` (
+CREATE TABLE `auth_item` (
  `name` varchar(64) NOT NULL,
  `type` int(11) NOT NULL,
  `description` text,
@@ -31,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `auth_item` (
  CONSTRAINT `auth_item_ibfk_1` FOREIGN KEY (`rule_name`) REFERENCES `auth_rule` (`name`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
-CREATE TABLE IF NOT EXISTS `auth_item_child` (
+CREATE TABLE `auth_item_child` (
  `parent` varchar(64) NOT NULL,
  `child` varchar(64) NOT NULL,
  PRIMARY KEY (`parent`,`child`),
@@ -40,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `auth_item_child` (
  CONSTRAINT `auth_item_child_ibfk_2` FOREIGN KEY (`child`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
-CREATE TABLE IF NOT EXISTS `auth_assignment` (
+CREATE TABLE `auth_assignment` (
  `item_name` varchar(64) NOT NULL,
  `user_id` int(64) NOT NULL,
  `created_at` int(11) DEFAULT NULL,
@@ -49,13 +51,6 @@ CREATE TABLE IF NOT EXISTS `auth_assignment` (
  CONSTRAINT `auth_assignment_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
  CONSTRAINT `auth_assignment_ibfk_1` FOREIGN KEY (`item_name`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
---
--- Zrzut danych tabeli `auth_item`
---
 
 REPLACE INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`) VALUES
 ('admin', 1, 'Administrative rights', NULL, NULL, NULL, NULL),
@@ -84,7 +79,6 @@ REPLACE INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `c
 ('search-use', 2, 'Right to use search box', NULL, NULL, NULL, NULL),
 ('SuperAdmin', 1, 'Global Administrator', NULL, NULL, NULL, NULL),
 ('user', 1, 'Default user role', NULL, NULL, NULL, NULL);
-
 REPLACE INTO `auth_item_child` (`parent`, `child`) VALUES
 ('SuperAdmin', 'admin'),
 ('admin', 'ban-user'),
@@ -118,14 +112,8 @@ REPLACE INTO `auth_item_child` (`parent`, `child`) VALUES
 ('user', 'relations-manage-own'),
 ('user', 'search-use'),
 ('admin', 'user');
-
---
--- Zrzut danych tabeli `auth_assignment`
---
-
 REPLACE INTO `auth_assignment` (`item_name`, `user_id`, `created_at`) VALUES
 ('SuperAdmin', 1, NULL);
-
 KONIEC;
         $this->execute($sql);
     }
