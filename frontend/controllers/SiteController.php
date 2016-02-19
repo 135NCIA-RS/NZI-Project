@@ -13,18 +13,18 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use app\components\UserService;
+use common\components\UserService;
 use common\models\User;
-use app\components;
-use app\components\RelationService;
-use app\components\RelationMode;
-use app\components\RelationType;
-use app\components\PhotoService;
-use app\components\AccessService;
-use app\components\RequestService;
-use app\components\Permission;
-use app\components\PostsService;
-use app\components\RequestType;
+use common\components;
+use common\components\RelationService;
+use common\components\RelationMode;
+use common\components\RelationType;
+use common\components\PhotoService;
+use common\components\AccessService;
+use common\components\RequestService;
+use common\components\Permission;
+use common\components\PostsService;
+use common\components\RequestType;
 
 /**
  * Site controller
@@ -103,7 +103,7 @@ class SiteController extends Controller
     {
         $id = Yii::$app->user->getId();
 
-        $photo = \app\components\PhotoService::getProfilePhoto($id);
+        $photo = \common\components\PhotoService::getProfilePhoto($id);
 
         if (is_string($photo))
         {
@@ -181,7 +181,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Logs out the current user. 
+     * Logs out the current user.
      *
      * @return mixed
      */

@@ -9,9 +9,9 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
-use app\components\PostsService;
-use app\components\UserService;
-use app\components\PhotoService;
+use common\components\PostsService;
+use common\components\UserService;
+use common\components\PhotoService;
 
 /* @var $this yii\web\View */
 ?>
@@ -24,10 +24,10 @@ use app\components\PhotoService;
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-<?= Html::img($UserProfilePhoto, ['class' => 'profile-user-img img-responsive img-circle', 'alt' => 'User profile image']) ?>
+                    <?= Html::img($UserProfilePhoto, ['class' => 'profile-user-img img-responsive img-circle', 'alt' => 'User profile image']) ?>
                     <h3 class="profile-username text-center"><?= $name . " " . $surname ?></h3>
 
-                    <p class="text-muted text-center"><?= Yii::t('app','InTouch User'); ?></p>
+                    <p class="text-muted text-center"><?= Yii::t('app', 'InTouch User'); ?></p>
                     <?php
                     $script = <<< JS
 $('body').on('click', '.pjaxButton', function() {
@@ -40,16 +40,16 @@ $('body').on('click', '.pjaxButton', function() {
 JS;
                     $this->registerJs($script, yii\web\View::POS_READY);
                     ?>
-<?php Pjax::begin(); ?>
+                    <?php Pjax::begin(); ?>
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <b><?= Yii::t('app','Followers'); ?></b> <a class="pull-right"><?= $followers ?></a>
+                            <b><?= Yii::t('app', 'Followers'); ?></b> <a class="pull-right"><?= $followers ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b><?= Yii::t('app','Following'); ?></b> <a class="pull-right"><?= $following ?></a>
+                            <b><?= Yii::t('app', 'Following'); ?></b> <a class="pull-right"><?= $following ?></a>
                         </li>
                         <li class="list-group-item">
-                            <b><?= Yii::t('app','Friends'); ?></b> <a class="pull-right"><?= $friends ?></a>
+                            <b><?= Yii::t('app', 'Friends'); ?></b> <a class="pull-right"><?= $friends ?></a>
                         </li>
                     </ul>
                     <style>
@@ -62,16 +62,16 @@ JS;
 
                     if (!$UserFollowState)
                     {
-                        echo Html::submitButton(Yii::t('app','Follow'), [
+                        echo Html::submitButton(Yii::t('app', 'Follow'), [
                             'class' => 'btn btn-primary btn-block btnodst pjaxButton',
-                            'name' => 'follow-btn',
+                            'name'  => 'follow-btn',
                         ]);
                     }
                     else
                     {
-                        echo Html::submitButton(Yii::t('app','Unfollow'), [
+                        echo Html::submitButton(Yii::t('app', 'Unfollow'), [
                             'class' => 'btn btn-default btn-block btn-sm btnodst pjaxButton',
-                            'name' => 'unfollow-btn',
+                            'name'  => 'unfollow-btn',
                         ]);
                     }
                     echo Html::endForm();
@@ -81,16 +81,16 @@ JS;
                         echo Html::beginForm("", 'post', ['data-pjax' => '']);
                         if (!$UserFriendshipState)
                         {
-                            echo Html::submitButton(Yii::t('app','Send a friend request'), [
+                            echo Html::submitButton(Yii::t('app', 'Send a friend request'), [
                                 'class' => 'btn btn-primary btn-block btnodst pjaxButton',
-                                'name' => 'friend-btn',
+                                'name'  => 'friend-btn',
                             ]);
                         }
                         else
                         {
                             echo Html::submitButton("Unfriend", [
                                 'class' => 'btn btn-default btn-block btn-sm btnodst pjaxButton',
-                                'name' => 'unfriend-btn',
+                                'name'  => 'unfriend-btn',
                             ]);
                         }
                         echo Html::endForm();
@@ -111,34 +111,34 @@ JS;
             <!-- About Me Box -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><?= Yii::t('app','About me'); ?></h3>
+                    <h3 class="box-title"><?= Yii::t('app', 'About me'); ?></h3>
 
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <strong><i class="fa fa-book margin-r-5"></i> <?= Yii::t('app','Education'); ?></strong>
+                    <strong><i class="fa fa-book margin-r-5"></i> <?= Yii::t('app', 'Education'); ?></strong>
 
                     <p class="text-muted">
-<?= $education ?>
+                        <?= $education ?>
                     </p>
 
                     <hr>
 
-                    <strong><i class="fa fa-map-marker margin-r-5"></i> <?= Yii::t('app','Location'); ?>n</strong>
+                    <strong><i class="fa fa-map-marker margin-r-5"></i> <?= Yii::t('app', 'Location'); ?>n</strong>
 
                     <p class="text-muted"><?= $city ?></p>
 
                     <hr>
 
-                    <strong><i class="fa fa-birthday-cake margin-r-5"></i> <?= Yii::t('app','Birthday'); ?></strong>
+                    <strong><i class="fa fa-birthday-cake margin-r-5"></i> <?= Yii::t('app', 'Birthday'); ?></strong>
 
                     <p>
-<?= $birth ?>
+                        <?= $birth ?>
                     </p>
 
                     <hr>
 
-                    <strong><i class="fa fa-file-text-o margin-r-5"></i> <?= Yii::t('app','Miscellaneous'); ?></strong>
+                    <strong><i class="fa fa-file-text-o margin-r-5"></i> <?= Yii::t('app', 'Miscellaneous'); ?></strong>
 
                     <p><?= $about ?></p>
                 </div>
@@ -150,19 +150,20 @@ JS;
         <div class="col-md-9">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#activity" data-toggle="tab"><?= Yii::t('app','Activity'); ?></a></li>
-                    <li><a href="#timeline" data-toggle="tab"><?= Yii::t('app','Timeline'); ?></a></li>
+                    <li class="active"><a href="#activity" data-toggle="tab"><?= Yii::t('app', 'Activity'); ?></a></li>
+                    <li><a href="#timeline" data-toggle="tab"><?= Yii::t('app', 'Timeline'); ?></a></li>
 
                 </ul>
                 <div class="tab-content">
                     <div class="active tab-pane" id="activity">
                         <?php if (true)
-                        { ?>
+                        {
+                            ?>
                             <!-- Add post -->
     <?= Html::beginForm("", 'post', []) ?>
                             <input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post" name="inputText">
                             <input type="hidden" name="type" value="newpost">
-                            <button style="width:20%; margin-top:5px;" type="submit" class="btn btn-danger btn-block btn-sm" ><?= Yii::t('app','Publish'); ?></button>
+                            <button style="width:20%; margin-top:5px;" type="submit" class="btn btn-danger btn-block btn-sm" ><?= Yii::t('app', 'Publish'); ?></button>
                             <hr>
                             <?= Html::endForm() ?>
                             <!-- /Add post-->
@@ -181,8 +182,11 @@ JS;
                                             <a href="#"><?php echo($row['name'] . " " . $row['surname']); ?></a>
                                             <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
                                         </span>
-                                        <span class="description"><?php if ($row['post_visibility'] == "visible") echo Yii::t('app','Post public');
-                                else echo Yii::t('app','Post hidden'); ?> - <?php echo($row['post_date']); ?></span>
+                                        <span class="description"><?php if ($row['post_visibility'] == "visible")
+                                    echo Yii::t('app', 'Post public');
+                                else
+                                    echo Yii::t('app', 'Post hidden');
+                                ?> - <?php echo($row['post_date']); ?></span>
                                     </div>
                                     <!-- /.user-block -->
                                     <p>
@@ -211,7 +215,8 @@ JS;
                                                         <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[3]['file']; ?>" alt="Photo">
                                                         <br>
             <?php if (isset($attachments[4]['file']))
-            { ?><img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>" alt="Photo"> <?php } ?>
+            {
+                ?><img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>" alt="Photo"> <?php } ?>
                                                     </div>
                                                     <!-- /.col -->
                                                 </div>
@@ -222,13 +227,13 @@ JS;
             <?php
         }
         ?>
-                                    </p>                            
+                                    </p>
                                     <ul class="list-inline">
-                                        <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> <?= Yii::t('app','Share'); ?></a></li>
-                                        <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> <?= Yii::t('app','Like'); ?></a>
+                                        <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> <?= Yii::t('app', 'Share'); ?></a></li>
+                                        <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> <?= Yii::t('app', 'Like'); ?></a>
                                         </li>
                                         <li class="pull-right">
-                                            <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app','Comments'); ?> (<?php echo(count($row['comments'])); ?>)</a></li>
+                                            <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app', 'Comments'); ?> (<?php echo(count($row['comments'])); ?>)</a></li>
                                     </ul>
                                     <?= Html::beginForm("", 'post', []) ?>
                                     <input class="form-control input-sm send-form-input" type="text" placeholder="Type a comment" name="inputText">
@@ -253,11 +258,11 @@ JS;
                                                     </a>
             <?php echo $comment['comment_text']; ?>
                                                 </p>
-                                            </div> 
+                                            </div>
                                 <?php } ?>
                                         <!-- /.direct-chat-text -->
                                     </div>
-                                </div> 
+                                </div>
 
         <?php
     }

@@ -9,18 +9,18 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use app\components\UserService;
+use common\components\UserService;
 use common\models\User;
-use app\components;
-use app\components\RelationService;
-use app\components\RelationMode;
-use app\components\RelationType;
-use app\components\PhotoService;
-use app\components\AccessService;
-use app\components\RequestService;
-use app\components\Permission;
-use app\components\PostsService;
-use app\components\RequestType;
+use common\components;
+use common\components\RelationService;
+use common\components\RelationMode;
+use common\components\RelationType;
+use common\components\PhotoService;
+use common\components\AccessService;
+use common\components\RequestService;
+use common\components\Permission;
+use common\components\PostsService;
+use common\components\RequestType;
 
 class IntouchController extends Controller
 {
@@ -111,7 +111,7 @@ class IntouchController extends Controller
                                     '/web/dist/content/images/' .
                                     $nazwa);
                             $zmienna = Yii::$app->request->post('nazwisko');
-                            \app\components\PhotoService::setProfilePhoto($id, $nazwa);
+                            \common\components\PhotoService::setProfilePhoto($id, $nazwa);
                         }
 
                         UserService::setName($id, Yii::$app->request->post('inputName'));
@@ -206,7 +206,7 @@ class IntouchController extends Controller
                 }
                 UserService::setBirthDate($id, $bdate);
             }
-            catch (\app\components\exceptions\InvalidDateException $e)
+            catch (\common\components\exceptions\InvalidDateException $e)
             {
                 Yii::$app->session->setFlash('error', 'Invalid date');
                 return $this->redirect('/profile/aboutedit');
@@ -233,7 +233,7 @@ class IntouchController extends Controller
     {
         $id = Yii::$app->user->getId();
 
-        $photo = \app\components\PhotoService::getProfilePhoto($id);
+        $photo = \common\components\PhotoService::getProfilePhoto($id);
 
         if (is_string($photo))
         {
@@ -276,7 +276,7 @@ class IntouchController extends Controller
             $id           = Yii::$app->user->getId();
             $this->getUserData($id);
             $this->layout = 'logged';
-            $users        = \app\components\SearchService::findUsers($q);
+            $users        = \common\components\SearchService::findUsers($q);
             $resultsCnt   = count($users);
             return $this->render('searchResults', [
                         'query' => $q,

@@ -9,7 +9,7 @@ return [
     'basePath'            => dirname(__DIR__),
     'bootstrap'           => [
         'log',
-    //'app\components\DynamicProfileLinksBootstrap',
+    //'common\components\DynamicProfileLinksBootstrap',
     ],
     'controllerNamespace' => 'frontend\controllers',
     'language'            => 'us',
@@ -41,7 +41,7 @@ return [
                         'app'       => 'app.php',
                         'app/error' => 'error.php',
                     ],
-                    'on missingTranslation' => ['app\components\TranslationEventHandler', 'handleMissingTranslation'],
+                    'on missingTranslation' => ['common\components\TranslationEventHandler', 'handleMissingTranslation'],
                 ],
             ],
         ],
@@ -68,7 +68,7 @@ return [
         ],
     ],
     'as beforeRequest'    => [
-        'class' => 'app\components\LanguageHandler',
+        'class' => 'common\components\LanguageHandler',
     ],
     'on beforeAction'     => function ($event)
 {

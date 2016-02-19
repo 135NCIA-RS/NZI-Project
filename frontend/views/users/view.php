@@ -9,9 +9,9 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
-use app\components\PostsService;
-use app\components\UserService;
-use app\components\PhotoService;
+use common\components\PostsService;
+use common\components\UserService;
+use common\components\PhotoService;
 
 /* @var $this yii\web\View */
 ?>
@@ -24,7 +24,7 @@ use app\components\PhotoService;
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-<?= Html::img($UserProfilePhoto, ['class' => 'profile-user-img img-responsive img-circle', 'alt' => 'User profile image']) ?>
+                    <?= Html::img($UserProfilePhoto, ['class' => 'profile-user-img img-responsive img-circle', 'alt' => 'User profile image']) ?>
                     <h3 class="profile-username text-center"><?= $name . " " . $surname ?></h3>
 
                     <p class="text-muted text-center"><?= Yii::t('app', 'InTouch User'); ?></p>
@@ -65,14 +65,14 @@ JS;
                     {
                         echo Html::submitButton(Yii::t('app', 'Follow'), [
                             'class' => 'btn btn-primary btn-block btnodst pjaxButton',
-                            'name' => 'follow-btn',
+                            'name'  => 'follow-btn',
                         ]);
                     }
                     else
                     {
                         echo Html::submitButton(Yii::t('app', 'Unfollow'), [
                             'class' => 'btn btn-default btn-block btn-sm btnodst pjaxButton',
-                            'name' => 'unfollow-btn',
+                            'name'  => 'unfollow-btn',
                         ]);
                     }
                     echo Html::endForm();
@@ -84,14 +84,14 @@ JS;
                         {
                             echo Html::submitButton(Yii::t('app', 'Send a friend request'), [
                                 'class' => 'btn btn-primary btn-block btnodst pjaxButton',
-                                'name' => 'friend-btn',
+                                'name'  => 'friend-btn',
                             ]);
                         }
                         else
                         {
                             echo Html::submitButton(Yii::t('app', 'Unfriend'), [
                                 'class' => 'btn btn-default btn-block btn-sm btnodst pjaxButton',
-                                'name' => 'unfriend-btn',
+                                'name'  => 'unfriend-btn',
                             ]);
                         }
                         echo Html::endForm();
@@ -119,7 +119,7 @@ JS;
                     <strong><i class="fa fa-book margin-r-5"></i> <?= Yii::t('app', 'Education'); ?></strong>
 
                     <p class="text-muted">
-<?= $education ?>
+                        <?= $education ?>
                     </p>
 
                     <hr>
@@ -133,7 +133,7 @@ JS;
                     <strong><i class="fa fa-birthday-cake margin-r-5"></i> <?= Yii::t('app', 'Birthday'); ?></strong>
 
                     <p>
-<?= $birth ?>
+                        <?= $birth ?>
                     </p>
 
                     <hr>
@@ -161,7 +161,7 @@ JS;
                         {
                             ?>
                             <!-- Add post -->
-    <?= Html::beginForm("", 'post', []) ?>
+                            <?= Html::beginForm("", 'post', []) ?>
                             <input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post" name="inputText">
                             <input type="hidden" name="type" value="newpost">
                             <button style="width:20%; margin-top:5px;" type="submit" class="btn btn-danger btn-block btn-sm" ><?= Yii::t('app', 'Publish'); ?></button>
@@ -230,7 +230,7 @@ JS;
                                         <?php
                                     }
                                     ?>
-                                    </p>                            
+                                    </p>
                                     <ul class="list-inline">
                                         <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> <?= Yii::t('app', 'Share'); ?></a></li>
                                         <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> <?= Yii::t('app', 'Like'); ?></a>
@@ -238,12 +238,12 @@ JS;
                                         <li class="pull-right">
                                             <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app', 'Comments'); ?> (<?php echo(count($row['comments'])); ?>)</a></li>
                                     </ul>
-        <?= Html::beginForm("", 'post', []) ?>
+                                    <?= Html::beginForm("", 'post', []) ?>
                                     <input class="form-control input-sm send-form-input" type="text" placeholder="<?= Yii::t('app', 'Type a comment'); ?>" name="inputText">
                                     <input type="hidden" name="type" value="newcomment">
                                     <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
                                     <button style="width:20%; margin-top:5px;" type="submit" class="btn btn-danger btn-block btn-sm hidden" ></button>
-        <?= Html::endForm() ?>
+                                    <?= Html::endForm() ?>
                                     <div class="direct-chat-msg" style="margin-top: 10px;">
                                         <div class="direct-chat-info clearfix">
                                         </div>
@@ -257,15 +257,15 @@ JS;
                                                 <p class="message" >
                                                     <a href="#" class="name">
                                                         <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> <?php echo $comment['comment_date']; ?></small>
-                                                    <?php echo($comment['name'] . " " . $comment['surname']); ?><br>
+                                                        <?php echo($comment['name'] . " " . $comment['surname']); ?><br>
                                                     </a>
-            <?php echo $comment['comment_text']; ?>
+                                                    <?php echo $comment['comment_text']; ?>
                                                 </p>
-                                            </div> 
-        <?php } ?>
+                                            </div>
+                                        <?php } ?>
                                         <!-- /.direct-chat-text -->
                                     </div>
-                                </div> 
+                                </div>
 
                                 <?php
                             }
