@@ -15,20 +15,6 @@ class AccessService
     private static $LocationsPermissions;
     private static $location;
 
-    public static function check($perm)
-    {
-        if (!(Permission::isValid($perm)))
-        {
-            throw new InvalidEnumKeyException();
-        }
-        self::matchLocation();
-        $userID = Yii::$app->user->getId();
-
-        $value = self::judgePermission($perm);
-
-        return $value;
-    }
-
     public static function hasAccess($check_id, $objectCheckType)
     {
         if (!ObjectCheckType::isValid($objectCheckType))
@@ -92,20 +78,35 @@ class AccessService
         }
     }
 
+    /**
+     * @deprecated Not use it anymore. Will be removed in future
+     */
+    public static function check($perm)
+    {
+        if (!(Permission::isValid($perm)))
+        {
+            throw new InvalidEnumKeyException();
+        }
+        self::matchLocation();
+        $value = self::judgePermission($perm);
+
+        return $value;
+    }
+
     private static function matchLocation()
     {
         $controller = \Yii::$app->controller->id;
-        $action = \Yii::$app->controller->action->id;
+        $action     = \Yii::$app->controller->action->id;
 
         $searchRegex = $controller . "|" . $action;
-        $key = Location::search($searchRegex);
+        $key         = Location::search($searchRegex);
 
         if (!is_string($key))
         {
             throw new InvalidLocationException("Error: Regex: " . $searchRegex);
         }
 
-        $locs = Location::toArray();
+        $locs           = Location::toArray();
         self::$location = $locs[$key];
     }
 
@@ -135,7 +136,7 @@ class AccessService
         self::$LocationsPermissions = self::ResizeOneDimensionalToTwoDimensionalArray(self::$LocationsPermissions);
         ////////////////////////////////////////////////////////////////////////
 
-        self::$LocationsPermissions[Location::GLOBAL_ALL] = [
+        self::$LocationsPermissions[Location::GLOBAL_ALL]    = [
             Permission::UseSearch,
         ];
         self::$LocationsPermissions[Location::GLOBAL_logged] = [
@@ -205,66 +206,71 @@ class AccessService
 
 /**
  * AccessService
+ * @deprecated No longer in use. Will be removed.
  */
 class Permission extends Enum
 {
 
-    const ChangeProfilePhoto = "PHOTO.PROFILECHANGE";
-    const AddPhoto = "PHOTO.ADD";
-    const RemovePhoto = "PHOTO.REMOVE";
-    const AddPost = "POST.WALL";
-    const ChangePost = "POST.WALLCHANGE"; // global for moderators and for WALL owners
-    const ChangeOwnPost = "POST.OWNCHANGE";
-    const RemovePost = "POST.WALLREMOVE";
-    const AddPostComment = "POST.ADDCOMMENT";
-    const ChangePostComment = "POST.CHANGECOMMENT"; // global for moderators etc.
+    const ChangeProfilePhoto   = "PHOTO.PROFILECHANGE";
+    const AddPhoto             = "PHOTO.ADD";
+    const RemovePhoto          = "PHOTO.REMOVE";
+    const AddPost              = "POST.WALL";
+    const ChangePost           = "POST.WALLCHANGE"; // global for moderators and for WALL owners
+    const ChangeOwnPost        = "POST.OWNCHANGE";
+    const RemovePost           = "POST.WALLREMOVE";
+    const AddPostComment       = "POST.ADDCOMMENT";
+    const ChangePostComment    = "POST.CHANGECOMMENT"; // global for moderators etc.
     const ChangePostOwnComment = "POST.CHANGECOMMENT.OWN";
-    const RemovePostComment = "POST.REMOVECOMMENT";
+    const RemovePostComment    = "POST.REMOVECOMMENT";
     const RemovePostOwnComment = "POST.REMOVECOMMENT.OWN";
     const ChangeProfileDetails = "PROFILE.CHANGEDETAILS";
-    const ChangeAccountInfo = "ACCOUNT.CHANGE";
-    const SendPrivateMessage = "PM.SEND";
-    const RequestFriendship = "FRIEND.REQ";
-    const ChangeLanguage = "ACTION.CHANGELANG";
-    const LoginPermission = "GLOBAL.LOGINPERMISSION";
-    const CreateAccount = "SYSTEM.CREATEUSER";
-    const ManageUserRelations = "USER.RELATIONS";
-    const UseSearch = "SYSTEM.SEARCH";
+    const ChangeAccountInfo    = "ACCOUNT.CHANGE";
+    const SendPrivateMessage   = "PM.SEND";
+    const RequestFriendship    = "FRIEND.REQ";
+    const ChangeLanguage       = "ACTION.CHANGELANG";
+    const LoginPermission      = "GLOBAL.LOGINPERMISSION";
+    const CreateAccount        = "SYSTEM.CREATEUSER";
+    const ManageUserRelations  = "USER.RELATIONS";
+    const UseSearch            = "SYSTEM.SEARCH";
 
 }
 
 /**
  * AccessService
+ * @deprecated Will be Removed
  */
 class Location extends Enum
 {
 
-    const GLOBAL_logged = "GLOBAL.L";
-    const GLOBAL_notLogged = "GLOBAL.NL";
-    const GLOBAL_ALL = "GLOBAL";
+    const GLOBAL_logged        = "GLOBAL.L";
+    const GLOBAL_notLogged     = "GLOBAL.NL";
+    const GLOBAL_ALL           = "GLOBAL";
     //NOT LOGGED
-    const HomePage = "site|index";
-    const RegisterPage = "site|signup";
-    const LoginPage = "site|login";
-    const ForgotPasswordPage = "Site|requestPasswordReset"; //TODO it needs to be checked
+    const HomePage             = "site|index";
+    const RegisterPage         = "site|signup";
+    const LoginPage            = "site|login";
+    const ForgotPasswordPage   = "Site|requestPasswordReset"; //TODO it needs to be checked
     //MIXED
     const ActionChangeLanguage = "action|lang";
     //LOGGED
 
-    const MyProfiePage = "intouch|profile";
+    const MyProfiePage    = "intouch|profile";
     const UserProfilePage = "users|view";
-    const LoggedHomePage = "intouch|index";
-    const SearchLogged = "intouch|search";
+    const LoggedHomePage  = "intouch|index";
+    const SearchLogged    = "intouch|search";
 
 }
 
+/**
+ * @deprecated No longer in use. Will be removed
+ */
 class ObjectCheckType extends Enum
 {
 
-    const Post = "PostService|Post";
+    const Post        = "PostService|Post";
     const PostComment = "PostService|Comment";
-    const Relation = "RelationService|Relation";
-    const Request = "RequestService|Request";
-    const Photo = "PhotoService|Photo";
+    const Relation    = "RelationService|Relation";
+    const Request     = "RequestService|Request";
+    const Photo       = "PhotoService|Photo";
 
 }
