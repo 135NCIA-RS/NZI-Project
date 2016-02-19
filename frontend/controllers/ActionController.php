@@ -22,16 +22,18 @@ class ActionController extends Controller
     {
         //Yii::$app->language = Yii::$app->request->post('lang');
         $cookie = new Cookie([
-            'name' => 'lang',
+            'name'  => 'lang',
             'value' => $lang,
         ]);
         Yii::$app->getResponse()->getCookies()->add($cookie);
         return $this->redirect(Yii::$app->request->referrer);
     }
+
     public function actionAddcomment($id)
     {
         $request = Yii::$app->request;
-        $text = $request->post('text');
+        $text    = $request->post('text');
         var_dump($text);
     }
+
 }

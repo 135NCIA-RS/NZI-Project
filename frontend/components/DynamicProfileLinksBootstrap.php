@@ -7,6 +7,9 @@ use common\models\User;
 use app\components\exceptions\InvalidUserException;
 use yii\base\BootstrapInterface;
 
+/**
+ * @deprecated No longer in use
+ */
 class DynamicProfileLinksBootstrap implements BootstrapInterface
 {
 
@@ -21,7 +24,7 @@ class DynamicProfileLinksBootstrap implements BootstrapInterface
         {
             $app->getUrlManager()->addRules([
                 strtolower($user['username']) => 'intouch/userprofile',
-                $user['username'] => 'intouch/userprofile'
+                $user['username']             => 'intouch/userprofile'
                     ], true);
         }
     }

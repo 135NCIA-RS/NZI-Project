@@ -37,8 +37,8 @@ class IntouchController extends Controller
                     ],
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
+            'verbs'  => [
+                'class'   => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post'],
                 ],
@@ -52,11 +52,11 @@ class IntouchController extends Controller
     public function actions()
     {
         return [
-            'error' => [
+            'error'   => [
                 'class' => 'yii\web\ErrorAction',
             ],
             'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
+                'class'           => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
@@ -65,23 +65,30 @@ class IntouchController extends Controller
     public function actionIndex()
     {
         $this->getUserData();
-        $zdjecie = new \app\models\Photo();
-        $dane = $zdjecie->find()->all();
+        $zdjecie      = new \app\models\Photo();
+        $dane         = $zdjecie->find()->all();
         $this->layout = 'logged';
         return $this->render('index', ['dane' => $dane]);
     }
 
     public function actionTestmail()
     {
-        $email = UserService::getEmail(1);
-        $s = Yii::$app->mailer->compose()
-                ->setFrom('noreply@yii2.local')
-                ->setTo($email)
-                ->setSubject('InTouch')
-                ->setTextBody('Hello')
-                ->setHtmlBody('<b>Html Hello</b>')
-                ->send();
-        die(var_dump($s));
+        if (Yii::$app->user->can('admin'))
+        {
+            $email = UserService::getEmail(1);
+            $s     = Yii::$app->mailer->compose()
+                    ->setFrom('noreply@yii2.local')
+                    ->setTo($email)
+                    ->setSubject('InTouch')
+                    ->setTextBody('Hello')
+                    ->setHtmlBody('<b>Html Hello</b>')
+                    ->send();
+            die(var_dump($s));
+        }
+        else
+        {
+            echo "Access Denied, you have to log in as admin";
+        }
         //
     }
 
@@ -99,7 +106,7 @@ class IntouchController extends Controller
                         $plik = $_FILES['exampleInputFile']['tmp_name'];
                         if (strlen($plik) > 0)
                         {
-                            $nazwa = md5(uniqid(time())) . '.jpg';
+                            $nazwa   = md5(uniqid(time())) . '.jpg';
                             move_uploaded_file($plik, Yii::$app->basePath .
                                     '/web/dist/content/images/' .
                                     $nazwa);
@@ -141,35 +148,35 @@ class IntouchController extends Controller
                 }
             }
         }
-        $education = UserService::getUserEducation($id);
-        $about = UserService::getUserAbout($id);
-        $city = UserService::getUserCity($id);
-        $birth = UserService::getBirthDate($id);
-        $name = UserService::getName($id);
-        $surname = UserService::getSurname($id);
-        $email = UserService::getEmail($id);
-        $followers = count(RelationService::getUsersWhoFollowMe($id));
-        $following = count(RelationService::getUsersWhoIFollow($id));
-        $friends = count(RelationService::getFriendsList($id));
-        $posts = PostsService::getPosts($id);
-        $photo = PhotoService::getProfilePhoto($id, true, true);
+        $education    = UserService::getUserEducation($id);
+        $about        = UserService::getUserAbout($id);
+        $city         = UserService::getUserCity($id);
+        $birth        = UserService::getBirthDate($id);
+        $name         = UserService::getName($id);
+        $surname      = UserService::getSurname($id);
+        $email        = UserService::getEmail($id);
+        $followers    = count(RelationService::getUsersWhoFollowMe($id));
+        $following    = count(RelationService::getUsersWhoIFollow($id));
+        $friends      = count(RelationService::getFriendsList($id));
+        $posts        = PostsService::getPosts($id);
+        $photo        = PhotoService::getProfilePhoto($id, true, true);
         //////////////////////////////////////////////////////////////////////////
         $this->getUserData();
         $this->layout = 'logged';
         return $this->render('profile', [
-                    'name' => $name,
-                    'surname' => $surname,
-                    'email' => $email,
+                    'name'      => $name,
+                    'surname'   => $surname,
+                    'email'     => $email,
                     'education' => $education,
-                    'about' => $about,
-                    'city' => $city,
-                    'birth' => $birth,
+                    'about'     => $about,
+                    'city'      => $city,
+                    'birth'     => $birth,
                     'followers' => $followers,
                     'following' => $following,
-                    'friends' => $friends,
-                    'posts' => $posts,
-                    'photo' => $photo,
-                    'id' => $id,
+                    'friends'   => $friends,
+                    'posts'     => $posts,
+                    'photo'     => $photo,
+                    'id'        => $id,
         ]);
     }
 
@@ -179,9 +186,9 @@ class IntouchController extends Controller
         ////////////////////////////
 
         $education = UserService::getUserEducation($id);
-        $about = UserService::getUserAbout($id);
-        $city = UserService::getUserCity($id);
-        $birth = UserService::getBirthDate($id);
+        $about     = UserService::getUserAbout($id);
+        $city      = UserService::getUserCity($id);
+        $birth     = UserService::getBirthDate($id);
 
         if (Yii::$app->request->isPost)
         {
@@ -192,10 +199,10 @@ class IntouchController extends Controller
             try
             {
                 $bdate = Yii::$app->request->post('inputDate');
-                if(strtotime($bdate) - time() > 0)
+                if (strtotime($bdate) - time() > 0)
                 {
                     Yii::$app->session->setFlash('error', 'Hello! It\'s date from future!');
-                return $this->redirect('/profile/aboutedit');
+                    return $this->redirect('/profile/aboutedit');
                 }
                 UserService::setBirthDate($id, $bdate);
             }
@@ -216,9 +223,9 @@ class IntouchController extends Controller
         $this->layout = 'logged';
         return $this->render('aboutEdit', [
                     'education' => $education,
-                    'about' => $about,
-                    'city' => $city,
-                    'birth' => $birth
+                    'about'     => $about,
+                    'city'      => $city,
+                    'birth'     => $birth
         ]);
     }
 
@@ -230,19 +237,19 @@ class IntouchController extends Controller
 
         if (is_string($photo))
         {
-            $location = "@web/dist/content/images/";
+            $location                               = "@web/dist/content/images/";
             //TODO set chmod for that directory(php init)
             $this->view->params['userProfilePhoto'] = $location . $photo;
         }
         else
         {
-            $location = "@web/dist/img/guest.png";
+            $location                               = "@web/dist/img/guest.png";
             //TODO add that file
             $this->view->params['userProfilePhoto'] = $location;
         }
 
-        $userinfo = array();
-        $userinfo['user_name'] = UserService::getName($id);
+        $userinfo                 = array();
+        $userinfo['user_name']    = UserService::getName($id);
         $userinfo['user_surname'] = UserService::getSurname($id);
         if ($userinfo['user_name'] == false)
         {
@@ -256,21 +263,21 @@ class IntouchController extends Controller
         $this->view->params['userInfo'] = $userinfo;
         ////////////////////////////////////////////////////// request service
 
-        $notification = RequestService::getMyRequests($id);
-        $tablelength = count($notification);
-        $this->view->params['notification_data'] = $notification;
+        $notification                             = RequestService::getMyRequests($id);
+        $tablelength                              = count($notification);
+        $this->view->params['notification_data']  = $notification;
         $this->view->params['notification_count'] = $tablelength;
     }
 
     public function actionSearch($q)
     {
-        if (AccessService::check(Permission::UseSearch))
+        if (Yii::$app->user->can('search-use'))
         {
-            $id = Yii::$app->user->getId();
+            $id           = Yii::$app->user->getId();
             $this->getUserData($id);
             $this->layout = 'logged';
-            $users = \app\components\SearchService::findUsers($q);
-            $resultsCnt = count($users);
+            $users        = \app\components\SearchService::findUsers($q);
+            $resultsCnt   = count($users);
             return $this->render('searchResults', [
                         'query' => $q,
                         'count' => $resultsCnt,
@@ -285,7 +292,7 @@ class IntouchController extends Controller
 
     public function actionAccessdenied()
     {
-        $id = Yii::$app->user->getId();
+        $id           = Yii::$app->user->getId();
         $this->getUserData($id);
         $this->layout = 'logged';
         return $this->render('accessDenied');
@@ -314,16 +321,16 @@ class IntouchController extends Controller
         $this->layout = 'logged';
         return $this->render('allRequests');
     }
-    
+
     public function actionMyfriends()
     {
-        $id = Yii::$app->user->getId();
+        $id           = Yii::$app->user->getId();
         ///////
-        $friends = RelationService::getFriendsList($id, true);
+        $friends      = RelationService::getFriendsList($id, true);
         ///////
         $this->getUserData($id);
         $this->layout = 'logged';
-        return $this->render('myFriends',['friends' => $friends]);
+        return $this->render('myFriends', ['friends' => $friends]);
     }
 
 }

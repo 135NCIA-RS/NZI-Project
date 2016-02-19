@@ -93,6 +93,9 @@ class AccessService
         return $value;
     }
 
+    /**
+     * @deprecated Not use it anymore. Will be removed in future
+     */
     private static function matchLocation()
     {
         $controller = \Yii::$app->controller->id;
@@ -110,6 +113,9 @@ class AccessService
         self::$location = $locs[$key];
     }
 
+    /**
+     * @deprecated Not use it anymore. Will be removed in future
+     */
     private static function judgePermission($valueToCheck)
     {
         self::SetLocationsPermissions();
@@ -130,6 +136,9 @@ class AccessService
         return false;
     }
 
+    /**
+     * @deprecated Not use it anymore. Will be removed in future
+     */
     private static function SetLocationsPermissions()
     {
         self::$LocationsPermissions = Location::values();
@@ -192,6 +201,9 @@ class AccessService
         ];
     }
 
+    /**
+     * @deprecated This will NOT be removed, for learning purposes
+     */
     private static function ResizeOneDimensionalToTwoDimensionalArray($Array)
     {
         $array = array();
