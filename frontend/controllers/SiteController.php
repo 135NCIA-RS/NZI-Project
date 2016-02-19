@@ -40,22 +40,22 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only'  => ['logout', 'signup'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
-                        'allow' => true,
-                        'roles' => ['?'],
+                        'allow'   => true,
+                        'roles'   => ['?'],
                     ],
                     [
                         'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
+                        'allow'   => true,
+                        'roles'   => ['@'],
                     ],
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
+            'verbs'  => [
+                'class'   => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post'],
                 ],
@@ -69,11 +69,11 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'error' => [
+            'error'   => [
                 'class' => 'yii\web\ErrorAction',
             ],
             'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
+                'class'           => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
@@ -107,19 +107,19 @@ class SiteController extends Controller
 
         if (is_string($photo))
         {
-            $location = "@web/dist/content/images/";
+            $location                               = "@web/dist/content/images/";
             //TODO set chmod for that directory(php init)
             $this->view->params['userProfilePhoto'] = $location . $photo;
         }
         else
         {
-            $location = "@web/dist/img/guest.png";
+            $location                               = "@web/dist/img/guest.png";
             //TODO add that file
             $this->view->params['userProfilePhoto'] = $location;
         }
 
-        $userinfo = array();
-        $userinfo['user_name'] = UserService::getName($id);
+        $userinfo                 = array();
+        $userinfo['user_name']    = UserService::getName($id);
         $userinfo['user_surname'] = UserService::getSurname($id);
         if ($userinfo['user_name'] == false)
         {
@@ -133,9 +133,9 @@ class SiteController extends Controller
         $this->view->params['userInfo'] = $userinfo;
         ////////////////////////////////////////////////////// request service
 
-        $notification = RequestService::getMyRequests($id);
-        $tablelength = count($notification);
-        $this->view->params['notification_data'] = $notification;
+        $notification                             = RequestService::getMyRequests($id);
+        $tablelength                              = count($notification);
+        $this->view->params['notification_data']  = $notification;
         $this->view->params['notification_count'] = $tablelength;
     }
 
@@ -181,7 +181,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Logs out the current user.
+     * Logs out the current user. 
      *
      * @return mixed
      */
