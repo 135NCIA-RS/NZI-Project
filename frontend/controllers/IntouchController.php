@@ -65,8 +65,8 @@ class IntouchController extends Controller
     public function actionIndex()
     {
         $this->getUserData();
-        $zdjecie      = new \app\models\Photo();
-        $dane         = $zdjecie->find()->all();
+        $zdjecie = new \app\models\Photo();
+        $dane = $zdjecie->find()->all();
         $this->layout = 'logged';
         return $this->render('index', ['dane' => $dane]);
     }
@@ -76,9 +76,9 @@ class IntouchController extends Controller
         if (Yii::$app->user->can('admin'))
         {
             $email = UserService::getEmail(1);
-            $s     = Yii::$app->mailer->compose()
-                    ->setFrom('noreply@yii2.local')
-                    ->setTo($email)
+            $s = Yii::$app->mailer->compose()
+                    ->setFrom('noreply@yii2.com')
+                    ->setTo('costam@costa.com')
                     ->setSubject('InTouch')
                     ->setTextBody('Hello')
                     ->setHtmlBody('<b>Html Hello</b>')
@@ -106,7 +106,7 @@ class IntouchController extends Controller
                         $plik = $_FILES['exampleInputFile']['tmp_name'];
                         if (strlen($plik) > 0)
                         {
-                            $nazwa   = md5(uniqid(time())) . '.jpg';
+                            $nazwa = md5(uniqid(time())) . '.jpg';
                             move_uploaded_file($plik, Yii::$app->basePath .
                                     '/web/dist/content/images/' .
                                     $nazwa);
@@ -148,18 +148,18 @@ class IntouchController extends Controller
                 }
             }
         }
-        $education    = UserService::getUserEducation($id);
-        $about        = UserService::getUserAbout($id);
-        $city         = UserService::getUserCity($id);
-        $birth        = UserService::getBirthDate($id);
-        $name         = UserService::getName($id);
-        $surname      = UserService::getSurname($id);
-        $email        = UserService::getEmail($id);
-        $followers    = count(RelationService::getUsersWhoFollowMe($id));
-        $following    = count(RelationService::getUsersWhoIFollow($id));
-        $friends      = count(RelationService::getFriendsList($id));
-        $posts        = PostsService::getPosts($id);
-        $photo        = PhotoService::getProfilePhoto($id, true, true);
+        $education = UserService::getUserEducation($id);
+        $about = UserService::getUserAbout($id);
+        $city = UserService::getUserCity($id);
+        $birth = UserService::getBirthDate($id);
+        $name = UserService::getName($id);
+        $surname = UserService::getSurname($id);
+        $email = UserService::getEmail($id);
+        $followers = count(RelationService::getUsersWhoFollowMe($id));
+        $following = count(RelationService::getUsersWhoIFollow($id));
+        $friends = count(RelationService::getFriendsList($id));
+        $posts = PostsService::getPosts($id);
+        $photo = PhotoService::getProfilePhoto($id, true, true);
         //////////////////////////////////////////////////////////////////////////
         $this->getUserData();
         $this->layout = 'logged';
@@ -186,9 +186,9 @@ class IntouchController extends Controller
         ////////////////////////////
 
         $education = UserService::getUserEducation($id);
-        $about     = UserService::getUserAbout($id);
-        $city      = UserService::getUserCity($id);
-        $birth     = UserService::getBirthDate($id);
+        $about = UserService::getUserAbout($id);
+        $city = UserService::getUserCity($id);
+        $birth = UserService::getBirthDate($id);
 
         if (Yii::$app->request->isPost)
         {
@@ -237,19 +237,19 @@ class IntouchController extends Controller
 
         if (is_string($photo))
         {
-            $location                               = "@web/dist/content/images/";
+            $location = "@web/dist/content/images/";
             //TODO set chmod for that directory(php init)
             $this->view->params['userProfilePhoto'] = $location . $photo;
         }
         else
         {
-            $location                               = "@web/dist/img/guest.png";
+            $location = "@web/dist/img/guest.png";
             //TODO add that file
             $this->view->params['userProfilePhoto'] = $location;
         }
 
-        $userinfo                 = array();
-        $userinfo['user_name']    = UserService::getName($id);
+        $userinfo = array();
+        $userinfo['user_name'] = UserService::getName($id);
         $userinfo['user_surname'] = UserService::getSurname($id);
         if ($userinfo['user_name'] == false)
         {
@@ -263,9 +263,9 @@ class IntouchController extends Controller
         $this->view->params['userInfo'] = $userinfo;
         ////////////////////////////////////////////////////// request service
 
-        $notification                             = RequestService::getMyRequests($id);
-        $tablelength                              = count($notification);
-        $this->view->params['notification_data']  = $notification;
+        $notification = RequestService::getMyRequests($id);
+        $tablelength = count($notification);
+        $this->view->params['notification_data'] = $notification;
         $this->view->params['notification_count'] = $tablelength;
     }
 
@@ -273,11 +273,11 @@ class IntouchController extends Controller
     {
         if (Yii::$app->user->can('search-use'))
         {
-            $id           = Yii::$app->user->getId();
+            $id = Yii::$app->user->getId();
             $this->getUserData($id);
             $this->layout = 'logged';
-            $users        = \common\components\SearchService::findUsers($q);
-            $resultsCnt   = count($users);
+            $users = \common\components\SearchService::findUsers($q);
+            $resultsCnt = count($users);
             return $this->render('searchResults', [
                         'query' => $q,
                         'count' => $resultsCnt,
@@ -292,7 +292,7 @@ class IntouchController extends Controller
 
     public function actionAccessdenied()
     {
-        $id           = Yii::$app->user->getId();
+        $id = Yii::$app->user->getId();
         $this->getUserData($id);
         $this->layout = 'logged';
         return $this->render('accessDenied');
@@ -324,9 +324,9 @@ class IntouchController extends Controller
 
     public function actionMyfriends()
     {
-        $id           = Yii::$app->user->getId();
+        $id = Yii::$app->user->getId();
         ///////
-        $friends      = RelationService::getFriendsList($id, true);
+        $friends = RelationService::getFriendsList($id, true);
         ///////
         $this->getUserData($id);
         $this->layout = 'logged';
