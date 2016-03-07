@@ -7,11 +7,15 @@ class m151220_120914_add_AIs extends Migration
 {
     public function up()
     {
+        $sql = "SET foreign_key_checks = 0;";
+        $this->execute($sql);
         $sql = "ALTER TABLE  `post` CHANGE  `post_id`  `post_id` INT( 11 ) NOT NULL AUTO_INCREMENT ;";
         $this->execute($sql);
         $sql = "ALTER TABLE `comment` CHANGE `comment_id` `comment_id` INT(11) NOT NULL AUTO_INCREMENT;";
         $this->execute($sql);
         $sql = "ALTER TABLE `like` CHANGE `like_id` `like_id` INT(11) NOT NULL AUTO_INCREMENT;";
+        $this->execute($sql);
+        $sql = "SET foreign_key_checks = 1;";
         $this->execute($sql);
         
     }
