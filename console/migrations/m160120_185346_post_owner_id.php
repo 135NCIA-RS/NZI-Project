@@ -7,12 +7,16 @@ class m160120_185346_post_owner_id extends Migration
 {
     public function up()
     {
+        $sql = "SET foreign_key_checks = 0;";
+        $this->execute($sql);
         $sql = "ALTER TABLE `post` ADD `owner_id` INT NULL AFTER `user_id`;";
         $this->execute($sql);
         $sql = "ALTER TABLE `post` ADD INDEX(`owner_id`);";
         $this->execute($sql);
         $sql = "ALTER TABLE `post` ADD FOREIGN KEY (`owner_id`) REFERENCES `projectdb`.`user`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;\n"
     . "";
+        $this->execute($sql);
+        $sql = "SET foreign_key_checks = 1;";
         $this->execute($sql);
     }
 
