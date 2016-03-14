@@ -50,6 +50,7 @@ return [
             'rules'           => [
                 '/authenticate' => 'site/login',
                 'logout'        => 'site/logout',
+                
             ],
         ],
         'authManager'  => [
