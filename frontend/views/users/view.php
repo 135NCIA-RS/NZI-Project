@@ -24,7 +24,8 @@ use common\components\PhotoService;
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <?= Html::img($UserProfilePhoto, ['class' => 'profile-user-img img-responsive img-circle', 'alt' => 'User profile image']) ?>
+                    <?= Html::img($UserProfilePhoto,
+                            ['class' => 'profile-user-img img-responsive img-circle', 'alt' => 'User profile image']) ?>
                     <h3 class="profile-username text-center"><?= $name . " " . $surname ?></h3>
 
                     <p class="text-muted text-center"><?= Yii::t('app', 'InTouch User'); ?></p>
@@ -54,7 +55,7 @@ JS;
                         </li>
                     </ul>
                     <style>
-                        .btnodst{
+                        .btnodst {
                             margin-top: 5px;
                         }
                     </style>
@@ -64,15 +65,15 @@ JS;
                     if (!$UserFollowState)
                     {
                         echo Html::submitButton(Yii::t('app', 'Follow'), [
-                            'class' => 'btn btn-primary btn-block btnodst pjaxButton',
-                            'name'  => 'follow-btn',
+                                'class' => 'btn btn-primary btn-block btnodst pjaxButton',
+                                'name' => 'follow-btn',
                         ]);
                     }
                     else
                     {
                         echo Html::submitButton(Yii::t('app', 'Unfollow'), [
-                            'class' => 'btn btn-default btn-block btn-sm btnodst pjaxButton',
-                            'name'  => 'unfollow-btn',
+                                'class' => 'btn btn-default btn-block btn-sm btnodst pjaxButton',
+                                'name' => 'unfollow-btn',
                         ]);
                     }
                     echo Html::endForm();
@@ -83,15 +84,15 @@ JS;
                         if (!$UserFriendshipState)
                         {
                             echo Html::submitButton(Yii::t('app', 'Send a friend request'), [
-                                'class' => 'btn btn-primary btn-block btnodst pjaxButton',
-                                'name'  => 'friend-btn',
+                                    'class' => 'btn btn-primary btn-block btnodst pjaxButton',
+                                    'name' => 'friend-btn',
                             ]);
                         }
                         else
                         {
                             echo Html::submitButton(Yii::t('app', 'Unfriend'), [
-                                'class' => 'btn btn-default btn-block btn-sm btnodst pjaxButton',
-                                'name'  => 'unfriend-btn',
+                                    'class' => 'btn btn-default btn-block btn-sm btnodst pjaxButton',
+                                    'name' => 'unfriend-btn',
                             ]);
                         }
                         echo Html::endForm();
@@ -100,7 +101,8 @@ JS;
                     {
                         echo "<button class='btn btn-default btn-block btn-sm'>Friend Request Sent</button>";
                     }
-                    echo Html::a("Refresh", ["users/view", 'uname' => $UserName], ['class' => 'hidden', 'id' => 'refr']);
+                    echo Html::a("Refresh", ["users/view", 'uname' => $UserName],
+                            ['class' => 'hidden', 'id' => 'refr']);
                     Pjax::end();
                     ?>
                 </div>
@@ -155,20 +157,23 @@ JS;
 
                 </ul>
                 <div class="tab-content">
+                    <?php Pjax::begin(); ?>
                     <div class="active tab-pane" id="activity">
                         <?php
-                        if (true)
-                        {
+
                             ?>
+
                             <!-- Add post -->
-                            <?= Html::beginForm("", 'post', []) ?>
-                            <input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post" name="inputText">
+                            <?= Html::beginForm(["users/view", 'uname' => $UserName], 'post', []) ?>
+                            <input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post"
+                                   name="inputText">
                             <input type="hidden" name="type" value="newpost">
-                            <button style="width:20%; margin-top:5px;" type="submit" class="btn btn-danger btn-block btn-sm" ><?= Yii::t('app', 'Publish'); ?></button>
+                            <button style="width:20%; margin-top:5px;" type="submit"
+                                    class="btn btn-danger btn-block btn-sm"><?= Yii::t('app', 'Publish'); ?></button>
                             <hr>
                             <?= Html::endForm() ?>
                             <!-- /Add post-->
-                        <?php } ?>
+
                         <!-- Post -->
                         <?php
                         foreach ($posts as $row)
@@ -178,16 +183,21 @@ JS;
                                 ?>
                                 <div class="post">
                                     <div class="user-block">
-                                        <img class="img-circle img-bordered-sm" src="<?php echo $row['photo']; ?>" alt="user image">
+                                        <img class="img-circle img-bordered-sm" src="<?php echo $row['photo']; ?>"
+                                             alt="user image">
                                         <span class="username">
                                             <a href="#"><?php echo($row['name'] . " " . $row['surname']); ?></a>
                                             <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
                                         </span>
                                         <span class="description"><?php
                                             if ($row['post_visibility'] == "visible")
+                                            {
                                                 echo Yii::t('app', 'Post public');
+                                            }
                                             else
+                                            {
                                                 echo Yii::t('app', 'Post hidden');
+                                            }
                                             ?> - <?php echo($row['post_date']); ?></span>
                                     </div>
                                     <!-- /.user-block -->
@@ -195,54 +205,75 @@ JS;
                                         <?php
                                         $attachments = $row['attachments'];
                                         if ($row['post_type'] == "text")
+                                        {
                                             echo $row['post_text'];
+                                        }
                                         else if ($row['post_type'] == "gallery")
                                         {
-                                            echo $row['post_text'] . "<br>";
-                                            ?>
-                                        <div class="row margin-bottom">
-                                            <div class="col-sm-6">
-                                                <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[0]['file']; ?>" alt="Photo">
-                                            </div>
-                                            <!-- /.col -->
-                                            <div class="col-sm-6">
-                                                <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>" alt="Photo">
-                                                        <br>
-                                                        <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[2]['file']; ?>" alt="Photo">
-                                                    </div>
-                                                    <!-- /.col -->
-                                                    <div class="col-sm-6">
-                                                        <img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[3]['file']; ?>" alt="Photo">
-                                                        <br>
-                                                        <?php
-                                                        if (isset($attachments[4]['file']))
-                                                        {
-                                                            ?><img class="img-responsive" src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>" alt="Photo"> <?php } ?>
-                                                    </div>
-                                                    <!-- /.col -->
-                                                </div>
-                                                <!-- /.row -->
-                                            </div>
-                                            <!-- /.col -->
+                                        echo $row['post_text'] . "<br>";
+                                        ?>
+                                    <div class="row margin-bottom">
+                                        <div class="col-sm-6">
+                                            <img class="img-responsive"
+                                                 src="../../dist/content/attachments/<?php echo $attachments[0]['file']; ?>"
+                                                 alt="Photo">
                                         </div>
-                                        <?php
+                                        <!-- /.col -->
+                                        <div class="col-sm-6">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <img class="img-responsive"
+                                                         src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>"
+                                                         alt="Photo">
+                                                    <br>
+                                                    <img class="img-responsive"
+                                                         src="../../dist/content/attachments/<?php echo $attachments[2]['file']; ?>"
+                                                         alt="Photo">
+                                                </div>
+                                                <!-- /.col -->
+                                                <div class="col-sm-6">
+                                                    <img class="img-responsive"
+                                                         src="../../dist/content/attachments/<?php echo $attachments[3]['file']; ?>"
+                                                         alt="Photo">
+                                                    <br>
+                                                    <?php
+                                                    if (isset($attachments[4]['file']))
+                                                    {
+                                                        ?><img class="img-responsive"
+                                                               src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>"
+                                                               alt="Photo"> <?php } ?>
+                                                </div>
+                                                <!-- /.col -->
+                                            </div>
+                                            <!-- /.row -->
+                                        </div>
+                                        <!-- /.col -->
+                                    </div>
+                                    <?php
                                     }
                                     ?>
                                     </p>
                                     <ul class="list-inline">
-                                        <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> <?= Yii::t('app', 'Share'); ?></a></li>
-                                        <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> <?= Yii::t('app', 'Like'); ?></a>
+                                        <li><a href="#" class="link-black text-sm"><i
+                                                        class="fa fa-share margin-r-5"></i> <?= Yii::t('app',
+                                                        'Share'); ?></a></li>
+                                        <li><a href="#" class="link-black text-sm"><i
+                                                        class="fa fa-thumbs-o-up margin-r-5"></i> <?= Yii::t('app',
+                                                        'Like'); ?></a>
                                         </li>
                                         <li class="pull-right">
-                                            <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app', 'Comments'); ?> (<?php echo(count($row['comments'])); ?>)</a></li>
+                                            <a href="#" class="link-black text-sm"><i
+                                                        class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app',
+                                                        'Comments'); ?> (<?php echo(count($row['comments'])); ?>)</a>
+                                        </li>
                                     </ul>
-                                    <?= Html::beginForm("", 'post', []) ?>
-                                    <input class="form-control input-sm send-form-input" type="text" placeholder="<?= Yii::t('app', 'Type a comment'); ?>" name="inputText">
+                                    <?= Html::beginForm(["users/view", 'uname' => $UserName], 'post', []) ?>
+                                    <input class="form-control input-sm send-form-input" type="text"
+                                           placeholder="<?= Yii::t('app', 'Type a comment'); ?>" name="inputText">
                                     <input type="hidden" name="type" value="newcomment">
                                     <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
-                                    <button style="width:20%; margin-top:5px;" type="submit" class="btn btn-danger btn-block btn-sm hidden" ></button>
+                                    <button style="width:20%; margin-top:5px;" type="submit"
+                                            class="btn btn-danger btn-block btn-sm hidden"></button>
                                     <?= Html::endForm() ?>
                                     <div class="direct-chat-msg" style="margin-top: 10px;">
                                         <div class="direct-chat-info clearfix">
@@ -253,10 +284,14 @@ JS;
                                         {
                                             ?>
                                             <div style="background-color: #EDF5F7; padding: 10px 10px 1px 10px; border-radius: 10px; margin-left: 30px; margin-bottom:5px;">
-                                                <img class="direct-chat-img" src="<?php echo $comment['photo']; ?>" alt="message user image" style="margin-right: 10px;"><!-- /.direct-chat-img -->
-                                                <p class="message" >
+                                                <img class="direct-chat-img" src="<?php echo $comment['photo']; ?>"
+                                                     alt="message user image" style="margin-right: 10px;">
+                                                <!-- /.direct-chat-img -->
+                                                <p class="message">
                                                     <a href="#" class="name">
-                                                        <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> <?php echo $comment['comment_date']; ?></small>
+                                                        <small class="text-muted pull-right"><i
+                                                                    class="fa fa-clock-o"></i> <?php echo $comment['comment_date']; ?>
+                                                        </small>
                                                         <?php echo($comment['name'] . " " . $comment['surname']); ?><br>
                                                     </a>
                                                     <?php echo $comment['comment_text']; ?>
@@ -268,11 +303,15 @@ JS;
                                 </div>
 
                                 <?php
+
                             }
                         }
+
                         ?>
                         <!-- /.post -->
                     </div>
+                    <?php Pjax::end();
+                    ?>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="timeline">
                         <!-- The timeline -->
@@ -313,7 +352,8 @@ JS;
                                 <div class="timeline-item">
                                     <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
 
-                                    <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
+                                    <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your
+                                        friend request
                                     </h3>
                                 </div>
                             </li>

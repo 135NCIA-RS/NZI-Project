@@ -72,7 +72,7 @@ class UsersController extends Controller
         {
             return $this->redirect('/profile');
         }
-        if (Yii::$app->request->isPost)
+        if (Yii::$app->request->isPost || Yii::$app->request->isPjax)
         {
             if (Yii::$app->user->can('relations-manage-own'))
             {
