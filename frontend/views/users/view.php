@@ -157,22 +157,22 @@ JS;
 
                 </ul>
                 <div class="tab-content">
-                    <?php Pjax::begin(); ?>
+                    <?php ?>
                     <div class="active tab-pane" id="activity">
                         <?php
+                        yii\widgets\Pjax::begin();
+                        ?>
 
-                            ?>
-
-                            <!-- Add post -->
-                            <?= Html::beginForm(["users/view", 'uname' => $UserName], 'post', []) ?>
-                            <input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post"
-                                   name="inputText">
-                            <input type="hidden" name="type" value="newpost">
-                            <button style="width:20%; margin-top:5px;" type="submit"
-                                    class="btn btn-danger btn-block btn-sm"><?= Yii::t('app', 'Publish'); ?></button>
-                            <hr>
-                            <?= Html::endForm() ?>
-                            <!-- /Add post-->
+                        <!-- Add post -->
+                        <?= Html::beginForm(["users/view", 'uname' => $UserName], 'post', ['data-pjax' => '']) ?>
+                        <input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post"
+                               name="inputText">
+                        <input type="hidden" name="type" value="newpost">
+                        <button style="width:20%; margin-top:5px;" type="submit"
+                                class="btn btn-danger btn-block btn-sm"><?= Yii::t('app', 'Publish'); ?></button>
+                        <hr>
+                        <?= Html::endForm() ?>
+                        <!-- /Add post-->
 
                         <!-- Post -->
                         <?php
@@ -252,6 +252,7 @@ JS;
                                     <?php
                                     }
                                     ?>
+
                                     </p>
                                     <ul class="list-inline">
                                         <li><a href="#" class="link-black text-sm"><i
@@ -267,7 +268,7 @@ JS;
                                                         'Comments'); ?> (<?php echo(count($row['comments'])); ?>)</a>
                                         </li>
                                     </ul>
-                                    <?= Html::beginForm(["users/view", 'uname' => $UserName], 'post', []) ?>
+                                    <?= Html::beginForm(["users/view", 'uname' => $UserName], 'post', ['data-pjax' => '']) ?>
                                     <input class="form-control input-sm send-form-input" type="text"
                                            placeholder="<?= Yii::t('app', 'Type a comment'); ?>" name="inputText">
                                     <input type="hidden" name="type" value="newcomment">
@@ -307,10 +308,11 @@ JS;
                             }
                         }
 
+                        yii\widgets\Pjax::end();
                         ?>
                         <!-- /.post -->
                     </div>
-                    <?php Pjax::end();
+                    <?php
                     ?>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="timeline">
