@@ -26,7 +26,7 @@ use common\components\PhotoService;
                 ?>
 
                 <!-- Add post -->
-                <?= Html::beginForm(["users/view", 'uname' => $UserName], 'post', ['data-pjax' => '']) ?>
+                <?= Html::beginForm(["intouch/index", 'uname' => $UserName], 'post', ['data-pjax' => '']) ?>
                 <input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post"
                        name="inputText">
                 <input type="hidden" name="type" value="newpost">
@@ -130,7 +130,7 @@ use common\components\PhotoService;
                                                 'Comments'); ?> (<?php echo(count($row['comments'])); ?>)</a>
                                 </li>
                             </ul>
-                            <?= Html::beginForm(["users/view", 'uname' => $UserName], 'post', ['data-pjax' => '']) ?>
+                            <?= Html::beginForm(["intouch/index", 'uname' => $UserName], 'post', ['data-pjax' => '']) ?>
                             <input class="form-control input-sm send-form-input" type="text"
                                    placeholder="<?= Yii::t('app', 'Type a comment'); ?>" name="inputText">
                             <input type="hidden" name="type" value="newcomment">

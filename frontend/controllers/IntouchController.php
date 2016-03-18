@@ -70,6 +70,22 @@ class IntouchController extends Controller
 		$dane = $zdjecie->find()->all();
 		$this->layout = 'logged';
 
+		if (Yii::$app->request->isPost || Yii::$app->request->isPjax)
+		{
+			if (!is_null(Yii::$app->request->post('type')))
+			{
+				switch (Yii::$app->request->post('type'))
+				{
+					case 'newpost':
+						PostsService::createPost($id, Yii::$app->request->post('inputText'));
+						break;
+
+					case 'newcomment':
+						PostsService::createComment(Yii::$app->request->post('post_id'), Yii::$app->request->post('inputText'));
+						break;
+				}
+			}
+		}
 		$posts = PostsService::getFriendsPosts($id);
 		//die(var_dump($posts));
 		return $this->render('index', ['dane' => $dane, 'UserName' => $id, 'posts' => $posts]);
