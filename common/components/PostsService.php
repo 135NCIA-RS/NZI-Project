@@ -25,6 +25,11 @@ class PostsService
 		$arr = [];
 		$counter = 0;
 		$friendList = RelationService::getFriendsList($id);
+		if (count($friendList) == 0)
+		{
+			$posts = [];
+			return $posts;
+		}
 		foreach ($friendList as $friend)
 		{
 			$arr[$counter] = self::getPosts($friend);
@@ -34,17 +39,8 @@ class PostsService
 		$posts = call_user_func_array('array_merge', $arr);
 		//sort posts(array) by date
 		usort($posts, ["\common\components\PostsService", "date_compare"]);
-		// die(var_dump($posts));
-		if (is_null($posts))
-		{
-			return false;
-		}
-		else
-		{
-			return $posts;
-		}
+		return $posts;
 
-		return false;
 	}
 
 	/*
