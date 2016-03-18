@@ -116,7 +116,7 @@ use yii\widgets\Pjax
                                     <span class="username">
                                         <a href="#"><?php echo($row['name'] . " " . $row['surname']); ?></a>
                                         <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
-	                                     <a href="#" class="pull-right btn-box-tool"><i class="fa fa-wrench"></i></a>
+	                                    <a href="#" class="pull-right btn-box-tool"><i class="fa fa-wrench"></i></a>
                                     </span>
                                     <span class="description"><?php if ($row['post_visibility'] == "visible")
                                         {
@@ -192,7 +192,8 @@ use yii\widgets\Pjax
 					                                    class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app',
 					                                    'Comments'); ?> (<?php echo(count($row['comments'])); ?>)</a>
 	                                        </li>
-	                                        <li class="pull-right"><a href="#" class="link-black text-sm"><i
+	                                        <li class="pull-right">
+		                                        <a href="#" class="link-black text-sm"><i
 				                                        class="fa fa-exclamation margin-r-5"></i><?= Yii::t('app',
 				                                        'Report'); ?></a>
 	                                        </li>

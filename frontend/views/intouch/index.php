@@ -50,6 +50,7 @@ use common\components\PhotoService;
                                         <span class="username">
                                             <a href="#"><?php echo($row['name'] . " " . $row['surname']); ?></a>
                                             <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
+	                                        <a href="#" class="pull-right btn-box-tool"><i class="fa fa-wrench"></i></a>
                                         </span>
                                         <span class="description"><?php
                                             if ($row['post_visibility'] == "visible")
@@ -129,6 +130,11 @@ use common\components\PhotoService;
                                                 class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app',
                                                 'Comments'); ?> (<?php echo(count($row['comments'])); ?>)</a>
                                 </li>
+	                            <li class="pull-right">
+		                            <a href="#" class="link-black text-sm"><i
+					                            class="fa fa-exclamation margin-r-5"></i><?= Yii::t('app',
+					                            'Report'); ?></a>
+	                            </li>
                             </ul>
                             <?= Html::beginForm(["intouch/index", 'uname' => $UserName], 'post', ['data-pjax' => '']) ?>
                             <input class="form-control input-sm send-form-input" type="text"
@@ -150,10 +156,12 @@ use common\components\PhotoService;
                                         <img class="direct-chat-img" src="<?php echo $comment['photo']; ?>"
                                              alt="message user image" style="margin-right: 10px;">
                                         <!-- /.direct-chat-img -->
-                                        <p class="message">
+		                                    <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
+		                                    <a href="#" class="pull-right btn-box-tool"><i class="fa fa-wrench"></i></a>
+	                                    <p class="message">
                                             <a href="#" class="name">
-                                                <small class="text-muted pull-right"><i
-                                                            class="fa fa-clock-o"></i> <?php echo $comment['comment_date']; ?>
+                                                <small class="text-muted pull-right">
+	                                                <i class="fa fa-clock-o"></i> <?php echo $comment['comment_date']; ?>
                                                 </small>
                                                 <?php echo($comment['name'] . " " . $comment['surname']); ?><br>
                                             </a>
@@ -174,6 +182,9 @@ use common\components\PhotoService;
                 ?>
                 <!-- /.post -->
             </div>
+	        <dir class="box-footer text-center">
+		        <a href="javascript::;" class="btn btn-sm btn-info btn-flat">View More Posts</a>
+	        </dir>
         </div>
     </div>
 
