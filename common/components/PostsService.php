@@ -23,17 +23,17 @@ class PostsService
 	public static function getFriendsPosts($id)
 	{
 		$arr = [];
-		$counter = 0;
 		$friendList = RelationService::getFriendsList($id);
+		$friendList[] = $id;
 		if (count($friendList) == 0)
 		{
 			$posts = [];
 			return $posts;
 		}
+
 		foreach ($friendList as $friend)
 		{
-			$arr[$counter] = self::getPosts($friend);
-			$counter = $counter + 1;
+			$arr[] = self::getPosts($friend);
 		}
 		//convert to two dimensional array from three dimensional
 		$posts = call_user_func_array('array_merge', $arr);
@@ -102,10 +102,10 @@ class PostsService
 			return false;
 		}
 		$post = new Post();
-		if ($receiver_id != $author_id)
-		{
-			$post->owner_id = $author_id;
-		}
+		//if ($receiver_id != $author_id)
+		//{
+		$post->owner_id = $author_id;
+		//}
 		$post->user_id = $receiver_id;
 		$post->post_text = $text;
 		$post->post_date = date('Y-m-d H:i:s');
