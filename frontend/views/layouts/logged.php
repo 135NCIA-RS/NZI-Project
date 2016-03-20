@@ -74,8 +74,6 @@ AppAsset::register($this);
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-
-                                    <!-- <?php echo Html::img('@web/dist/img/guest.png', ['class' => "user-image"]) ?>-->
                                     <i class="fa fa-sign-in"></i>
                                     <span class="hidden-xs"><?= Yii::t('app','Account'); ?></span>
                                 </a>
@@ -83,7 +81,6 @@ AppAsset::register($this);
                                     <!-- User image -->
 
                                     <li class="user-header">
-
                                         <?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
                                         <p style='color:black; font-weight:bold'><?= $this->params['userInfo']['user_name'] . ' ' . $this->params['userInfo']['user_surname'] ?></p>
                                         <p>
@@ -104,7 +101,7 @@ AppAsset::register($this);
                                             <a href="/profile" class="btn btn-default btn-flat"><?= Yii::t('app','Profile'); ?></a>
                                         </div>
                                         <div class="pull-right">
-                                            <a href="<?= Url::to(['/logout']) ?>" data-method="post" class="btn btn-default btn-flat"><?= Yii::t('app','Log out'); ?></a>                                           
+                                            <a href="<?= Url::to(['/logout']) ?>" data-method="post" class="btn btn-default btn-flat"><?= Yii::t('app','Log out'); ?></a>
                                         </div>
                                     </li>
                                 </ul>
@@ -144,12 +141,12 @@ AppAsset::register($this);
                         <li class="header"><?= Yii::t('app','MAIN NAVIGATION'); ?></li>
                         <li>
                             <a href="/profile">
-                                <i class="fa fa-user"></i> <span><?= Yii::t('app', 'Profile') ?></span> 
+                                <i class="fa fa-user"></i> <span><?= Yii::t('app', 'Profile') ?></span>
                             </a>
                         </li>
                         <li>
                             <a href="/myFriends">
-                                <i class="fa fa-users"></i> <span><?= Yii::t('app', 'Friends') ?></span> 
+                                <i class="fa fa-users"></i> <span><?= Yii::t('app', 'Friends') ?></span>
                             </a>
                         </li>
                         <li class="header"><?= Yii::t('app', 'ACTIONS') ?></li>

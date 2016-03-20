@@ -1,0 +1,48 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: grzes
+ * Date: 3/20/2016
+ * Time: 4:37 PM
+ */
+
+namespace common\components\ImgLocations;
+
+
+use common\components\Image;
+use common\components\ImageLocationInterface;
+use Yii;
+
+class ImgMediaLoc implements ImageLocationInterface
+{
+
+
+	public function save($data, $fileName, $subFolders = "")
+	{
+		return move_uploaded_file($data, "../../media/web/dist/content/" . $subFolders . $fileName);
+	}
+
+	public function remove($fileName, $subFolders = "")
+	{
+		$value = "../../media/web/dist/content/" . $subFolders . $fileName;
+
+		if (file_exists($value))
+		{
+			return unlink($value);
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public function listImages($subFolders = "")
+	{
+		// TODO: Implement listImages() method.
+	}
+
+	public function getUrl()
+	{
+		return Yii::getAlias("@media") . "/dist/content/";
+	}
+}

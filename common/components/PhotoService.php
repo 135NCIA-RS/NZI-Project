@@ -2,144 +2,149 @@
 
 namespace common\components;
 
+use common\components\ImgLocations\ImgMediaLoc;
 use Yii;
 use yii\caching\FileCache;
 use app\models\Photo;
 use common\models\User;
-use common\components\exceptions\InvalidUserException;
+use common\components\Exceptions\InvalidUserException;
 use yii\helpers\Url;
 
 class PhotoService // v.1.2
 {
 
-    /**
-     * Returns profile photo's filename for specified User's ID
-     * @param int $id User's ID
-     * @param type $onErrorDefaultPhoto if true returns default user photo if user doesn't have picture
-     * @return string|boolean filename or false on error
-     */
-    public static function getProfilePhoto($id, $onErrorDefaultPhoto = false, $includeFullPath = false)
-    {
-        $profilePhotosLocation = "/dist/content/images/";
+	/**
+	 * Returns profile photo's filename for specified User's ID
+	 * @param $id User_ID
+	 *
+	 * @return string photo url
+	 */
+	public static function getProfilePhoto($id)
+	{
+		$data = Photo::find()
+			->where(['user_id' => $id])
+			->andWhere(['type' => 'profile'])
+			->one();
+		if (!is_null($data))
+		{
+			$imgLocClass = "common\\components\\ImgLocations\\" . $data['image_loc'];
+			$img = new Image($data['filename'], new ImageTypes(ImageTypes::ProfilePhoto), new $imgLocClass());
+			return $img->getImage();
+		}
+		else
+		{
+			$img = new Image("default.png", new ImageTypes(ImageTypes::ProfilePhoto), new ImgMediaLoc());
+			return $img->getImage();
+		}
+	}
 
-        $data = Photo::find()
-                ->select('filename')
-                ->where(['user_id' => $id])
-                ->andWhere(['type' => 'profile'])
-                ->one();
-        if ($includeFullPath)
-        {
-            if (isset($data['filename']))
-            {
-                $data['filename'] = $profilePhotosLocation . $data['filename'];
-            }
-        }
-        return isset($data['filename']) ? $data['filename'] : ($onErrorDefaultPhoto ? "/dist/img/guest.png" : false);
-    }
+	/**
+	 * Sets Profile photo
+	 * @param $id User_id
+	 * @param $imgData $_FILES data
+	 *
+	 * @return bool
+	 */
+	public static function setProfilePhoto($id, $imgData)
+	{
+		$photo = Photo::find()->where(['user_id' => $id, 'type' => 'profile'])->one();
 
-    /**
-     * Sets Profile photo's filename for specified User's ID
-     * @param int $id User's ID
-     * @param string $filename Photo's filename eg. nerd.png
-     * @return boolean true on success, false on fail
-     */
-    public static function setProfilePhoto($id, $filename)
-    {
-        $photo = Photo::find()->where(['user_id' => $id, 'type' => 'profile'])->one();
+		if ($photo == null)
+		{
+			$photo = new Photo();
+			$photo->user_id = $id;
+		}
+		else
+		{
+			$imgLocClass = "common\\components\\ImgLocations\\" . $photo->image_loc;
+			$im = new Image($photo->filename, new ImageTypes(ImageTypes::ProfilePhoto), new $imgLocClass());
+			$im->remove();
+		}
 
-        if ($photo == null)
-        {
-            $photo          = new Photo();
-            $photo->user_id = $id;
-        }
-        else
-        {
-            if (file_exists("../web/dist/content/images/" . $photo->filename))
-            {
-                unlink("../web/dist/content/images/" . $photo->filename);
-            }
-        }
+		$genFileName = Yii::$app->security->generateRandomString(20);
+		$img = new Image($genFileName, new ImageTypes(ImageTypes::ProfilePhoto), new ImgMediaLoc(), $imgData);
+		$img->save();
 
-        $photo->filename = $filename;
-        $photo->type     = "profile";
+		$photo->filename = $genFileName;
+		$photo->type = "profile";
 
-        if ($photo->save())
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+		if ($photo->save())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
-    /**
-     * Returns number of photos stored in database for specified user's id
-     * @param int $id User's ID
-     * @return int|boolean Value or false on errr
-     */
-    public static function countPhotos($id)
-    {
-        $data = Photo::find()
-                ->where(['user_id' => $id])
-                ->count();
-        return isset($data) ? (int) $data : false;
-    }
+	/**
+	 * Returns number of photos stored in database for specified user's id
+	 *
+	 * @param int $id User's ID
+	 *
+	 * @return int|boolean Value or false on errr
+	 */
+	public static function countPhotos($id)
+	{
+		$data = Photo::find()
+			->where(['user_id' => $id])
+			->count();
+		return isset($data) ? (int)$data : false;
+	}
 
-    /**
-     * Adds a new photo to the user's gallery
-     * @param type $user_id User's ID
-     * @param type $filename photo's Filename
-     * @return boolean|array false on error or array with filenames
-     */
-    public static function addPhoto($user_id, $filename)
-    {
-        $photo = Photo::find()->where(['user_id' => $id, 'type' => 'gallery', 'filename' => $filename])->one();
+	/**
+	 * Adds a new photo to the user's gallery
+	 *
+	 * @param $user_id
+	 * @param $data $_FILES data
+	 *
+	 * @return bool
+	 */
+	public static function addPhoto($user_id, $data)
+	{
+		$photo = new Photo();
+		$photo->user_id = $user_id;
 
-        if ($photo == null)
-        {
-            $photo          = new Photo();
-            $photo->user_id = $id;
-        }
-        else
-        {
-            return true; //already in database
-        }
+		$genFileName = Yii::$app->security->generateRandomString(20);
+		$img = new Image($genFileName, new ImageTypes(ImageTypes::GalleryPhoto), new ImgMediaLoc(), $data);
+		$img->save();
 
-        $photo->filename = $filename;
-        $photo->type     = "gallery";
+		$photo->filename = $genFileName;
+		$photo->type = "gallery";
 
-        if ($photo->save())
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+		if ($photo->save())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
-    /**
-     * Returns User's Gallery Photos Filenames
-     * @param type $user_id User's ID
-     * @return null|boolean|array null on empty gallery, false on error or array of filenames
-     */
-    public static function getGallery($user_id)
-    {
-        $data = Photo::find()
-                ->select('filename')
-                ->where(['user_id' => $user_id])
-                ->andWhere(['type' => 'gallery'])
-                ->all();
+	/**
+	 * Returns User's Gallery Photos
+	 *
+	 * @param type $user_id User's ID
+	 *
+	 * @return array array of photos (urls)
+	 */
+	public static function getGallery($user_id)
+	{
+		$data = Photo::find()
+			->select('filename')
+			->where(['user_id' => $user_id])
+			->andWhere(['type' => 'gallery'])
+			->all();
 
-        $dt = [];
-        foreach ($data as $var)
-        {
-            $dt[] = $var['filename'];
-        }
-        if (count($dt) == 0)
-            return null;
-        return isset($dt) ? $dt : false;
-    }
+		$dt = [];
+		foreach ($data as $var)
+		{
+			$dt[] =
+				(new Image($var->filename, new ImageTypes(ImageTypes::GalleryPhoto), new ImgMediaLoc()))->getImage();
+		}
+		return $dt;
+	}
 
 }

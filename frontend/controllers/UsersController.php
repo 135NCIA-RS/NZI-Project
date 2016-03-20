@@ -181,21 +181,9 @@ class UsersController extends Controller
         $id = Yii::$app->user->getId();
 
         $photo = \common\components\PhotoService::getProfilePhoto($id);
+        $this->view->params['userProfilePhoto'] = $photo;
 
-        if (is_string($photo))
-        {
-            $location                               = "@web/dist/content/images/";
-            //TODO set chmod for that directory(php init)
-            $this->view->params['userProfilePhoto'] = $location . $photo;
-        }
-        else
-        {
-            $location                               = "@web/dist/img/guest.png";
-            //TODO add that file
-            $this->view->params['userProfilePhoto'] = $location;
-        }
-
-        $userinfo                 = array();
+        $userinfo                 = [];
         $userinfo['user_name']    = UserService::getName($id);
         $userinfo['user_surname'] = UserService::getSurname($id);
         if ($userinfo['user_name'] == false)

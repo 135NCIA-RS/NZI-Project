@@ -2,6 +2,8 @@
 
 namespace frontend\controllers;
 
+use app\models\Photo;
+use Faker\Provider\Image;
 use Yii;
 use common\models\LoginForm;
 use yii\base\InvalidParamException;
@@ -18,7 +20,6 @@ use common\components\RelationType;
 use common\components\PhotoService;
 use common\components\AccessService;
 use common\components\RequestService;
-use common\components\Permission;
 use common\components\PostsService;
 use common\components\RequestType;
 
@@ -81,7 +82,8 @@ class IntouchController extends Controller
 						break;
 
 					case 'newcomment':
-						PostsService::createComment(Yii::$app->request->post('post_id'), Yii::$app->request->post('inputText'));
+						PostsService::createComment(Yii::$app->request->post('post_id'),
+							Yii::$app->request->post('inputText'));
 						break;
 				}
 			}
@@ -126,12 +128,7 @@ class IntouchController extends Controller
 						$plik = $_FILES['exampleInputFile']['tmp_name'];
 						if (strlen($plik) > 0)
 						{
-							$nazwa = md5(uniqid(time())) . '.jpg';
-							move_uploaded_file($plik, Yii::$app->basePath .
-							                          '/web/dist/content/images/' .
-							                          $nazwa);
-							$zmienna = Yii::$app->request->post('nazwisko');
-							\common\components\PhotoService::setProfilePhoto($id, $nazwa);
+							\common\components\PhotoService::setProfilePhoto($id, $plik);
 						}
 
 						UserService::setName($id, Yii::$app->request->post('inputName'));
@@ -144,7 +141,8 @@ class IntouchController extends Controller
 						{
 							if ($pass1cnt != $pass2cnt)
 							{
-								Yii::$app->session->setFlash('error', 'Passwords not match. Password\'s has not been changed');
+								Yii::$app->session->setFlash('error',
+									'Passwords not match. Password\'s has not been changed');
 								return $this->redirect('/profile');
 							}
 							if ($pass1cnt < 6)
@@ -163,7 +161,8 @@ class IntouchController extends Controller
 						break;
 
 					case 'newcomment':
-						PostsService::createComment(Yii::$app->request->post('post_id'), Yii::$app->request->post('inputText'));
+						PostsService::createComment(Yii::$app->request->post('post_id'),
+							Yii::$app->request->post('inputText'));
 						break;
 				}
 			}
@@ -253,20 +252,8 @@ class IntouchController extends Controller
 	{
 		$id = Yii::$app->user->getId();
 
-		$photo = \common\components\PhotoService::getProfilePhoto($id);
-
-		if (is_string($photo))
-		{
-			$location = "@web/dist/content/images/";
-			//TODO set chmod for that directory(php init)
-			$this->view->params['userProfilePhoto'] = $location . $photo;
-		}
-		else
-		{
-			$location = "@web/dist/img/guest.png";
-			//TODO add that file
-			$this->view->params['userProfilePhoto'] = $location;
-		}
+		$photo = PhotoService::getProfilePhoto($id);
+		$this->view->params['userProfilePhoto'] = $photo;
 
 		$userinfo = array();
 		$userinfo['user_name'] = UserService::getName($id);
@@ -347,10 +334,16 @@ class IntouchController extends Controller
 		$id = Yii::$app->user->getId();
 		///////
 		$friends = RelationService::getFriendsList($id, true);
+		$falone =
+			new components\Image("forever_alone.png", new components\ImageTypes(components\ImageTypes::InTouchImage),
+				new components\ImgLocations\ImgIntouch());
+		$faloneT = new components\Image("forever_alone_text.png",
+			new components\ImageTypes(components\ImageTypes::InTouchImage), new components\ImgLocations\ImgIntouch());
 		///////
 		$this->getUserData($id);
 		$this->layout = 'logged';
-		return $this->render('myFriends', ['friends' => $friends]);
+		return $this->render('myFriends', ['friends' => $friends, 'imgForeverAlone' => $falone->getImage(),
+		                                   'imgForeverAloneText' => $faloneT->getImage()]);
 	}
 
 }
