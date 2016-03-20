@@ -15,25 +15,22 @@ class Utils
 	{
 		$host = @parse_url($url, PHP_URL_HOST);
 		if (!$host)
+		{
 			$host = $url;
+		}
 		if (substr($host, 0, 4) == "www.")
+		{
 			$host = substr($host, 4);
-		if(\Yii::$app->id == "app-frontend")
-		{
-			if (substr_count($host, ".") > 1) // remove subdomain
-			{
-				$val = strpos($host, ".");
-				$host = substr($host, $val + 1);
-			}
 		}
-		else
+
+		while (substr_count($host, ".") > 1) // remove subdomains
 		{
-			while (substr_count($host, ".") > 1) // remove subdomains
-			{
-				$val = strpos($host, ".");
-				$host = substr($host, $val + 1);
-			}
+			$val = strpos($host, ".");
+			$host = substr($host, $val + 1);
 		}
+
+		if($host == "bluequeen.tk"){$host = "intouch.bluequeen.tk";} // Just a shitty override...
+
 		return $host;
 	}
 }
