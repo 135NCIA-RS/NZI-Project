@@ -18,10 +18,21 @@ class Utils
 			$host = $url;
 		if (substr($host, 0, 4) == "www.")
 			$host = substr($host, 4);
-		while(substr_count($host, ".") > 1) // remove subdomains
+		if(\Yii::$app->id == "app-frontend")
 		{
-			$val = strpos($host, ".");
-			$host = substr($host, $val+1);
+			if (substr_count($host, ".") > 1) // remove subdomain
+			{
+				$val = strpos($host, ".");
+				$host = substr($host, $val + 1);
+			}
+		}
+		else
+		{
+			while (substr_count($host, ".") > 1) // remove subdomains
+			{
+				$val = strpos($host, ".");
+				$host = substr($host, $val + 1);
+			}
 		}
 		return $host;
 	}
