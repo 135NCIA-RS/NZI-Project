@@ -11,7 +11,7 @@ use yii\helpers\Url;
 use common\components\PostsService;
 use common\components\UserService;
 use common\components\PhotoService;
-use yii\widgets\Pjax
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 ?>
