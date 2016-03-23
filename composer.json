@@ -3,7 +3,7 @@
     "description": "Academic Project",
     "keywords": ["yii2", "academic"],
     "minimum-stability": "stable",
-    "require": {  
+    "require": {
         "php": ">=5.4.0",
         "fxp/composer-asset-plugin": "*",
         "yiisoft/yii2": ">=2.0.6",
