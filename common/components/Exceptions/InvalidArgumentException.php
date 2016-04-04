@@ -4,7 +4,7 @@ namespace common\components\exceptions;
 use Yii;
 use yii\base\ErrorException;
 
-class InvalidEnumKeyException extends ErrorException
+class InvalidArgumentException extends ErrorException
 {
     protected $ErrorNo;
     protected $message;

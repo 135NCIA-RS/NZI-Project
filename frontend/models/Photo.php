@@ -10,6 +10,7 @@ use Yii;
  * @property integer $user_id
  * @property string $filename
  * @property string $type
+ * @property string $image_loc
  *
  * @property User $user
  */
@@ -32,7 +33,8 @@ class Photo extends \yii\db\ActiveRecord
             [['user_id', 'filename', 'type'], 'required'],
             [['user_id'], 'integer'],
             [['filename'], 'string', 'max' => 255],
-            [['type'], 'string', 'max' => 20]
+            [['type'], 'string', 'max' => 20],
+            [['image_loc'], 'string', 'max' => 25]
         ];
     }
 
@@ -45,6 +47,7 @@ class Photo extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'filename' => 'Filename',
             'type' => 'Type',
+            'image_loc' => 'Image Loc',
         ];
     }
 
@@ -64,7 +67,7 @@ class Photo extends \yii\db\ActiveRecord
     {
         return new PhotoQuery(get_called_class());
     }
-    
+
     public static function primaryKey()
     {
         //parent::primaryKey();

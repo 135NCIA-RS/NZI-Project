@@ -25,128 +25,118 @@ use common\components\UserService;
 class SiteController extends Controller
 {
 
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['login', 'error'],
-                        'allow'   => true,
-                    ],
-                    [
-                        'actions' => ['logout', 'index'],
-                        'allow'   => true,
-                        'roles'   => ['@'],
-                    ],
-                ],
-            ],
-            'verbs'  => [
-                'class'   => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function behaviors()
+	{
+		return [
+			'access' => [
+				'class' => AccessControl::className(),
+				'rules' => [
+					[
+						'actions' => ['login', 'error'],
+						'allow' => true,
+					],
+					[
+						'actions' => ['logout', 'index'],
+						'allow' => true,
+						'roles' => ['@'],
+					],
+				],
+			],
+			'verbs' => [
+				'class' => VerbFilter::className(),
+				'actions' => [
+					'logout' => ['post'],
+				],
+			],
+		];
+	}
 
-    /**
-     * @inheritdoc
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-        ];
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function actions()
+	{
+		return [
+			'error' => [
+				'class' => 'yii\web\ErrorAction',
+			],
+		];
+	}
 
-    public function actionIndex()
-    {
-        $this->getUserData();
+	public function actionIndex()
+	{
+		$this->getUserData();
 
-        if (Yii::$app->user->can('admin'))
-        {
-            $this->layout = "Admin";
-            return $this->render('index');
-        }
-        else
-        {
-            $this->layout = "NonAdmin";
-            return $this->render('InsufficientRights');
-        }
-    }
+		if (Yii::$app->user->can('admin'))
+		{
+			$this->layout = "Admin";
+			return $this->render('index');
+		}
+		else
+		{
+			$this->layout = "NonAdmin";
+			return $this->render('InsufficientRights');
+		}
+	}
 
-    public function actionLogin()
-    {
-        if (!\Yii::$app->user->isGuest)
-        {
-            return $this->goHome();
-        }
+	public function actionLogin()
+	{
+		if (!\Yii::$app->user->isGuest)
+		{
+			return $this->goHome();
+		}
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login())
-        {
-            return $this->goBack();
-        }
-        else
-        {
-            return $this->render('login', [
-                        'model' => $model,
-            ]);
-        }
-    }
+		$model = new LoginForm();
+		if ($model->load(Yii::$app->request->post()) && $model->login())
+		{
+			return $this->goBack();
+		}
+		else
+		{
+			return $this->render('login', [
+				'model' => $model,
+			]);
+		}
+	}
 
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
+	public function actionLogout()
+	{
+		Yii::$app->user->logout();
 
-        return $this->goHome();
-    }
+		return $this->goHome();
+	}
 
-    public function getUserData()
-    {
-        $id = Yii::$app->user->getId();
+	public function getUserData()
+	{
+		$id = Yii::$app->user->getId();
 
-        $photo = PhotoService::getProfilePhoto($id);
+		$photo = PhotoService::getProfilePhoto($id);
 
-        if (is_string($photo))
-        {
-            $location                               = "@web/dist/content/images/";
-            //TODO set chmod for that directory(php init)
-            $this->view->params['userProfilePhoto'] = $location . $photo;
-        }
-        else
-        {
-            $location                               = "@web/dist/img/guest.png";
-            //TODO add that file
-            $this->view->params['userProfilePhoto'] = $location;
-        }
+		$this->view->params['userProfilePhoto'] = $photo;
 
-        $userinfo                 = array();
-        $userinfo['user_name']    = UserService::getName($id);
-        $userinfo['user_surname'] = UserService::getSurname($id);
-        if ($userinfo['user_name'] == false)
-        {
-            $userinfo['user_name'] = "Uzupełnij";
-        }
-        if ($userinfo['user_surname'] == false)
-        {
-            $userinfo['user_surname'] = "swoje dane";
-        }
 
-        $this->view->params['userInfo'] = $userinfo;
-        ////////////////////////////////////////////////////// request service
+		$userinfo = array();
+		$userinfo['user_name'] = UserService::getName($id);
+		$userinfo['user_surname'] = UserService::getSurname($id);
+		if ($userinfo['user_name'] == false)
+		{
+			$userinfo['user_name'] = "Uzupełnij";
+		}
+		if ($userinfo['user_surname'] == false)
+		{
+			$userinfo['user_surname'] = "swoje dane";
+		}
 
-        $notification                             = RequestService::getMyRequests($id);
-        $tablelength                              = count($notification);
-        $this->view->params['notification_data']  = $notification;
-        $this->view->params['notification_count'] = $tablelength;
-    }
+		$this->view->params['userInfo'] = $userinfo;
+		////////////////////////////////////////////////////// request service
+
+		$notification = RequestService::getMyRequests($id);
+		$tablelength = count($notification);
+		$this->view->params['notification_data'] = $notification;
+		$this->view->params['notification_count'] = $tablelength;
+	}
 
 }
