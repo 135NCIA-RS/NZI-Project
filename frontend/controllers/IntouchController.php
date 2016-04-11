@@ -67,8 +67,8 @@ class IntouchController extends Controller
 	{
 		$id = Yii::$app->user->getId();
 		$this->getUserData();
-		$zdjecie = new \app\models\Photo();
-		$dane = $zdjecie->find()->all();
+		//$zdjecie = new \app\models\Photo();
+		//$dane = $zdjecie->find()->all();
 		$this->layout = 'logged';
 
 		if (Yii::$app->request->isPost || Yii::$app->request->isPjax)
@@ -88,9 +88,25 @@ class IntouchController extends Controller
 				}
 			}
 		}
+
+
 		$posts = PostsService::getFriendsPosts($id);
 		//die(var_dump($posts));
-		return $this->render('index', ['dane' => $dane, 'UserName' => $id, 'posts' => $posts]);
+		return $this->render('index', ['UserName' => $id, 'posts' => $posts]);
+	}
+
+	public function actionLoadMorePosts($last = 1)
+	{
+		$data = PostsService::getFriendsPosts(Yii::$app->user->id, $last);
+		$lastId = $data[4]['post_id'];
+		$id = Yii::$app->user->id;
+		$html = $this->renderPartial('postsLoad', ['UserName' => $id, 'posts' => $data]);
+
+		$arr['html'] = $html;
+		$arr['lastId'] = $lastId;
+
+		echo json_encode($arr);
+
 	}
 
 	public function actionTestmail()

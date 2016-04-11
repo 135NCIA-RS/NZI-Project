@@ -20,7 +20,7 @@ class PostsService
 	/*
 	 * returns Friends Posts ordered by date
 	 */
-	public static function getFriendsPosts($id)
+	public static function getFriendsPosts($id, $lastid=null)
 	{
 		$arr = [];
 		$friendList = RelationService::getFriendsList($id);
@@ -31,7 +31,7 @@ class PostsService
 			return $posts;
 		}
 
-		$arr = self::getPostsOrderById($friendList);
+		$arr = self::getPostsOrderById($friendList, $lastid);
 //		foreach ($friendList as $friend)
 //		{
 //			$arr[] = self::getPostsOrderById($friend);
@@ -54,11 +54,16 @@ class PostsService
 		return $t2 - $t1;
 	}
 
-	public static function getPostsOrderById($friendsIds)
+	public static function getPostsOrderById($friendsIds, $startId)
 	{
-		$data = Post::find()
-			->where(['in', 'user_id', $friendsIds])
-			->orderBy(['post_id' => SORT_DESC])
+		$data = Post::find()->where(['in', 'user_id', $friendsIds]);
+
+		if (!is_null($startId))
+		{
+			$data->andWhere(['>', 'post_id', $startId]);
+		}
+
+		$data = $data->orderBy(['post_id' => SORT_DESC])
 			->limit(5)
 			->all();
 
