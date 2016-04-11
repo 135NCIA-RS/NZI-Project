@@ -31,15 +31,16 @@ class PostsService
 			return $posts;
 		}
 
-		foreach ($friendList as $friend)
-		{
-			$arr[] = self::getPosts($friend);
-		}
+		$arr = self::getPostsOrderById($friendList);
+//		foreach ($friendList as $friend)
+//		{
+//			$arr[] = self::getPostsOrderById($friend);
+//		}
 		//convert to two dimensional array from three dimensional
-		$posts = call_user_func_array('array_merge', $arr);
+		//$posts = call_user_func_array('array_merge', $arr);
 		//sort posts(array) by date
-		usort($posts, ["\common\components\PostsService", "date_compare"]);
-		return $posts;
+		//usort($posts, ["\common\components\PostsService", "date_compare"]);
+		return $arr;
 
 	}
 
@@ -51,6 +52,36 @@ class PostsService
 		$t1 = strtotime($a['post_date']);
 		$t2 = strtotime($b['post_date']);
 		return $t2 - $t1;
+	}
+
+	public static function getPostsOrderById($friendsIds)
+	{
+		$data = Post::find()
+			->where(['in', 'user_id', $friendsIds])
+			->orderBy(['post_id' => SORT_DESC])
+			->limit(5)
+			->all();
+
+		$counter = 0;
+		foreach ($data as $row)
+		{
+			$refined_data[$counter]['post_id'] = (int)$row['post_id'];
+
+			$refined_data[$counter]['owner_id'] = $row['owner_id'];
+			$refined_data[$counter]['name'] = UserService::getName($row['owner_id']);
+			$refined_data[$counter]['surname'] = UserService::getSurname($row['owner_id']);
+
+			$refined_data[$counter]['post_visibility'] = $row['post_visibility'];
+			$refined_data[$counter]['post_date'] = $row['post_date'];
+			$refined_data[$counter]['post_type'] = $row['post_type'];
+			$refined_data[$counter]['post_text'] = $row['post_text'];
+			$refined_data[$counter]['comments'] = PostsService::getComments($row['post_id']);
+			$refined_data[$counter]['attachments'] = PostsService::getAttachments($row['post_id']);
+			$refined_data[$counter]['photo'] =
+				PhotoService::getProfilePhoto($refined_data[$counter]['owner_id'], true, true);
+			$counter++;
+		}
+		return isset($refined_data) ? $refined_data : [];
 	}
 
 	public static function getPosts($id)
@@ -78,7 +109,8 @@ class PostsService
 			$refined_data[$counter]['post_text'] = $row['post_text'];
 			$refined_data[$counter]['comments'] = PostsService::getComments($row['post_id']);
 			$refined_data[$counter]['attachments'] = PostsService::getAttachments($row['post_id']);
-			$refined_data[$counter]['photo'] = PhotoService::getProfilePhoto($refined_data[$counter]['owner_id'], true, true);
+			$refined_data[$counter]['photo'] =
+				PhotoService::getProfilePhoto($refined_data[$counter]['owner_id'], true, true);
 			$counter++;
 		}
 
