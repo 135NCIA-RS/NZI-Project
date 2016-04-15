@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "scores".
  *
  * @property integer $score_id
- * @property string $score_type
+ * @property integer $score_type
  * @property integer $user_id
  * @property integer $element_id
  * @property integer $element_type
@@ -32,8 +32,7 @@ class Scores extends \yii\db\ActiveRecord
     {
         return [
             [['score_type', 'user_id', 'element_id', 'element_type'], 'required'],
-            [['user_id', 'element_id', 'element_type'], 'integer'],
-            [['score_type'], 'string', 'max' => 25]
+            [['score_type', 'user_id', 'element_id', 'element_type'], 'integer']
         ];
     }
 
