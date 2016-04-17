@@ -18,11 +18,12 @@ use common\components\Permission;
 use common\components\PostsService;
 use common\components\RequestType;
 use common\components\UserService;
+use common\components\ScoreService;
 
 /**
  * Site controller
  */
-class SiteController extends Controller
+class SiteController extends components\AdminGlobalController
 {
 
 	/**
@@ -35,11 +36,10 @@ class SiteController extends Controller
 				'class' => AccessControl::className(),
 				'rules' => [
 					[
-						'actions' => ['login', 'error'],
+						'actions' => ['login', 'error', 'denied'],
 						'allow' => true,
 					],
 					[
-						'actions' => ['logout', 'index'],
 						'allow' => true,
 						'roles' => ['@'],
 					],
@@ -68,18 +68,12 @@ class SiteController extends Controller
 
 	public function actionIndex()
 	{
-		$this->getUserData();
+		return $this->render('index');
+	}
 
-		if (Yii::$app->user->can('admin'))
-		{
-			$this->layout = "Admin";
-			return $this->render('index');
-		}
-		else
-		{
-			$this->layout = "NonAdmin";
-			return $this->render('InsufficientRights');
-		}
+	public function actionDenied()
+	{
+		return $this->render('InsufficientRights');
 	}
 
 	public function actionLogin()
@@ -108,35 +102,10 @@ class SiteController extends Controller
 
 		return $this->goHome();
 	}
-
-	public function getUserData()
+	public function actionRepports()
 	{
-		$id = Yii::$app->user->getId();
-
-		$photo = PhotoService::getProfilePhoto($id);
-
-		$this->view->params['userProfilePhoto'] = $photo;
-
-
-		$userinfo = array();
-		$userinfo['user_name'] = UserService::getName($id);
-		$userinfo['user_surname'] = UserService::getSurname($id);
-		if ($userinfo['user_name'] == false)
-		{
-			$userinfo['user_name'] = "Uzupełnij";
-		}
-		if ($userinfo['user_surname'] == false)
-		{
-			$userinfo['user_surname'] = "swoje dane";
-		}
-
-		$this->view->params['userInfo'] = $userinfo;
-		////////////////////////////////////////////////////// request service
-
-		$notification = RequestService::getMyRequests($id);
-		$tablelength = count($notification);
-		$this->view->params['notification_data'] = $notification;
-		$this->view->params['notification_count'] = $tablelength;
+		return $this->render('repports');
 	}
+
 
 }

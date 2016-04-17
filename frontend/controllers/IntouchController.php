@@ -23,7 +23,7 @@ use common\components\RequestService;
 use common\components\PostsService;
 use common\components\RequestType;
 
-class IntouchController extends Controller
+class IntouchController extends components\GlobalController
 {
 
 	public function behaviors()
@@ -66,10 +66,6 @@ class IntouchController extends Controller
 	public function actionIndex()
 	{
 		$id = Yii::$app->user->getId();
-		$this->getUserData();
-		//$zdjecie = new \app\models\Photo();
-		//$dane = $zdjecie->find()->all();
-		$this->layout = 'logged';
 
 		if (Yii::$app->request->isPost || Yii::$app->request->isPjax)
 		{
@@ -196,8 +192,7 @@ class IntouchController extends Controller
 		$posts = PostsService::getPosts($id);
 		$photo = PhotoService::getProfilePhoto($id, true, true);
 		//////////////////////////////////////////////////////////////////////////
-		$this->getUserData();
-		$this->layout = 'logged';
+
 		return $this->render('profile', [
 			'name' => $name,
 			'surname' => $surname,
@@ -264,41 +259,10 @@ class IntouchController extends Controller
 		]);
 	}
 
-	public function getUserData()
-	{
-		$id = Yii::$app->user->getId();
-
-		$photo = PhotoService::getProfilePhoto($id);
-		$this->view->params['userProfilePhoto'] = $photo;
-
-		$userinfo = array();
-		$userinfo['user_name'] = UserService::getName($id);
-		$userinfo['user_surname'] = UserService::getSurname($id);
-		if ($userinfo['user_name'] == false)
-		{
-			$userinfo['user_name'] = "Uzupełnij";
-		}
-		if ($userinfo['user_surname'] == false)
-		{
-			$userinfo['user_surname'] = "swoje dane";
-		}
-
-		$this->view->params['userInfo'] = $userinfo;
-		////////////////////////////////////////////////////// request service
-
-		$notification = RequestService::getMyRequests($id);
-		$tablelength = count($notification);
-		$this->view->params['notification_data'] = $notification;
-		$this->view->params['notification_count'] = $tablelength;
-	}
-
 	public function actionSearch($q)
 	{
 		if (Yii::$app->user->can('search-use'))
 		{
-			$id = Yii::$app->user->getId();
-			$this->getUserData($id);
-			$this->layout = 'logged';
 			$users = \common\components\SearchService::findUsers($q);
 			$resultsCnt = count($users);
 			return $this->render('searchResults', [
@@ -316,8 +280,6 @@ class IntouchController extends Controller
 	public function actionAccessdenied()
 	{
 		$id = Yii::$app->user->getId();
-		$this->getUserData($id);
-		$this->layout = 'logged';
 		return $this->render('accessDenied');
 	}
 
@@ -340,8 +302,6 @@ class IntouchController extends Controller
 			}
 		}
 
-		$this->getUserData($id);
-		$this->layout = 'logged';
 		return $this->render('allRequests');
 	}
 
@@ -356,8 +316,7 @@ class IntouchController extends Controller
 		$faloneT = new components\Image("forever_alone_text.png",
 			new components\ImageTypes(components\ImageTypes::InTouchImage), new components\ImgLocations\ImgIntouch());
 		///////
-		$this->getUserData($id);
-		$this->layout = 'logged';
+
 		return $this->render('myFriends', ['friends' => $friends, 'imgForeverAlone' => $falone->getImage(),
 		                                   'imgForeverAloneText' => $faloneT->getImage()]);
 	}

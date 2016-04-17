@@ -22,7 +22,7 @@ use common\components\Permission;
 use common\components\PostsService;
 use common\components\RequestType;
 
-class UsersController extends Controller
+class UsersController extends components\GlobalController
 {
 
     public function behaviors()
@@ -170,38 +170,6 @@ class UsersController extends Controller
             'myId'                => $myId,
             'myUname'             => UserService::getUserName($myId),
         ];
-
-        $this->getUserData();
-        $this->layout = "logged";
         return $this->render('view', $shared);
     }
-
-    private function getUserData()
-    {
-        $id = Yii::$app->user->getId();
-
-        $photo = \common\components\PhotoService::getProfilePhoto($id);
-        $this->view->params['userProfilePhoto'] = $photo;
-
-        $userinfo                 = [];
-        $userinfo['user_name']    = UserService::getName($id);
-        $userinfo['user_surname'] = UserService::getSurname($id);
-        if ($userinfo['user_name'] == false)
-        {
-            $userinfo['user_name'] = "Uzupełnij";
-        }
-        if ($userinfo['user_surname'] == false)
-        {
-            $userinfo['user_surname'] = "swoje dane";
-        }
-
-        $this->view->params['userInfo'] = $userinfo;
-        ////////////////////////////////////////////////////// request service
-
-        $notification                             = RequestService::getMyRequests($id);
-        $tablelength                              = count($notification);
-        $this->view->params['notification_data']  = $notification;
-        $this->view->params['notification_count'] = $tablelength;
-    }
-
 }
