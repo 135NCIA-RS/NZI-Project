@@ -20,7 +20,7 @@ class PostsService
 	/*
 	 * returns Friends Posts ordered by date
 	 */
-	public static function getFriendsPosts($id, $lastid=null)
+	public static function getFriendsPosts($id, $lastid = null)
 	{
 		$arr = [];
 		$friendList = RelationService::getFriendsList($id);
@@ -88,6 +88,7 @@ class PostsService
 		}
 		return isset($refined_data) ? $refined_data : [];
 	}
+
 
 	public static function getPosts($id)
 	{
@@ -210,4 +211,54 @@ class PostsService
 		return isset($data) ? $data : false;
 	}
 
+	public static function getPost($id)
+	{
+		$row = Post::find()->where(['post_id' => $id])->one();
+
+
+		$refined_data['post_id'] = (int)$row['post_id'];
+		if ($row['owner_id'] != NULL)
+		{
+			$refined_data['owner_id'] = $row['owner_id'];
+			$refined_data['name'] = UserService::getName($row['owner_id']);
+			$refined_data['surname'] = UserService::getSurname($row['owner_id']);
+		}
+		else
+		{
+			$refined_data['owner_id'] = $id;
+			$refined_data['name'] = UserService::getName($id);
+			$refined_data['surname'] = UserService::getSurname($id);
+		}
+		$refined_data['post_visibility'] = $row['post_visibility'];
+		$refined_data['post_date'] = $row['post_date'];
+		$refined_data['post_type'] = $row['post_type'];
+		$refined_data['post_text'] = $row['post_text'];
+		$refined_data['comments'] = PostsService::getComments($row['post_id']);
+		$refined_data['attachments'] = PostsService::getAttachments($row['post_id']);
+		$refined_data['photo'] =
+			PhotoService::getProfilePhoto($refined_data['owner_id'], true, true);
+
+		return isset($refined_data) ? $refined_data : [];
+
+	}
+
+	public static function getComment($id)
+	{
+		$row = Comment::find()->where(['comment_id' => $id])->one();
+
+		$refined_data = [];
+		$refined_data['comment_text'] = $row['comment_text'];
+		$refined_data['name'] = UserService::getName($row['author_id']);
+		$refined_data['surname'] = UserService::getSurname($row['author_id']);
+		$refined_data['comment_date'] = $row['comment_date'];
+		$refined_data['photo'] = PhotoService::getProfilePhoto($row['author_id'], true, true);
+
+		return isset($refined_data) ? $refined_data : false;
+	}
+
+	public static function deletePost($id)
+	{
+		$del = Post::findOne($id);
+		return isset($del) ? $del->delete() : false;
+	}
 }

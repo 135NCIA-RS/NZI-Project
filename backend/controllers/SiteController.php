@@ -19,6 +19,7 @@ use common\components\PostsService;
 use common\components\RequestType;
 use common\components\UserService;
 use common\components\ScoreService;
+use common\components\ScoreTypeEnum;
 
 /**
  * Site controller
@@ -102,9 +103,32 @@ class SiteController extends components\AdminGlobalController
 
 		return $this->goHome();
 	}
-	public function actionRepports()
+	public function actionRepports() //TODO
 	{
-		return $this->render('repports');
+		if (Yii::$app->request->isPost || Yii::$app->request->isPjax)
+		{
+			$request = Yii::$app->request;
+			//TODO
+
+		}
+
+
+		$data = ScoreService::getElementsByScoreType(new components\ScoreTypeEnum(components\ScoreTypeEnum::report));
+		$table =[];
+		foreach($data as $var)
+		{
+			if ($var['element_type']==components\ScoreElemEnum::post)
+			{
+				$table[] = PostsService::getPost($var['element_id']);
+			}
+//			if ($var['element_type']==components\ScoreElemEnum::post_comment)
+//			{
+//				$table[] = PostsService::getComment($var['element_id']);
+//			}
+		}
+		return $this->render('repports', [
+			'posts' => $table,
+		]);
 	}
 
 

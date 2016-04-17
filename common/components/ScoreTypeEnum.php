@@ -11,4 +11,5 @@ use MyCLabs\Enum\Enum;
 class ScoreTypeEnum extends Enum 
 {
     const like = 1;
+    const report = 2;
 }
