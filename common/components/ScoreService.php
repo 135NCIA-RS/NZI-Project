@@ -4,6 +4,8 @@ namespace common\components;
 use app\models\Scores;
 use common\components\ScoreElemEnum;
 use common\components\ScoreTypeEnum;
+use common\components\Score;
+
 
 class ScoreService {
     
@@ -65,6 +67,24 @@ class ScoreService {
     {
         $score = Scores::findOne($score_id);
         return isset($score) ? $score->delete() : false;
+    }
+    
+    /*
+     * Gets elements sorted by the amount of a certain score
+     */
+    public static function getElementsByScoreType(ScoreTypeEnum $score_type, $sort = true)
+    {
+        $score_type->score_type = (int)$score_type->getValue();
+        if($sort)
+        {
+            $sql = "SELECT COUNT(*) AS `count`, `element_id`, `element_type` FROM `scores` GROUP BY `element_id` ORDER BY 1 DESC;";
+            $ptr = Scores::findBySql($sql)->all();
+        }
+        else
+        {
+            $ptr = Scores::find()->select(['element_id', 'element_type'])->where(['score_type'=> (int)$score_type->getValue()])->distinct()->all();
+        }
+        return $ptr;
     }
     
     //returns a string of what the elem is, returns false if such an elem doesn't exist
