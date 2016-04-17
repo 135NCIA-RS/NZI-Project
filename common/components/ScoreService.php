@@ -45,18 +45,18 @@ class ScoreService {
     
     /*
      * Adds a new score to the database.
-     * $score_type : type of the score e.g. like, dislike
+     * $score_type : type of the score e.g. like, dislike (type hinted at ScoreTypeEnum
      * $user_id : id of who performed the score action
      * $score_elem_id : id of the element towards which the score is targeted at
-     * $score_elem_type : type of the element towards which the score is targeted at e.g. post, post_comment
+     * $score_elem_type : type of the element towards which the score is targeted at e.g. post, post_comment, type hinted at ScoreElemEnum
      */
-    public static function addScore($score_type, $user_id, $score_elem_id, $score_elem_type)
+    public static function addScore(ScoreTypeEnum $score_type, $user_id, $score_elem_id, ScoreElemEnum $score_elem_type)
     {
         $score = new Scores();
-        $score->score_type = $score_type;
+        $score->score_type = (int)$score_type->getValue();
         $score->user_id = $user_id;
         $score->element_id = $score_elem_id;
-        $score->element_type = $score_elem_type;
+        $score->element_type = (int)$score_elem_type->getValue();
         return $score->save();
     }
     
