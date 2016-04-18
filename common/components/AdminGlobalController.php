@@ -26,11 +26,11 @@ abstract class AdminGlobalController extends Controller
 
 		if (Yii::$app->user->can('admin'))
 		{
-			$this->layout = "Admin";
+			$this->layout = "@app/views/layouts/Admin";
 		}
 		else
 		{
-			$this->layout = "NonAdmin";
+			$this->layout = "@app/views/layouts/NonAdmin";
 			$exclude = false;
 			foreach($excludedActions as $var)
 			{
