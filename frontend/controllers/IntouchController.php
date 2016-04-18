@@ -179,14 +179,13 @@ class IntouchController extends components\GlobalController
 						PostsService::createComment(Yii::$app->request->post('post_id'),
 							Yii::$app->request->post('inputText'));
 						break;
-                                        case 'liek':
-                                                $like_form_post_id = Yii::$app->request->post('post_id');
-                                                $like_form_score_elem = Yii::$app->request->post('score_elem');
-                                                $like_form_score_type = Yii::$app->request->post('score_type');
-                                                $like_form_user_id = Yii::$app->request->post('user_id');
-                                                die(var_dump(ScoreTypeEnum::$like_form_score_type));
-                                                ScoreService::addScore($like_form_score_type, $like_form_user_id, $like_form_post_id, $like_form_score_elem);
-                                                break;
+					case 'liek':
+						$like_form_post_id = Yii::$app->request->post('post_id');
+						$like_form_score_elem = Yii::$app->request->post('score_elem');
+						$like_form_score_type = Yii::$app->request->post('score_type');
+						$like_form_user_id = Yii::$app->request->post('user_id');
+						ScoreService::addScore(ScoreTypeEnum::$like_form_score_type(), $like_form_user_id, $like_form_post_id, ScoreElemEnum::$like_form_score_elem());
+						break;
 				}
 			}
 		}

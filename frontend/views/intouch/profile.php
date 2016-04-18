@@ -96,7 +96,7 @@ use yii\widgets\Pjax;
                         <div class="active tab-pane" id="activity">
                             <!-- Add post -->
                             <?php Pjax::begin(); ?>
-                            <?php  echo Html::beginForm(['intouch/profile'], 'post', ['data-pjax' => '']) ?>
+                            <?php echo Html::beginForm(['intouch/profile'], 'post', ['data-pjax' => '']) ?>
                             <input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post"
                                    name="inputText">
                             <input type="hidden" name="type" value="newpost">
@@ -188,36 +188,36 @@ use yii\widgets\Pjax;
                                                         class="fa fa-share margin-r-5"></i> <?= Yii::t('app',
                                                         'Share'); ?></a></li>
                                         <li>
-                                            <?php  echo Html::beginForm(['intouch/profile'], 'post', ['data-pjax' => '']) ?>
+                                            <?php echo Html::beginForm(['intouch/profile'], 'post') ?>
                                             <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
                                             <input type="hidden" name="score_elem" value="post">
                                             <input type="hidden" name="score_type" value="like">
                                             <input type="hidden" name="user_id" value="<?= $id ?>">
-                                            <span class="link-black text-sm"><i
-                                                        class="fa fa-thumbs-o-up margin-r-5"></i>
                                             <input class="" type="hidden" name="type" value="liek" id="like-form">
-                                            <input type="submit" class="fa fa-t humbs-o-up link-black text-sm" style="background: none; border: none;" value="Liek">
-                                            
+                                            <span class="link-black text-sm">
+                                                <i class="fa fa-thumbs-o-up margin-r-5"></i>
+                                                <input type="submit" class="fa fa-t humbs-o-up link-black text-sm"
+                                                   style="background: none; border: none;" value="Liek">
                                             </span>
-                                            
+
                                             <?= Html::endForm() ?>
                                         </li>
-	                                        <li class="pull-right"><a href="#" class="link-black text-sm"><i
-					                                    class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app',
-					                                    'Comments'); ?> (<?php echo(count($row['comments'])); ?>)</a>
-	                                        </li>
-	                                        <li class="pull-right">
-		                                        <a href="#" class="link-black text-sm"><i
-				                                        class="fa fa-exclamation margin-r-5"></i><?= Yii::t('app',
-				                                        'Report'); ?></a>
-	                                        </li>
+                                        <li class="pull-right"><a href="#" class="link-black text-sm"><i
+                                                        class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app',
+                                                        'Comments'); ?> (<?php echo(count($row['comments'])); ?>)</a>
+                                        </li>
+                                        <li class="pull-right">
+                                            <a href="#" class="link-black text-sm"><i
+                                                        class="fa fa-exclamation margin-r-5"></i><?= Yii::t('app',
+                                                        'Report'); ?></a>
+                                        </li>
                                     </ul>
-                                    <?php  echo Html::beginForm(['intouch/profile'], 'post', ['data-pjax' => '']) ?>
-	                                <input class="form-control input-sm send-form-input" type="text"
+                                    <?php echo Html::beginForm(['intouch/profile'], 'post', ['data-pjax' => '']) ?>
+                                    <input class="form-control input-sm send-form-input" type="text"
                                            placeholder="<?= Yii::t('app', 'Type a comment'); ?>" name="inputText">
                                     <input type="hidden" name="type" value="newcomment">
                                     <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
-	                                <button style="width:20%; margin-top:5px;" type="submit"
+                                    <button style="width:20%; margin-top:5px;" type="submit"
                                             class="btn btn-danger btn-block btn-sm hidden"></button>
                                     <?= Html::endForm() ?>
                                     <div class="direct-chat-msg" style="margin-top: 10px;">
@@ -236,10 +236,13 @@ use yii\widgets\Pjax;
                                                     <a href="#" class="name">
                                                         <small class="text-muted pull-right"><i
                                                                     class="fa fa-clock-o"></i> <?php echo $comment['comment_date']; ?>
-	                                                        <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
-		                                                        <i class="fa fa-wrench"></i></button>
-	                                                        <button type="button" class="btn btn-box-tool" data-widget="remove">
-		                                                        <i class="fa fa-times"></i></button>
+                                                            <button type="button"
+                                                                    class="btn btn-box-tool dropdown-toggle"
+                                                                    data-toggle="dropdown">
+                                                                <i class="fa fa-wrench"></i></button>
+                                                            <button type="button" class="btn btn-box-tool"
+                                                                    data-widget="remove">
+                                                                <i class="fa fa-times"></i></button>
                                                         </small>
                                                         <?php echo($comment['name'] . " " . $comment['surname']); ?><br>
                                                     </a>
