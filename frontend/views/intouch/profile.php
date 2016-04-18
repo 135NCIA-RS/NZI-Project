@@ -11,6 +11,9 @@ use yii\helpers\Url;
 use common\components\PostsService;
 use common\components\UserService;
 use common\components\PhotoService;
+use common\components\ScoreService;
+use common\components\ScoreElemEnum;
+use common\components\ScoreTypeEnum;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
@@ -184,9 +187,20 @@ use yii\widgets\Pjax;
                                         <li><a href="#" class="link-black text-sm"><i
                                                         class="fa fa-share margin-r-5"></i> <?= Yii::t('app',
                                                         'Share'); ?></a></li>
-                                        <li><a href="#" class="link-black text-sm"><i
-                                                        class="fa fa-thumbs-o-up margin-r-5"></i> <?= Yii::t('app',
-                                                        'Like'); ?></a>
+                                        <li>
+                                            <?php  echo Html::beginForm(['intouch/profile'], 'post', ['data-pjax' => '']) ?>
+                                            <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
+                                            <input type="hidden" name="score_elem" value="post">
+                                            <input type="hidden" name="score_type" value="like">
+                                            <input type="hidden" name="user_id" value="<?= $id ?>">
+                                            <span class="link-black text-sm"><i
+                                                        class="fa fa-thumbs-o-up margin-r-5"></i>
+                                            <input class="" type="hidden" name="type" value="liek" id="like-form">
+                                            <input type="submit" class="fa fa-t humbs-o-up link-black text-sm" style="background: none; border: none;" value="Liek">
+                                            
+                                            </span>
+                                            
+                                            <?= Html::endForm() ?>
                                         </li>
 	                                        <li class="pull-right"><a href="#" class="link-black text-sm"><i
 					                                    class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app',

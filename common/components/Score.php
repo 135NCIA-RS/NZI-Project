@@ -17,5 +17,4 @@ class Score
 {
     public $element_id;
     public $element_type;
-    public $count = 0;
 }

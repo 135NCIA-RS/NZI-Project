@@ -71,6 +71,7 @@ class ScoreService {
     
     /*
      * Gets elements sorted by the amount of a certain score
+     * Returns an array of Score objects
      */
     public static function getElementsByScoreType(ScoreTypeEnum $score_type, $sort = true)
     {
@@ -84,7 +85,15 @@ class ScoreService {
         {
             $ptr = Scores::find()->select(['element_id', 'element_type'])->where(['score_type'=> (int)$score_type->getValue()])->distinct()->all();
         }
-        return $ptr;
+        $ptr2 = [];
+        foreach($ptr as $row)
+        {
+            $score = new Score();
+            $score->element_id = $row->element_id;
+            $score->element_type = $row->element_type;
+            array_push($ptr2, $score);
+        }
+        return $ptr2;
     }
     
     //returns a string of what the elem is, returns false if such an elem doesn't exist
