@@ -22,6 +22,9 @@ use common\components\AccessService;
 use common\components\RequestService;
 use common\components\PostsService;
 use common\components\RequestType;
+use common\components\ScoreService;
+use common\components\ScoreElemEnum;
+use common\components\ScoreTypeEnum;
 
 class IntouchController extends components\GlobalController
 {
@@ -129,7 +132,7 @@ class IntouchController extends components\GlobalController
 	public function actionProfile()
 	{
 		$id = Yii::$app->user->getId();
-		if (Yii::$app->request->isPost)
+		if (Yii::$app->request->isPost || Yii::$app->request->isPjax)
 		{
 			if (!is_null(Yii::$app->request->post('type')))
 			{
@@ -176,6 +179,14 @@ class IntouchController extends components\GlobalController
 						PostsService::createComment(Yii::$app->request->post('post_id'),
 							Yii::$app->request->post('inputText'));
 						break;
+                                        case 'liek':
+                                                $like_form_post_id = Yii::$app->request->post('post_id');
+                                                $like_form_score_elem = Yii::$app->request->post('score_elem');
+                                                $like_form_score_type = Yii::$app->request->post('score_type');
+                                                $like_form_user_id = Yii::$app->request->post('user_id');
+                                                die(var_dump(ScoreTypeEnum::$like_form_score_type));
+                                                ScoreService::addScore($like_form_score_type, $like_form_user_id, $like_form_post_id, $like_form_score_elem);
+                                                break;
 				}
 			}
 		}
