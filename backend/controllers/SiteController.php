@@ -113,20 +113,19 @@ class SiteController extends components\AdminGlobalController
 		}
 
 
-		$data = ScoreService::getElementsByScoreType(new components\ScoreTypeEnum(components\ScoreTypeEnum::report));
+		$data = ScoreService::getElementsByScoreType(ScoreTypeEnum::report());
 		$table =[];
+		/**
+		 * @var $var components\Score
+		 */
 		foreach($data as $var)
 		{
-			if ($var['element_type']==components\ScoreElemEnum::post)
+			if($var->element_type == components\ScoreElemEnum::post())
 			{
-				$table[] = PostsService::getPost($var['element_id']);
+				$table[] = PostsService::getPost($var->element_id);
 			}
-//			if ($var['element_type']==components\ScoreElemEnum::post_comment)
-//			{
-//				$table[] = PostsService::getComment($var['element_id']);
-//			}
 		}
-		return $this->render('repports', [
+		return $this->render('reports', [
 			'posts' => $table,
 		]);
 	}

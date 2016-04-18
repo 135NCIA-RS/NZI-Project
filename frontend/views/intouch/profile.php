@@ -191,15 +191,13 @@ use yii\widgets\Pjax;
                                             <?php echo Html::beginForm(['intouch/profile'], 'post') ?>
                                             <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
                                             <input type="hidden" name="score_elem" value="post">
-                                            <input type="hidden" name="score_type" value="like">
                                             <input type="hidden" name="user_id" value="<?= $id ?>">
-                                            <input class="" type="hidden" name="type" value="liek" id="like-form">
+                                            <input class="" type="hidden" name="type" value="like" id="like-form">
                                             <span class="link-black text-sm">
-                                                <i class="fa fa-thumbs-o-up margin-r-5"></i>
+                                                <i class="fa fa-thumbs-o-up"></i>
                                                 <input type="submit" class="fa fa-t humbs-o-up link-black text-sm"
-                                                   style="background: none; border: none;" value="Liek">
+                                                   style="background: none; border: none;" value="<?= Yii::t('app', 'Like'); ?>">
                                             </span>
-
                                             <?= Html::endForm() ?>
                                         </li>
                                         <li class="pull-right"><a href="#" class="link-black text-sm"><i
@@ -207,9 +205,19 @@ use yii\widgets\Pjax;
                                                         'Comments'); ?> (<?php echo(count($row['comments'])); ?>)</a>
                                         </li>
                                         <li class="pull-right">
-                                            <a href="#" class="link-black text-sm"><i
-                                                        class="fa fa-exclamation margin-r-5"></i><?= Yii::t('app',
-                                                        'Report'); ?></a>
+                                            <?php echo Html::beginForm(['intouch/profile'], 'post') ?>
+                                            <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
+                                            <input type="hidden" name="score_elem" value="post">
+                                            <input type="hidden" name="user_id" value="<?= $id ?>">
+                                            <input class="" type="hidden" name="type" value="report" id="like-form">
+                                            <span class="link-black text-sm">
+                                                <i class="fa fa-exclamation"></i>
+                                                <input type="submit" class="link-black text-sm"
+                                                       style="background: none; border: none;" value="<?= Yii::t('app', 'Report'); ?>">
+                                            </span>
+
+                                            <?= Html::endForm() ?>
+
                                         </li>
                                     </ul>
                                     <?php echo Html::beginForm(['intouch/profile'], 'post', ['data-pjax' => '']) ?>
