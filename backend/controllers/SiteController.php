@@ -20,6 +20,7 @@ use common\components\RequestType;
 use common\components\UserService;
 use common\components\ScoreService;
 use common\components\ScoreTypeEnum;
+use common\components\ScoreElemEnum;
 
 /**
  * Site controller
@@ -103,21 +104,37 @@ class SiteController extends components\AdminGlobalController
 
 		return $this->goHome();
 	}
-	public function actionRepports() //TODO
+
+	public function actionReport() //TODO
 	{
 		if (Yii::$app->request->isPost || Yii::$app->request->isPjax)
 		{
 			$request = Yii::$app->request;
-			//TODO
+			if (!is_null(Yii::$app->request->post('action')))
+			{
+				switch (Yii::$app->request->post('action'))
+				{
+					case 'delete':
+						//die('dupa');
+						PostsService::deletePost(Yii::$app->request->post('post_id'));
+						ScoreService::revokeScoreByElemId(Yii::$app->request->post('post_id'),
+							new ScoreElemEnum(ScoreElemEnum::post));
+						break;
+					case 'revoke':
+						ScoreService::revokeScoreByElemId(Yii::$app->request->post('post_id'),
+							new ScoreElemEnum(ScoreElemEnum::post));
+						break;
 
+				}
+			}
 		}
 
 
 		$data = ScoreService::getElementsByScoreType(new components\ScoreTypeEnum(components\ScoreTypeEnum::report));
-		$table =[];
-		foreach($data as $var)
+		$table = [];
+		foreach ($data as $var)
 		{
-			if ($var['element_type']==components\ScoreElemEnum::post)
+			if ($var['element_type'] == components\ScoreElemEnum::post)
 			{
 				$table[] = PostsService::getPost($var['element_id']);
 			}
@@ -126,9 +143,14 @@ class SiteController extends components\AdminGlobalController
 //				$table[] = PostsService::getComment($var['element_id']);
 //			}
 		}
-		return $this->render('repports', [
+		return $this->render('report', [
 			'posts' => $table,
 		]);
+	}
+
+	public function actionReportedComment()
+	{
+		return $this->render('reportedComment');
 	}
 
 

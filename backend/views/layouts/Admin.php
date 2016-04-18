@@ -106,6 +106,16 @@ AppAsset::register($this);
                                 <i class="fa fa-user"></i> <span><?= Yii::t('app', 'Profile') ?></span>
                             </a>
                         </li>
+                        <li>
+                            <a href="/rep">
+                                <i class="fa fa-bicycle"></i> <span><?= Yii::t('app', 'Reported Posts') ?></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/rep">
+                                <i class="fa fa-comments"></i> <span><?= Yii::t('app', 'Reported Comments') ?></span>
+                            </a>
+                        </li>
                         <li class="header"><?= Yii::t('app', 'ACTIONS') ?></li>
                         <li class="treeview">
                             <a href="#">

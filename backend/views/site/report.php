@@ -38,13 +38,23 @@ use yii\widgets\Pjax;
                                         <a href="#"><?php echo($row['name'] . " " . $row['surname']); ?></a>
 
 
-<!--                                        <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>-->
-                                        <?php echo Html::beginForm(['site/repport'], 'post', ['data-pjax' => '']) ?>
+                                        <!--                                        <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>-->
+
+                                        <?php echo Html::beginForm(['site/report'], 'post', ['data-pjax' => '']) ?>
                                         <input type="hidden" name="action" value="delete">
                                          <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
                                          <button style="..." type="submit"
-                                                 class="pull-right btn-box-tool fa fa-times"></button>
+                                                 class="pull-right fa fa-times"></button>
                                         <?= Html::endForm() ?>
+
+                                        <?php echo Html::beginForm(['site/report'], 'post', ['data-pjax' => '']) ?>
+                                        <input type="hidden" name="action" value="revoke">
+                                         <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
+                                         <button style="..." type="submit"
+                                                 class="pull-right fa fa-minus-circle"></button>
+                                        <?= Html::endForm() ?>
+
+
 
                                     </span>
                                     <span class="description"><?php if ($row['post_visibility'] == "visible")
@@ -109,22 +119,6 @@ use yii\widgets\Pjax;
                             }
                             ?>
                             </p>
-                            <ul class="list-inline">
-
-                                <li class="pull-right"><a href="#" class="link-black text-sm"><i
-                                                class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app',
-                                                'Comments'); ?> (<?php echo(count($row['comments'])); ?>)</a>
-                                </li>
-
-                            </ul>
-                            <?php echo Html::beginForm(['intouch/profile'], 'post', ['data-pjax' => '']) ?>
-                            <input class="form-control input-sm send-form-input" type="text"
-                                   placeholder="<?= Yii::t('app', 'Type a comment'); ?>" name="inputText">
-                            <input type="hidden" name="type" value="newcomment">
-                            <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
-                            <button style="width:20%; margin-top:5px;" type="submit"
-                                    class="btn btn-danger btn-block btn-sm hidden"></button>
-                            <?= Html::endForm() ?>
 
                         </div>
                         <?php

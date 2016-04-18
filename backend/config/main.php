@@ -54,8 +54,9 @@ return [
 			'rules' => [
 				'/authenticate' => 'site/login',
 				'logout' => 'site/logout',
-			    'rep' => 'site/repports',
+			    'rep' => 'site/report',
 			    'denied' => 'site/denied',
+			    'reportedComment' => 'site/reportedComment',
 
 			],
 		],
