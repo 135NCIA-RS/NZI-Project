@@ -1,47 +1,50 @@
 <?php
 namespace common\components;
+
 use app\models\Scores;
 use common\components\ScoreElemEnum;
 use common\components\ScoreTypeEnum;
 use common\components\Score;
+
+
 class ScoreService {
-    
+
     //gets all scores for a certain post_id
     public static function getPostScores($post_id)
     {
         $data = Scores::findAll(['element_id' => $post_id, 'element_type' => 1]);
         $counter = 0;
         foreach ($data as $row)
-	{
-		$refined_data[$counter]['score_id'] = $row['score_id'];
-                $refined_data[$counter]['user_id'] = $row['user_id'];
-                $refined_data[$counter]['score_type'] = ScoreService::getScoreType($row['score_type']);
-		$counter++;
-	}
-	return isset($refined_data) ? $refined_data : [];
+        {
+            $refined_data[$counter]['score_id'] = $row['score_id'];
+            $refined_data[$counter]['user_id'] = $row['user_id'];
+            $refined_data[$counter]['score_type'] = ScoreService::getScoreType($row['score_type']);
+            $counter++;
+        }
+        return isset($refined_data) ? $refined_data : [];
     }
-    
+
     //gets all scores for a certain comment_id
     public static function getPostCommentScores($comment_id)
     {
         $data = Scores::findAll(['element_id' => $comment_id, 'element_type' => 2]);
         $counter = 0;
         foreach ($data as $row)
-	{
-		$refined_data[$counter]['score_id'] = $row['score_id'];
-                $refined_data[$counter]['user_id'] = $row['user_id'];
-                $refined_data[$counter]['score_type'] = ScoreService::getScoreType($row['score_type']);
-		$counter++;
-	}
-	return isset($refined_data) ? $refined_data : [];
+        {
+            $refined_data[$counter]['score_id'] = $row['score_id'];
+            $refined_data[$counter]['user_id'] = $row['user_id'];
+            $refined_data[$counter]['score_type'] = ScoreService::getScoreType($row['score_type']);
+            $counter++;
+        }
+        return isset($refined_data) ? $refined_data : [];
     }
-    
+
     //returns a string of what type the elem is, returns false if such a type doesn't exist
     private static function getScoreType($id)
     {
         return ScoreTypeEnum::search($id);
     }
-    
+
     /*
      * Adds a new score to the database.
      * $score_type : type of the score e.g. like, dislike (type hinted at ScoreTypeEnum
@@ -58,23 +61,14 @@ class ScoreService {
         $score->element_type = (int)$score_elem_type->getValue();
         return $score->save();
     }
-    
+
     //deletes a score with the given id
     public static function revokeScore($score_id)
     {
         $score = Scores::findOne($score_id);
         return isset($score) ? $score->delete() : false;
     }
-    public static function revokeScoreByElemId($id, ScoreElemEnum $elem_type)
-    {
-        $data = Scores::findAll(['element_id' => $id, 'element_type' => $elem_type]);
-        foreach ($data as $row)
-        {
-            $row->delete();
-        }
-        return true;
-    }
-    
+
     /*
      * Gets elements sorted by the amount of a certain score
      * Returns an array of Score objects
@@ -101,7 +95,7 @@ class ScoreService {
         }
         return $ptr2;
     }
-    
+
     //returns a string of what the elem is, returns false if such an elem doesn't exist
     /*private static function getScoreElemType($elem_id)
     {
