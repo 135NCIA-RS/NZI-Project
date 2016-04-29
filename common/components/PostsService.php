@@ -245,13 +245,15 @@ class PostsService
 	public static function getComment($id)
 	{
 		$row = Comment::find()->where(['comment_id' => $id])->one();
-
 		$refined_data = [];
+		$refined_data['comment_id'] = $row['comment_id'];
 		$refined_data['comment_text'] = $row['comment_text'];
 		$refined_data['name'] = UserService::getName($row['author_id']);
 		$refined_data['surname'] = UserService::getSurname($row['author_id']);
 		$refined_data['comment_date'] = $row['comment_date'];
 		$refined_data['photo'] = PhotoService::getProfilePhoto($row['author_id'], true, true);
+		//die(var_dump($refined_data));
+
 
 		return isset($refined_data) ? $refined_data : false;
 	}

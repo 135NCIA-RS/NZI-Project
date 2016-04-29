@@ -69,6 +69,16 @@ class ScoreService {
         return isset($score) ? $score->delete() : false;
     }
 
+    public static function revokeScoreByElemId($id, ScoreElemEnum $elem_type)
+    {
+        $data = Scores::findAll(['element_id' => $id, 'element_type' => $elem_type]);
+        foreach ($data as $row)
+        {
+            $row->delete();
+        }
+        return true;
+    }
+
     /*
      * Gets elements sorted by the amount of a certain score
      * Returns an array of Score objects

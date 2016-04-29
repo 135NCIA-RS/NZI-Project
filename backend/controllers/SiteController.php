@@ -148,9 +148,50 @@ class SiteController extends components\AdminGlobalController
 		]);
 	}
 
-	public function actionReportedComment()
+	public function actionRepcomment()
 	{
-		return $this->render('reportedComment');
+		if (Yii::$app->request->isPost || Yii::$app->request->isPjax)
+		{
+			$request = Yii::$app->request;
+			if (!is_null(Yii::$app->request->post('action')))
+			{
+				switch (Yii::$app->request->post('action'))
+				{
+					case 'delete':
+						//die('dupa');
+						PostsService::deletePost(Yii::$app->request->post('post_id'));
+						ScoreService::revokeScoreByElemId(Yii::$app->request->post('post_id'),
+							new ScoreElemEnum(ScoreElemEnum::post));
+						break;
+					case 'revoke':
+						ScoreService::revokeScoreByElemId(Yii::$app->request->post('post_id'),
+							new ScoreElemEnum(ScoreElemEnum::post));
+						break;
+
+				}
+			}
+		}
+
+
+		$data = ScoreService::getElementsByScoreType(new components\ScoreTypeEnum(components\ScoreTypeEnum::report));
+		$table = [];
+		foreach ($data as $var)
+		{
+			//die(var_dump($data));
+			if ($var->element_type == components\ScoreElemEnum::post_comment)
+			{
+				$table[] = PostsService::getComment($var->element_id);
+				die(var_dump($table));
+			}
+			//die(var_dump($table));
+//			if ($var['element_type']==components\ScoreElemEnum::post_comment)
+//			{
+//				$table[] = PostsService::getComment($var['element_id']);
+//			}
+		}
+		return $this->render('repcomment', [
+			'posts' => $table,
+		]);
 	}
 
 

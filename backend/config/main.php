@@ -56,7 +56,7 @@ return [
 				'logout' => 'site/logout',
 			    'rep' => 'site/report',
 			    'denied' => 'site/denied',
-			    'reportedComment' => 'site/reportedComment',
+			    'reportedComment' => 'site/repcomment',
 
 			],
 		],
