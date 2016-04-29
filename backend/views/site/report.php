@@ -26,6 +26,10 @@ use yii\widgets\Pjax;
                     <?php Pjax::begin(); ?>
                     <!-- Post -->
                     <?php
+                    if ($posts== null)
+                    {
+                        echo 'Nothing to show';
+                    }
                     foreach ($posts as $row)
                     {
                         ?>

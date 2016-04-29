@@ -263,4 +263,9 @@ class PostsService
 		$del = Post::findOne($id);
 		return isset($del) ? $del->delete() : false;
 	}
+	public static function deleteComment($id)
+	{
+		$del = Comment::findOne($id);
+		return isset($id) ? $del->delete() : false;
+	}
 }

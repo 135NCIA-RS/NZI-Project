@@ -112,7 +112,7 @@ AppAsset::register($this);
                             </a>
                         </li>
                         <li>
-                            <a href="/rep">
+                            <a href="/reportedComment">
                                 <i class="fa fa-comments"></i> <span><?= Yii::t('app', 'Reported Comments') ?></span>
                             </a>
                         </li>

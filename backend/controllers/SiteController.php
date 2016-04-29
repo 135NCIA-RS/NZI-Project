@@ -159,13 +159,13 @@ class SiteController extends components\AdminGlobalController
 				{
 					case 'delete':
 						//die('dupa');
-						PostsService::deletePost(Yii::$app->request->post('post_id'));
+						PostsService::deleteComment(Yii::$app->request->post('post_id'));
 						ScoreService::revokeScoreByElemId(Yii::$app->request->post('post_id'),
-							new ScoreElemEnum(ScoreElemEnum::post));
+							new ScoreElemEnum(ScoreElemEnum::post_comment));
 						break;
 					case 'revoke':
 						ScoreService::revokeScoreByElemId(Yii::$app->request->post('post_id'),
-							new ScoreElemEnum(ScoreElemEnum::post));
+							new ScoreElemEnum(ScoreElemEnum::post_comment));
 						break;
 
 				}
@@ -181,7 +181,7 @@ class SiteController extends components\AdminGlobalController
 			if ($var->element_type == components\ScoreElemEnum::post_comment)
 			{
 				$table[] = PostsService::getComment($var->element_id);
-				die(var_dump($table));
+				//die(var_dump($table));
 			}
 			//die(var_dump($table));
 //			if ($var['element_type']==components\ScoreElemEnum::post_comment)
