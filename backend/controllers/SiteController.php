@@ -134,9 +134,9 @@ class SiteController extends components\AdminGlobalController
 		$table = [];
 		foreach ($data as $var)
 		{
-			if ($var['element_type'] == components\ScoreElemEnum::post)
+			if ($var->element_type == components\ScoreElemEnum::post)
 			{
-				$table[] = PostsService::getPost($var['element_id']);
+				$table[] = PostsService::getPost($var->element_id);
 			}
 //			if ($var['element_type']==components\ScoreElemEnum::post_comment)
 //			{
