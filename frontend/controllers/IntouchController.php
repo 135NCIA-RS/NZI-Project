@@ -1,7 +1,5 @@
 <?php
-
 namespace frontend\controllers;
-
 use app\models\Photo;
 use Faker\Provider\Image;
 use Yii;
@@ -25,10 +23,8 @@ use common\components\RequestType;
 use common\components\ScoreService;
 use common\components\ScoreElemEnum;
 use common\components\ScoreTypeEnum;
-
 class IntouchController extends components\GlobalController
 {
-
 	public function behaviors()
 	{
 		return [
@@ -49,7 +45,6 @@ class IntouchController extends components\GlobalController
 			],
 		];
 	}
-
 	/**
 	 * @inheritdoc
 	 */
@@ -65,11 +60,9 @@ class IntouchController extends components\GlobalController
 			],
 		];
 	}
-
 	public function actionIndex()
 	{
 		$id = Yii::$app->user->getId();
-
 		if (Yii::$app->request->isPost || Yii::$app->request->isPjax)
 		{
 			if (!is_null(Yii::$app->request->post('type')))
@@ -79,7 +72,6 @@ class IntouchController extends components\GlobalController
 					case 'newpost':
 						PostsService::createPost($id, Yii::$app->request->post('inputText'));
 						break;
-
 					case 'newcomment':
 						PostsService::createComment(Yii::$app->request->post('post_id'),
 							Yii::$app->request->post('inputText'));
@@ -87,27 +79,20 @@ class IntouchController extends components\GlobalController
 				}
 			}
 		}
-
-
 		$posts = PostsService::getFriendsPosts($id);
 		//die(var_dump($posts));
 		return $this->render('index', ['UserName' => $id, 'posts' => $posts]);
 	}
-
 	public function actionLoadMorePosts($last = 1)
 	{
 		$data = PostsService::getFriendsPosts(Yii::$app->user->id, $last);
 		$lastId = $data[4]['post_id'];
 		$id = Yii::$app->user->id;
 		$html = $this->renderPartial('postsLoad', ['UserName' => $id, 'posts' => $data]);
-
 		$arr['html'] = $html;
 		$arr['lastId'] = $lastId;
-
 		echo json_encode($arr);
-
 	}
-
 	public function actionTestmail()
 	{
 		if (Yii::$app->user->can('admin'))
@@ -128,7 +113,6 @@ class IntouchController extends components\GlobalController
 		}
 		//
 	}
-
 	public function actionProfile()
 	{
 		$id = Yii::$app->user->getId();
@@ -145,11 +129,9 @@ class IntouchController extends components\GlobalController
 						{
 							\common\components\PhotoService::setProfilePhoto($id, $plik);
 						}
-
 						UserService::setName($id, Yii::$app->request->post('inputName'));
 						UserService::setSurname($id, Yii::$app->request->post('inputSurname'));
 						USerService::setEmail($id, Yii::$app->request->post('inputEmail'));
-
 						$pass1cnt = strlen(Yii::$app->request->post('inputPassword'));
 						$pass2cnt = strlen(Yii::$app->request->post('inputPasswordRepeat'));
 						if ($pass1cnt > 0 || $pass2cnt > 0)
@@ -167,26 +149,27 @@ class IntouchController extends components\GlobalController
 							}
 						}
 						////////////////////
-
 						Yii::$app->session->setFlash('success', 'Profile\'s been succesfuly updated');
 						break;
-
 					case 'newpost':
 						PostsService::createPost($id, Yii::$app->request->post('inputText'));
 						break;
-
 					case 'newcomment':
 						PostsService::createComment(Yii::$app->request->post('post_id'),
 							Yii::$app->request->post('inputText'));
 						break;
-                                        case 'liek':
-                                                $like_form_post_id = Yii::$app->request->post('post_id');
-                                                $like_form_score_elem = Yii::$app->request->post('score_elem');
-                                                $like_form_score_type = Yii::$app->request->post('score_type');
-                                                $like_form_user_id = Yii::$app->request->post('user_id');
-                                                die(var_dump(ScoreTypeEnum::$like_form_score_type));
-                                                ScoreService::addScore($like_form_score_type, $like_form_user_id, $like_form_post_id, $like_form_score_elem);
-                                                break;
+					case 'like':
+						$like_form_post_id = Yii::$app->request->post('post_id');
+						$like_form_score_elem = Yii::$app->request->post('score_elem');
+						$like_form_user_id = Yii::$app->request->post('user_id');
+						ScoreService::addScore(ScoreTypeEnum::like(), $like_form_user_id, $like_form_post_id, ScoreElemEnum::$like_form_score_elem());
+						break;
+					case 'report':
+						$rep_form_post_id = Yii::$app->request->post('post_id');
+						$rep_form_score_elem = Yii::$app->request->post('score_elem');
+						$rep_form_user_id = Yii::$app->request->post('user_id');
+						ScoreService::addScore(ScoreTypeEnum::report(), $rep_form_user_id, $rep_form_post_id, ScoreElemEnum::$rep_form_score_elem());
+						break;
 				}
 			}
 		}
@@ -203,7 +186,6 @@ class IntouchController extends components\GlobalController
 		$posts = PostsService::getPosts($id);
 		$photo = PhotoService::getProfilePhoto($id, true, true);
 		//////////////////////////////////////////////////////////////////////////
-
 		return $this->render('profile', [
 			'name' => $name,
 			'surname' => $surname,
@@ -220,23 +202,19 @@ class IntouchController extends components\GlobalController
 			'id' => $id,
 		]);
 	}
-
 	public function actionAboutedit()
 	{
 		$id = Yii::$app->user->getId();
 		////////////////////////////
-
 		$education = UserService::getUserEducation($id);
 		$about = UserService::getUserAbout($id);
 		$city = UserService::getUserCity($id);
 		$birth = UserService::getBirthDate($id);
-
 		if (Yii::$app->request->isPost)
 		{
 			UserService::setUserCity($id, Yii::$app->request->post('inputLocation'));
 			UserService::setUserEducation($id, Yii::$app->request->post('inputEducation'));
 			UserService::setUserAbout($id, Yii::$app->request->post('inputNotes'));
-
 			try
 			{
 				$bdate = Yii::$app->request->post('inputDate');
@@ -252,13 +230,10 @@ class IntouchController extends components\GlobalController
 				Yii::$app->session->setFlash('error', 'Invalid date');
 				return $this->redirect('/profile/aboutedit');
 			}
-
 			Yii::$app->session->setFlash('success', 'Profile\'s been Succesfuly Updated');
 			//UserService::setUserAbout($id, Yii::$app->request->post('inputNotes'));
 			return $this->redirect('/profile');
 		}
-
-
 		///////////////////////////
 		$this->getUserData();
 		$this->layout = 'logged';
@@ -269,7 +244,6 @@ class IntouchController extends components\GlobalController
 			'birth' => $birth
 		]);
 	}
-
 	public function actionSearch($q)
 	{
 		if (Yii::$app->user->can('search-use'))
@@ -287,18 +261,14 @@ class IntouchController extends components\GlobalController
 			$this->redirect("/intouch/accessdenied");
 		}
 	}
-
 	public function actionAccessdenied()
 	{
 		$id = Yii::$app->user->getId();
 		return $this->render('accessDenied');
 	}
-
 	public function actionNotifications()
 	{
 		$id = Yii::$app->user->getId();
-
-
 		if (Yii::$app->request->isPost)
 		{
 			if (!is_null(Yii::$app->request->post('accept-btn')) || !is_null(Yii::$app->request->post('dismiss-btn')))
@@ -312,10 +282,8 @@ class IntouchController extends components\GlobalController
 				RequestService::answerRequest($request_id, $answer);
 			}
 		}
-
 		return $this->render('allRequests');
 	}
-
 	public function actionMyfriends()
 	{
 		$id = Yii::$app->user->getId();
@@ -327,9 +295,7 @@ class IntouchController extends components\GlobalController
 		$faloneT = new components\Image("forever_alone_text.png",
 			new components\ImageTypes(components\ImageTypes::InTouchImage), new components\ImgLocations\ImgIntouch());
 		///////
-
 		return $this->render('myFriends', ['friends' => $friends, 'imgForeverAlone' => $falone->getImage(),
 		                                   'imgForeverAloneText' => $faloneT->getImage()]);
 	}
-
 }
