@@ -116,7 +116,12 @@ use yii\widgets\Pjax;
                                              alt="user image">
                                     <span class="username">
                                         <a href="#"><?php echo($row['name'] . " " . $row['surname']); ?></a>
-                                        <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
+                                        <?php echo Html::beginForm(['intouch/profile'], 'post') ?>
+                                        <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
+                                        <input class="" type="hidden" name="type" value="delete_post" id="delete_post-form">
+                                        <button style="..." type="submit" class="pull-right fa fa-times"></button>
+                                        <?= Html::endForm() ?>
+<!--                                        <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>-->
 	                                    <a href="#" class="pull-right btn-box-tool"><i class="fa fa-wrench"></i></a>
                                     </span>
                                     <span class="description"><?php if ($row['post_visibility'] == "visible")
@@ -246,9 +251,17 @@ use yii\widgets\Pjax;
                                                                     class="btn btn-box-tool dropdown-toggle"
                                                                     data-toggle="dropdown">
                                                                 <i class="fa fa-wrench"></i></button>
-                                                            <button type="button" class="btn btn-box-tool"
-                                                                    data-widget="remove">
-                                                                <i class="fa fa-times"></i></button>
+                                                            <!--button to delete comment -->
+                                                            <?php echo Html::beginForm(['intouch/profile'], 'post') ?>
+                                                            <input type="hidden" name="comment_id" value="<?= $comment['comment_id'] ?>">
+                                                            <input class="" type="hidden" name="type" value="delete_comment" id="delete_comment-form">
+                                                            <button style="..." type="submit" class="fa fa-times"></button>
+                                                            <?= Html::endForm() ?>
+
+<!--                                                            <button type="button" class="btn btn-box-tool"-->
+<!--                                                                    data-widget="remove">-->
+<!--                                                                <i class="fa fa-times"></i></button>-->
+
                                                         </small>
                                                         <?php echo($comment['name'] . " " . $comment['surname']); ?><br>
                                                     </a>

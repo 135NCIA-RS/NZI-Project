@@ -76,6 +76,9 @@ class IntouchController extends components\GlobalController
 						PostsService::createComment(Yii::$app->request->post('post_id'),
 							Yii::$app->request->post('inputText'));
 						break;
+//					case 'delete':
+//						PostsService::deletePost(Yii::$app->request->post('post_id'));
+//						break;
 				}
 			}
 		}
@@ -169,6 +172,14 @@ class IntouchController extends components\GlobalController
 						$rep_form_score_elem = Yii::$app->request->post('score_elem');
 						$rep_form_user_id = Yii::$app->request->post('user_id');
 						ScoreService::addScore(ScoreTypeEnum::report(), $rep_form_user_id, $rep_form_post_id, ScoreElemEnum::$rep_form_score_elem());
+						break;
+					case 'delete_post':
+						$rep_post_id = Yii::$app->request->post('post_id');
+						PostsService::deletePost($rep_post_id);
+						break;
+					case 'delete_comment':
+						$rep_comment_id = Yii::$app->request->post('comment_id');
+						PostsService::deleteComment($rep_comment_id);
 						break;
 				}
 			}

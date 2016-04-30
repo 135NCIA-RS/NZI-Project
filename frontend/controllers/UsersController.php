@@ -100,11 +100,21 @@ class UsersController extends components\GlobalController
                     switch (Yii::$app->request->post('type'))
                     {
                         case 'newpost':
+                            //die('dupa');
                             PostsService::createPost($id, Yii::$app->request->post('inputText'));
                             break;
 
                         case 'newcomment':
                             PostsService::createComment(Yii::$app->request->post('post_id'), Yii::$app->request->post('inputText'));
+                            break;
+
+                        case 'delete_post':
+                            $rep_post_id = Yii::$app->request->post('post_id');
+                            PostsService::deletePost($rep_post_id);
+                            break;
+                        case 'delete_comment':
+                            $rep_comment_id = Yii::$app->request->post('comment_id');
+                            PostsService::deleteComment($rep_comment_id);
                             break;
                     }
                 }

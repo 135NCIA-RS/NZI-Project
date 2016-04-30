@@ -125,6 +125,7 @@ class PostsService
 
 	public static function createPost($receiver_id, $text)
 	{
+
 		$author_id = Yii::$app->user->getId();
 		try
 		{
@@ -195,6 +196,7 @@ class PostsService
 		$refined_data = [];
 		foreach ($data as $row)
 		{
+			$refined_data[$counter]['comment_id'] = $row['comment_id'];
 			$refined_data[$counter]['comment_text'] = $row['comment_text'];
 			$refined_data[$counter]['name'] = UserService::getName($row['author_id']);
 			$refined_data[$counter]['surname'] = UserService::getSurname($row['author_id']);
@@ -268,4 +270,5 @@ class PostsService
 		$del = Comment::findOne($id);
 		return isset($id) ? $del->delete() : false;
 	}
+
 }

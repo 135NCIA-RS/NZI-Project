@@ -187,7 +187,16 @@ JS;
                                              alt="user image">
                                         <span class="username">
                                             <a href="#"><?php echo($row['name'] . " " . $row['surname']); ?></a>
-                                            <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
+
+                                            <?= Html::beginForm(["users/view", 'uname' => $UserName], 'post',
+                                                    ['data-pjax' => '']) ?>
+                                            <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
+                                            <input class="" type="hidden" name="type" value="delete_post"
+                                                   id="delete_post-form">
+                                            <button style="..." type="submit" class="pull-right fa fa-times"></button>
+                                            <?= Html::endForm() ?>
+
+                                            <!--                                            <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>-->
 	                                        <a href="#" class="pull-right btn-box-tool"><i class="fa fa-wrench"></i></a>
                                         </span>
                                         <span class="description"><?php
@@ -268,13 +277,14 @@ JS;
                                                         class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app',
                                                         'Comments'); ?> (<?php echo(count($row['comments'])); ?>)</a>
                                         </li>
-	                                    <li class="pull-right">
-		                                    <a href="#" class="link-black text-sm"><i
-					                                    class="fa fa-exclamation margin-r-5"></i><?= Yii::t('app',
-					                                    'Report'); ?></a>
-	                                    </li>
+                                        <li class="pull-right">
+                                            <a href="#" class="link-black text-sm"><i
+                                                        class="fa fa-exclamation margin-r-5"></i><?= Yii::t('app',
+                                                        'Report'); ?></a>
+                                        </li>
                                     </ul>
-                                    <?= Html::beginForm(["users/view", 'uname' => $UserName], 'post', ['data-pjax' => '']) ?>
+                                    <?= Html::beginForm(["users/view", 'uname' => $UserName], 'post',
+                                            ['data-pjax' => '']) ?>
                                     <input class="form-control input-sm send-form-input" type="text"
                                            placeholder="<?= Yii::t('app', 'Type a comment'); ?>" name="inputText">
                                     <input type="hidden" name="type" value="newcomment">
@@ -298,6 +308,15 @@ JS;
                                                     <a href="#" class="name">
                                                         <small class="text-muted pull-right"><i
                                                                     class="fa fa-clock-o"></i> <?php echo $comment['comment_date']; ?>
+                                                            <?= Html::beginForm(["users/view", 'uname' => $UserName], 'post',
+                                                                    ['data-pjax' => '']) ?>
+                                                            <input type="hidden" name="comment_id"
+                                                                   value="<?= $comment['comment_id'] ?>">
+                                                            <input class="" type="hidden" name="type"
+                                                                   value="delete_comment" id="delete_comment-form">
+                                                            <button style="..." type="submit"
+                                                                    class="fa fa-times"></button>
+                                                            <?= Html::endForm() ?>
                                                         </small>
                                                         <?php echo($comment['name'] . " " . $comment['surname']); ?><br>
                                                     </a>
