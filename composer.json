@@ -5,11 +5,11 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
-        "fxp/composer-asset-plugin": "*",
         "yiisoft/yii2": ">=2.0.6",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
-        "myclabs/php-enum": "^1.4"
+        "myclabs/php-enum": "^1.4",
+        "fxp/composer-asset-plugin": "^1.1"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
