@@ -29,7 +29,7 @@ use common\components\RequestType;
 /**
  * Site controller
  */
-class SiteController extends Controller
+class SiteController extends components\GlobalController
 {
 
     /**
@@ -77,66 +77,6 @@ class SiteController extends Controller
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
-    }
-
-    public function beforeAction($action)
-    {
-        if (parent::beforeAction($action))
-        {
-            if ($action->id == 'error')
-            {
-                if (!Yii::$app->user->isGuest)
-                {
-                    $this->getUserData();
-                    $this->layout = "logged";
-                }
-            }
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    private function getUserData()
-    {
-        $id = Yii::$app->user->getId();
-
-        $photo = \common\components\PhotoService::getProfilePhoto($id);
-
-        if (is_string($photo))
-        {
-            $location                               = "@web/dist/content/images/";
-            //TODO set chmod for that directory(php init)
-            $this->view->params['userProfilePhoto'] = $location . $photo;
-        }
-        else
-        {
-            $location                               = "@web/dist/img/guest.png";
-            //TODO add that file
-            $this->view->params['userProfilePhoto'] = $location;
-        }
-
-        $userinfo                 = array();
-        $userinfo['user_name']    = UserService::getName($id);
-        $userinfo['user_surname'] = UserService::getSurname($id);
-        if ($userinfo['user_name'] == false)
-        {
-            $userinfo['user_name'] = "Uzupełnij";
-        }
-        if ($userinfo['user_surname'] == false)
-        {
-            $userinfo['user_surname'] = "swoje dane";
-        }
-
-        $this->view->params['userInfo'] = $userinfo;
-        ////////////////////////////////////////////////////// request service
-
-        $notification                             = RequestService::getMyRequests($id);
-        $tablelength                              = count($notification);
-        $this->view->params['notification_data']  = $notification;
-        $this->view->params['notification_count'] = $tablelength;
     }
 
     /**

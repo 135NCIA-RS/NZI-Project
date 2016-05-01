@@ -8,7 +8,7 @@ use MyCLabs\Enum\Enum;
  *
  * @author mayumu
  */
-class ScoreElemEnum extends Enum 
+class EScoreElem extends Enum 
 {
     const post = 1;
     const post_comment = 2;

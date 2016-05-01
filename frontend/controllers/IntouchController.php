@@ -22,8 +22,8 @@ use common\components\RequestService;
 use common\components\PostsService;
 use common\components\RequestType;
 use common\components\ScoreService;
-use common\components\ScoreElemEnum;
-use common\components\ScoreTypeEnum;
+use common\components\EScoreElem;
+use common\components\EScoreType;
 
 class IntouchController extends components\GlobalController
 {
@@ -181,15 +181,15 @@ class IntouchController extends components\GlobalController
 						$like_form_post_id = Yii::$app->request->post('post_id');
 						$like_form_score_elem = Yii::$app->request->post('score_elem');
 						$like_form_user_id = Yii::$app->request->post('user_id');
-						ScoreService::addScore(ScoreTypeEnum::like(), $like_form_user_id, $like_form_post_id,
-							ScoreElemEnum::$like_form_score_elem());
+						$score = new components\Score(EScoreType::like(),null, EScoreElem::$like_form_score_elem(), $like_form_post_id);
+						ScoreService::addScore($score, $like_form_user_id);
 						break;
 					case 'report':
 						$rep_form_post_id = Yii::$app->request->post('post_id');
 						$rep_form_score_elem = Yii::$app->request->post('score_elem');
 						$rep_form_user_id = Yii::$app->request->post('user_id');
-						ScoreService::addScore(ScoreTypeEnum::report(), $rep_form_user_id, $rep_form_post_id,
-							ScoreElemEnum::$rep_form_score_elem());
+						$score = new components\Score(EScoreType::like(),null, EScoreElem::$rep_form_score_elem(), $rep_form_post_id);
+						ScoreService::addScore($score, $rep_form_user_id);
 						break;
 					case 'delete_post':
 						$rep_post_id = Yii::$app->request->post('post_id');

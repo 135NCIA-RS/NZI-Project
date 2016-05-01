@@ -274,7 +274,10 @@ JS;
                                                         'Share'); ?></a></li>
                                         <li><a href="#" class="link-black text-sm"><i
                                                         class="fa fa-thumbs-o-up margin-r-5"></i> <?= Yii::t('app',
-                                                        'Like'); ?></a>
+                                                        'Like'.
+                                                       " (" .
+                                                        $row->countScoresByType(\common\components\EScoreType::like()) .
+                                                        ")"); ?></a>
                                         </li>
                                         <li class="pull-right">
                                             <a href="#" class="link-black text-sm"><i

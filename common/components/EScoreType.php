@@ -8,7 +8,7 @@ use MyCLabs\Enum\Enum;
  *
  * @author mayumu
  */
-class ScoreTypeEnum extends Enum 
+class EScoreType extends Enum
 {
     const like = 1;
     const report = 2;

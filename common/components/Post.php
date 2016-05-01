@@ -7,8 +7,10 @@
  */
 
 namespace common\components;
+use app\models\ScoreTypes;
 use common\components\exceptions\FeatureNotImplemented;
 
+/* @var $scores EScoreType[]*/
 
 /**
  * Class Post is created only for existing posts!
@@ -25,6 +27,7 @@ class Post
 	private $isEdited;
 	private $author;
 	private $postType;
+	private $scores;
 
 	/**
 	 * Post constructor.
@@ -42,6 +45,22 @@ class Post
 		$this->author = $author;
 		$this->postType = $PostType;
 		$this->Content = $content;
+
+		$scr = [];
+		$types = EScoreType::keys();
+		foreach($types as $type)
+		{
+			$scr[$type] = [];
+			$s = ScoreService::getScoresByElem(EScoreElem::post(),$Id);
+			foreach($s as $scor)
+			{
+				if($scor->getScoreType() == EScoreType::$type())
+				{
+					$scr[$type][]= $scor;
+				}
+			}
+		}
+		$this->scores = $scr;
 	}
 
 	/**
@@ -60,6 +79,20 @@ class Post
 		return $this->author;
 	}
 
+	public function getAllScores()
+	{
+		return $this->scores;
+	}
+
+	public function getScoresByType(EScoreType $type)
+	{
+		return $this->scores[$type->getKey()];
+	}
+
+	public function countScoresByType(EScoreType $type)
+	{
+		return count($this->getScoresByType($type));
+	}
 
 	/**
 	 * @return string Content of Post

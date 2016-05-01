@@ -205,7 +205,12 @@ use yii\widgets\Pjax;
                                                 <i class="fa fa-thumbs-o-up"></i>
                                                 <input type="submit" class="fa fa-t humbs-o-up link-black text-sm"
                                                        style="background: none; border: none;"
-                                                       value="<?= Yii::t('app', 'Like'); ?>">
+                                                       value="<?=
+                                                       Yii::t('app', 'Like') .
+                                                       " (" .
+                                                       $row->countScoresByType(\common\components\EScoreType::like()) .
+                                                       ")"
+                                                       ?> ">
                                             </span>
 											<?= Html::endForm() ?>
 										</li>
