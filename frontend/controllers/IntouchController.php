@@ -193,11 +193,13 @@ class IntouchController extends components\GlobalController
 						break;
 					case 'delete_post':
 						$rep_post_id = Yii::$app->request->post('post_id');
-						PostsService::deletePost($rep_post_id);
+						PostsService::deletePost(PostsService::getPostById($rep_post_id));
+						//PostsService::deletePost($rep_post_id);
 						break;
 					case 'delete_comment':
 						$rep_comment_id = Yii::$app->request->post('comment_id');
-						PostsService::deleteComment($rep_comment_id);
+						PostsService::deleteComment(PostsService::getCommentById($rep_comment_id));
+						//PostsService::deleteComment($rep_comment_id);
 						break;
 				}
 			}
