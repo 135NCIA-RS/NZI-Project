@@ -11,9 +11,8 @@ namespace common\components;
 
 use MyCLabs\Enum\Enum;
 
-class EVisibility extends Enum
+class EPostType extends Enum
 {
-	const friends = "friends";
-	const visible = "visible";
-	const hidden = "hidden";
+	const text = "text";
+	const gallery = "gallery";
 }

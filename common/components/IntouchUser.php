@@ -20,9 +20,10 @@ class IntouchUser
 	private $city;
 	private $about;
 	private $username;
+	private $email;
 
 
-	public function __construct($id, $username, $name, $surname, \DateTime $birth, Image $photo, $education, $city,
+	public function __construct($id, $email, $username, $name, $surname, \DateTime $birth, $photo, $education, $city,
 	                            $about)
 	{
 		$this->id = $id;
@@ -34,11 +35,17 @@ class IntouchUser
 		$this->city = $city;
 		$this->about = $about;
 		$this->username = $username;
+		$this->email = $email;
 	}
 
 	public function getId()
 	{
 		return $this->id;
+	}
+
+	public function getEmail()
+	{
+		return $this->email;
 	}
 
 	public function getUsername()
@@ -48,7 +55,7 @@ class IntouchUser
 
 	public function getImageUrl()
 	{
-		return $this->photo->getImage();
+		return $this->photo;
 	}
 
 	public function getFullName()
@@ -88,7 +95,7 @@ class IntouchUser
 
 	public function getCity()
 	{
-		return $this->city();
+		return $this->city;
 	}
 
 	public function setCity($city)

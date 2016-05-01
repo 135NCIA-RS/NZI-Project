@@ -32,10 +32,18 @@ class Comment
 	{
 		return $this->Id;
 	}
-	
-	public function getDate()
+
+	/**
+	 * @return DateTime Date
+	 */
+	public function getDateObj()
 	{
 		return $this->Date;
+	}
+
+	public function getDate($format = "Y-m-d H:i:s")
+	{
+		return $this->Date->format($format);
 	}
 	
 	public function getContent()
@@ -47,7 +55,11 @@ class Comment
 	{
 		return $this->isEdited;
 	}
-	
+
+	/**
+	 * This function will not save changes in database!
+	 * @param $newContent
+	 */
 	public function changeContent($newContent)
 	{
 		$this->Content = $newContent;

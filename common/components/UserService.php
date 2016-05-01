@@ -541,6 +541,7 @@ class UserService
 			$details = UserInfo::findOne($id);
 			$intouchUser = new IntouchUser(
 				$id,
+				$u->email,
 				$u->username,
 				$details->user_name,
 				$details->user_surname,

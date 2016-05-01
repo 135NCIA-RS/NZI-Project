@@ -23,13 +23,15 @@ class Post
 	private $Attachments;
 	private $Comments;
 	private $isEdited;
+	private $author;
+	private $postType;
 
 	/**
 	 * Post constructor.
 	 *
 	 * @param $postId
 	 */
-	public function __construct($Id, $Date, EVisibility $Visibility, $Comments = [], $Attachments = [], $isEdited = false)
+	public function __construct($Id, $author, \DateTime $Date, EVisibility $Visibility, EPostType $PostType, $Comments = [], $Attachments = [], $isEdited = false)
 	{
 		$this->Id = $Id;
 		$this->Date = $Date;
@@ -37,6 +39,8 @@ class Post
 		$this->Attachments = $Attachments;
 		$this->Comments = $Comments;
 		$this->isEdited = $isEdited;
+		$this->author = $author;
+		$this->postType = $PostType;
 	}
 
 	/**
@@ -46,6 +50,15 @@ class Post
 	{
 		return $this->Id;
 	}
+
+	/**
+	 * @return IntouchUser
+	 */
+	public function getAuthor()
+	{
+		return $this->author;
+	}
+
 
 	/**
 	 * @return string Content of Post
@@ -58,9 +71,14 @@ class Post
 	/**
 	 * @return DateTime Date
 	 */
-	public function getDate()
+	public function getDateObj()
 	{
 		return $this->Date;
+	}
+
+	public function getDate($format = "Y-m-d H:i:s")
+	{
+		return $this->Date->format($format);
 	}
 
 	/**
@@ -72,6 +90,16 @@ class Post
 	}
 
 	/**
+	 * @param EVisibility $visibility
+	 *
+	 * @return bool
+	 */
+	public function checkVisibility(EVisibility $visibility)
+	{
+		return ($this->Visibility == $visibility);
+	}
+
+	/**
 	 * @return array
 	 */
 	public function getAttachments()
@@ -80,7 +108,7 @@ class Post
 	}
 
 	/**
-	 * @return array
+	 * @return Comment[]
 	 */
 	public function getComments()
 	{
@@ -93,6 +121,24 @@ class Post
 	public function isEdited()
 	{
 		return $this->isEdited;
+	}
+
+	/**
+	 * @return EPostType
+	 */
+	public function getPostType()
+	{
+		return $this->postType;
+	}
+
+	/**
+	 * @param EPostType $postType
+	 *
+	 * @return bool
+	 */
+	public function checkPostType(EPostType $postType)
+	{
+		return ($this->postType == $postType);
 	}
 
 	public function addAttachment()

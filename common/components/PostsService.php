@@ -91,8 +91,10 @@ class PostsService
 			$date = new \DateTime($p->post_date);
 			$vis = $p->post_visibility;
 			$visibility = EVisibility::$vis();
-
-			$post = new \common\components\Post($postID, $date, $visibility, $comms, $attachments);
+			$author = UserService::getUserById($p->user_id);
+			$pt = $p->post_type;
+			$ptype = EPostType::$pt();
+			$post = new \common\components\Post($postID,$author, $date, $visibility, $ptype, $comms, $attachments);
 			return $post;
 		}
 		else
