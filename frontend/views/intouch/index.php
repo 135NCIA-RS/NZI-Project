@@ -19,16 +19,16 @@ use common\components\PhotoService;
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs">
 					<li class="active"><a href="#activity" data-toggle="tab"><?= Yii::t('app', 'Activity'); ?></a></li>
-
+				
 				</ul>
 				<div class="tab-content">
-
+					
 					<?php
 					yii\widgets\Pjax::begin();
 					?>
 					<div class="active tab-pane" id="activity">
-
-
+						
+						
 						<!-- Add post -->
 						<?= Html::beginForm(["intouch/index", 'uname' => $loggedUser->getUsername()], 'post',
 								['data-pjax' => '']) ?>
@@ -118,21 +118,24 @@ use common\components\PhotoService;
 									<?php
 									}
 									?>
-
+									
 									</p>
 									<ul class="list-inline">
 										<li><a href="#" class="link-black text-sm"><i
 														class="fa fa-share margin-r-5"></i> <?= Yii::t('app',
 														'Share'); ?></a></li>
 										<li><a href="#" class="link-black text-sm"><i
-														class="fa fa-thumbs-o-up margin-r-5"></i> <?= Yii::t('app',
-														'Like'); ?></a>
+														class="fa fa-thumbs-o-up margin-r-5"></i> <?=
+														Yii::t('app','Like') .
+														" (" .
+														$row->countScoresByType(\common\components\EScoreType::like()) .
+														")"
+												?></a>
 										</li>
 										<li class="pull-right">
 											<a href="#" class="link-black text-sm"><i
 														class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app',
-														'Comments'); ?> (<?php echo(count($comments)); ?>
-												)</a>
+														'Comments'); ?> (<?php echo(count($comments));?>)</a>
 										</li>
 										<li class="pull-right">
 											<a href="#" class="link-black text-sm"><i
@@ -140,7 +143,8 @@ use common\components\PhotoService;
 														'Report'); ?></a>
 										</li>
 									</ul>
-									<?= Html::beginForm(["intouch/index", 'uname' => $loggedUser->getUsername()], 'post',
+									<?= Html::beginForm(["intouch/index", 'uname' => $loggedUser->getUsername()],
+											'post',
 											['data-pjax' => '']) ?>
 									<input class="form-control input-sm send-form-input" type="text"
 									       placeholder="<?= Yii::t('app', 'Type a comment'); ?>" name="inputText">
@@ -159,7 +163,8 @@ use common\components\PhotoService;
 											$comAuthor = $comment->getAuthor();
 											?>
 											<div style="background-color: #EDF5F7; padding: 10px 10px 1px 10px; border-radius: 10px; margin-left: 30px; margin-bottom:5px;">
-												<img class="direct-chat-img" src="<?php echo $comAuthor->getImageUrl() ?>"
+												<img class="direct-chat-img"
+												     src="<?php echo $comAuthor->getImageUrl() ?>"
 												     alt="message user image" style="margin-right: 10px;">
 												<!-- /.direct-chat-img -->
 												<a href="#" class="pull-right btn-box-tool"><i
@@ -181,14 +186,14 @@ use common\components\PhotoService;
 										<!-- /.direct-chat-text -->
 									</div>
 								</div>
-
+								
 								<?php
-
-
+								
+								
 							}
 							?>
 						</div>
-
+						
 						<!-- /.post -->
 					</div>
 					<?php

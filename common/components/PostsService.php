@@ -24,11 +24,7 @@ class PostsService
 	{
 		$arr = [];
 		$friendList = RelationService::getFriendsList($id);
-		//$friendList[] = UserService::getUserById($id);
-		if (count($friendList) == 0)
-		{
-			return [];
-		}
+		$friendList[] = UserService::getUserById($id);
 
 		$arr = self::getPostsOrderById($friendList, $lastid);
 
@@ -133,7 +129,6 @@ class PostsService
 		$post->post_date = date('Y-m-d H:i:s');
 		$post->post_type = EPostType::text;
 		$post->post_visibility = "visible";
-		die(var_dump($post));
 		return $post->save();
 	}
 
