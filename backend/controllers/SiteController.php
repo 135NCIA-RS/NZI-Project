@@ -116,32 +116,32 @@ class SiteController extends components\AdminGlobalController
 				{
 					case 'delete':
 						//die('dupa');
-						PostsService::deletePost(Yii::$app->request->post('post_id'));
-						ScoreService::revokeScoreByElemId(Yii::$app->request->post('post_id'),
-							new ScoreElemEnum(ScoreElemEnum::post));
+						PostsService::deletePost(PostsService::getPostById(Yii::$app->request->post('post_id')));
+						ScoreService::revokeScoresByElemId(
+							Yii::$app->request->post('post_id'),
+							components\EScoreElem::post()
+						);
 						break;
 					case 'revoke':
-						ScoreService::revokeScoreByElemId(Yii::$app->request->post('post_id'),
-							new ScoreElemEnum(ScoreElemEnum::post));
+						ScoreService::revokeScoresByElemId(
+							Yii::$app->request->post('post_id'),
+							components\EScoreElem::post()
+						);
 						break;
 
 				}
 			}
 		}
 
-
-		$data = ScoreService::getElementsByScoreType(new components\ScoreTypeEnum(components\ScoreTypeEnum::report));
+		$data = ScoreService::getElementsByScoreType(components\EScoreType::report());
 		$table = [];
 		foreach ($data as $var)
 		{
-			if ($var->element_type == components\ScoreElemEnum::post)
+			/* @var $var components\Score*/
+			if ($var->getElementType() == components\EScoreElem::post())
 			{
-				$table[] = PostsService::getPost($var->element_id);
+				$table[] = PostsService::getPostById($var->getElementId());
 			}
-//			if ($var['element_type']==components\ScoreElemEnum::post_comment)
-//			{
-//				$table[] = PostsService::getComment($var['element_id']);
-//			}
 		}
 		return $this->render('report', [
 			'posts' => $table,
@@ -158,39 +158,35 @@ class SiteController extends components\AdminGlobalController
 				switch (Yii::$app->request->post('action'))
 				{
 					case 'delete':
-						//die('dupa');
-						PostsService::deleteComment(Yii::$app->request->post('post_id'));
-						ScoreService::revokeScoreByElemId(Yii::$app->request->post('post_id'),
-							new ScoreElemEnum(ScoreElemEnum::post_comment));
+						PostsService::deleteComment(PostsService::getPostById(Yii::$app->request->post('post_id')));
+						ScoreService::revokeScoresByElemId(
+							Yii::$app->request->post('post_id'),
+							components\EScoreElem::post_comment()
+						);
 						break;
 					case 'revoke':
-						ScoreService::revokeScoreByElemId(Yii::$app->request->post('post_id'),
-							new ScoreElemEnum(ScoreElemEnum::post_comment));
+						ScoreService::revokeScoresByElemId(
+							Yii::$app->request->post('post_id'),
+							components\EScoreElem::post_comment()
+						);
 						break;
 
 				}
 			}
 		}
 
-
-		$data = ScoreService::getElementsByScoreType(new components\ScoreTypeEnum(components\ScoreTypeEnum::report));
+		$data = ScoreService::getElementsByScoreType(components\EScoreType::report());
 		$table = [];
 		foreach ($data as $var)
 		{
-			//die(var_dump($data));
-			if ($var->element_type == components\ScoreElemEnum::post_comment)
+			/* @var $var components\Score*/
+			if ($var->getElementType() == components\EScoreElem::post_comment())
 			{
-				$table[] = PostsService::getComment($var->element_id);
-				//die(var_dump($table));
+				$table[] = PostsService::getCommentById($var->getElementId());
 			}
-			//die(var_dump($table));
-//			if ($var['element_type']==components\ScoreElemEnum::post_comment)
-//			{
-//				$table[] = PostsService::getComment($var['element_id']);
-//			}
 		}
 		return $this->render('repcomment', [
-			'posts' => $table,
+			'comments' => $table,
 		]);
 	}
 

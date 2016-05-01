@@ -1,6 +1,7 @@
 <?php
 /* @var $this \yii\web\View */
 /* @var $content string */
+/* @var $userInfo \common\components\IntouchUser */
 
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
@@ -11,6 +12,8 @@ use common\widgets\Alert;
 use yii\helpers\Url;
 
 AppAsset::register($this);
+$userInfo = $this->params['userInfo'];
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -48,7 +51,7 @@ AppAsset::register($this);
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 
-                                    <!-- <?php echo Html::img('@web/dist/img/guest.png', ['class' => "user-image"]) ?>-->
+                                    <!-- <?php echo Html::img(\common\components\PhotoService::getProfilePhoto(0), ['class' => "user-image"]) ?>-->
                                     <i class="fa fa-sign-in"></i>
                                     <span class="hidden-xs"><?= Yii::t('app', 'Account'); ?></span>
                                 </a>
@@ -57,8 +60,8 @@ AppAsset::register($this);
 
                                     <li class="user-header">
 
-                                        <?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
-                                        <p style='color:black; font-weight:bold'><?= $this->params['userInfo']['user_name'] . ' ' . $this->params['userInfo']['user_surname'] ?></p>
+                                        <?= Html::img($userInfo->getImageUrl(), ['class' => 'img-circle', 'alt' => 'User Image']) ?>
+                                        <p style='color:black; font-weight:bold'><?= $userInfo->getFullName() ?></p>
                                         <p>
                                             <?= Yii::t('app', 'You\'re InTouch now.'); ?>
                                         </p>
@@ -90,10 +93,10 @@ AppAsset::register($this);
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <?= Html::img($this->params['userProfilePhoto'], ['class' => 'img-circle', 'alt' => 'User Image']) ?>
+                            <?= Html::img($userInfo->getImageUrl(), ['class' => 'img-circle', 'alt' => 'User Image']) ?>
                         </div>
                         <div class="pull-left info">
-                            <p><?= $this->params['userInfo']['user_name'] . ' ' . $this->params['userInfo']['user_surname'] ?></p>
+                            <p><?= $userInfo->getFullName() ?></p>
                             <a href="#"><i class="fa fa-circle text-success"></i> <?= Yii::t('app', 'Online'); ?></a>
                         </div>
 
@@ -101,11 +104,6 @@ AppAsset::register($this);
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
                         <li class="header"><?= Yii::t('app', 'MAIN NAVIGATION'); ?></li>
-                        <li>
-                            <a href="/profile">
-                                <i class="fa fa-user"></i> <span><?= Yii::t('app', 'Profile') ?></span>
-                            </a>
-                        </li>
                         <li class="header"><?= Yii::t('app', 'ACTIONS') ?></li>
                         <li class="treeview">
                             <a href="#">

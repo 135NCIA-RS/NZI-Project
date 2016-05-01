@@ -90,7 +90,8 @@ class ScoreService
 		foreach ($ptr as $row)
 		{
 			$elemType = $row->element_type;
-			$score = new Score($score_type, $row->score_id, EScoreElem::search($elemType), $row->element_id);
+			$elemt = EScoreElem::search($elemType);
+			$score = new Score($score_type, $row->score_id, EScoreElem::$elemt(), $row->element_id);
 			$ptr2[] = $score;
 		}
 		return $ptr2;
