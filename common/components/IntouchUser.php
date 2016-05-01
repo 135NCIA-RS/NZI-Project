@@ -60,7 +60,14 @@ class IntouchUser
 
 	public function getFullName()
 	{
-		return $this->name . " " . $this->surname;
+		if($this->name == "" || $this->surname == "")
+		{
+			return "Niepełne dane";
+		}
+		else
+		{
+			return $this->name . " " . $this->surname;
+		}
 	}
 
 	public function getName()
@@ -103,7 +110,7 @@ class IntouchUser
 		$this->city = $city;
 	}
 
-	public function getBirthDate($format = "Y-m-d H:i:s")
+	public function getBirthDate($format = "Y-m-d")
 	{
 		return $this->birth->format($format);
 	}
@@ -123,9 +130,19 @@ class IntouchUser
 		$this->about = $about;
 	}
 
+	public function setEmail($email)
+	{
+		$this->email = $email;
+	}
+
 	public function changePassword($newPassword)
 	{
 		UserService::setPassword($this->id, $newPassword);
+	}
+
+	public function setBirthDate(\DateTime $date)
+	{
+		$this->birth = $date;
 	}
 
 }

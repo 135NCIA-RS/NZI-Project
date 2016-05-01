@@ -34,6 +34,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+/* @var $friends \common\components\IntouchUser[] */
+
 if (count($friends) == 0)
 {
     echo Yii::t('app', 'You don\'t have friends. Invite someone :)');;
@@ -52,13 +54,13 @@ foreach ($friends as $friend)
 {
     ?>
     <div class="userbox">
-        <img class="direct-chat-img" src="<?= $friend['photo'] ?>" alt="message user image" style="margin-right: 10px;">
+        <img class="direct-chat-img" src="<?= $friend->getImageUrl() ?>" alt="message user image" style="margin-right: 10px;">
 
-        <p><?= $friend['name'] . " " . $friend['surname'] . " (" . $friend['username'] . ")" ?></p>
+        <p><?= $friend->getFullName() . " (" . $friend->getUsername() . ")" ?></p>
         <div>
-            <a href="/user/<?= $friend['username'] ?>"><?= Yii::t('app', 'Profile'); ?></a>
+            <a href="/user/<?= $friend->getUsername() ?>"><?= Yii::t('app', 'Profile'); ?></a>
             |
-            <a href="mailto:<?= $friend['email'] ?>"><?= Yii::t('app', 'Send e-mail'); ?></a>
+            <a href="mailto:<?= $friend->getEmail() ?>"><?= Yii::t('app', 'Send e-mail'); ?></a>
         </div>
     </div>
     <?php

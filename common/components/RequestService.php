@@ -69,7 +69,7 @@ class RequestService
         {
             if (!AccessService::hasAccess($user2_id, ObjectCheckType::Request))
             {
-                Yii::$app->session->setFlash('error', 'Access Denied');
+                \Yii::$app->session->setFlash('error', 'Access Denied');
                 return false;
             }
         }
@@ -143,8 +143,9 @@ class RequestService
 
     private static function createReqObj($user1_id, $date, $req_id, $req_type)
     {
-        $uname    = UserService::getUserName($user1_id);
-        $fullname = UserService::getNameLong($user1_id);
+        $u1 = UserService::getUserById($user1_id);
+        $uname    = $u1->getUsername();
+        $fullname = $u1->getFullName();
         return ['type' => $req_type, 'req_id' => $req_id, 'senderUserName' => $uname, 'date' => $date, 'fullname' => $fullname];
     }
 

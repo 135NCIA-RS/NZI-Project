@@ -24,7 +24,7 @@ class PostsService
 	{
 		$arr = [];
 		$friendList = RelationService::getFriendsList($id);
-		$friendList[] = $id;
+		//$friendList[] = UserService::getUserById($id);
 		if (count($friendList) == 0)
 		{
 			return [];
@@ -40,7 +40,13 @@ class PostsService
 	 */
 	private static function getPostsOrderById($friendsIds, $startId)
 	{
-		$data = Post::find()->where(['in', 'user_id', $friendsIds]);
+		$fIds = [];
+		foreach ($friendsIds as $fr)
+		{
+			/* @var $fr IntouchUser */
+			$fIds[] = $fr->getId();
+		}
+		$data = Post::find()->where(['in', 'user_id', $fIds]);
 
 		if (!is_null($startId))
 		{
@@ -91,10 +97,11 @@ class PostsService
 			$date = new \DateTime($p->post_date);
 			$vis = $p->post_visibility;
 			$visibility = EVisibility::$vis();
-			$author = UserService::getUserById($p->user_id);
+			$author = UserService::getUserById($p->owner_id);
 			$pt = $p->post_type;
 			$ptype = EPostType::$pt();
-			$post = new \common\components\Post($postID,$author, $date, $visibility, $ptype, $comms, $attachments);
+			$post = new \common\components\Post($postID, $author, $p->post_text, $date, $visibility, $ptype, $comms,
+				$attachments);
 			return $post;
 		}
 		else
@@ -124,8 +131,9 @@ class PostsService
 		$post->user_id = $receiver_id;
 		$post->post_text = $text;
 		$post->post_date = date('Y-m-d H:i:s');
-		$post->post_type = "text";
+		$post->post_type = EPostType::text;
 		$post->post_visibility = "visible";
+		die(var_dump($post));
 		return $post->save();
 	}
 
@@ -140,7 +148,7 @@ class PostsService
 	{
 		try
 		{
-			if (!AccessService::hasAccess($post->getId(), ObjectCheckType::PostComment))
+			if (!AccessService::hasAccess($post->getAuthor()->getId(), ObjectCheckType::PostComment))
 			{
 				Yii::$app->session->setFlash('error', 'Access Denied');
 				return false;
@@ -157,13 +165,7 @@ class PostsService
 		$comment->comment_text = $content;
 		$comment->comment_date = date('Y-m-d H:i:s');
 		$comment->post_id = $post->getId();
-		$comment->save();
-		return new \common\components\Comment(
-			$comment->comment_id,
-			new \DateTime($comment->comment_date),
-			UserService::getUserById($comment->author_id),
-			$content
-		);
+		return $comment->save();
 	}
 
 	public static function getNumberOfComments(\common\components\Post $post)
@@ -203,6 +205,30 @@ class PostsService
 	{
 		//usun post
 		throw new components\exceptions\FeatureNotImplemented();
+	}
+
+	public static function getCommentById($id)
+	{
+		$c = Comment::findOne($id);
+		$com = new \common\components\Comment(
+			$c->comment_id,
+			new \DateTime($c->comment_date),
+			UserService::getUserById($c->author_id),
+			$c->comment_text
+		);
+		return $com;
+	}
+
+	public static function saveComment(\common\components\Comment $comment)
+	{
+		$c = Comment::findOne($comment->getId());
+		$c->comment_text = $comment->getContent();
+		return $c->save();
+	}
+
+	public static function removeComment(\common\components\Comment $comment)
+	{
+		return Comment::findOne($comment->getId())->delete();
 	}
 
 }

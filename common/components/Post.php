@@ -31,7 +31,7 @@ class Post
 	 *
 	 * @param $postId
 	 */
-	public function __construct($Id, $author, \DateTime $Date, EVisibility $Visibility, EPostType $PostType, $Comments = [], $Attachments = [], $isEdited = false)
+	public function __construct($Id, $author, $content, \DateTime $Date, EVisibility $Visibility, EPostType $PostType, $Comments = [], $Attachments = [], $isEdited = false)
 	{
 		$this->Id = $Id;
 		$this->Date = $Date;
@@ -41,6 +41,7 @@ class Post
 		$this->isEdited = $isEdited;
 		$this->author = $author;
 		$this->postType = $PostType;
+		$this->Content = $content;
 	}
 
 	/**

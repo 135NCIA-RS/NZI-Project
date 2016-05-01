@@ -78,17 +78,18 @@ class IntouchController extends components\GlobalController
 						PostsService::createPost($id, Yii::$app->request->post('inputText'));
 						break;
 					case 'newcomment':
-						PostsService::createComment(Yii::$app->request->post('post_id'),
-							Yii::$app->request->post('inputText'));
+							PostsService::createComment(
+								PostsService::getPostById(Yii::$app->request->post('post_id')),
+								Yii::$app->request->post('inputText')
+							);
 						break;
-//					case 'delete':
-//						PostsService::deletePost(Yii::$app->request->post('post_id'));
-//						break;
+					case 'delete':
+						PostsService::deletePost(PostsService::getPostById(Yii::$app->request->post('post_id')));
+						break;
 				}
 			}
 		}
 		$posts = PostsService::getFriendsPosts($id);
-		//die(var_dump($posts));
 		$args = [
 			'posts' => $posts,
 		    'loggedUser' => $loggedUser,
@@ -98,13 +99,14 @@ class IntouchController extends components\GlobalController
 
 	public function actionLoadMorePosts($last = 1)
 	{
+		/* @var $data components\Post[] */
 		$data = PostsService::getFriendsPosts(Yii::$app->user->id, $last);
-		$lastId = $data[4]['post_id'];
+		$lastId = $data[4]->getId();
 		$id = Yii::$app->user->id;
 		$html = $this->renderPartial('postsLoad', ['UserName' => $id, 'posts' => $data]);
 		$arr['html'] = $html;
 		$arr['lastId'] = $lastId;
-		echo json_encode($arr);
+		echo json_encode($arr); // ??????
 	}
 
 	public function actionTestmail()
@@ -131,6 +133,7 @@ class IntouchController extends components\GlobalController
 	public function actionProfile()
 	{
 		$id = Yii::$app->user->getId();
+		$lUser = UserService::getUserById($id);
 		if (Yii::$app->request->isPost || Yii::$app->request->isPjax)
 		{
 			if (!is_null(Yii::$app->request->post('type')))
@@ -144,9 +147,10 @@ class IntouchController extends components\GlobalController
 						{
 							\common\components\PhotoService::setProfilePhoto($id, $plik);
 						}
-						UserService::setName($id, Yii::$app->request->post('inputName'));
-						UserService::setSurname($id, Yii::$app->request->post('inputSurname'));
-						USerService::setEmail($id, Yii::$app->request->post('inputEmail'));
+						$lUser->setName(Yii::$app->request->post('inputName'));
+						$lUser->setSurname(Yii::$app->request->post('inputSurname'));
+						$lUser->setEmail(Yii::$app->request->post('inputEmail'));
+						UserService::saveUser($lUser);
 						$pass1cnt = strlen(Yii::$app->request->post('inputPassword'));
 						$pass2cnt = strlen(Yii::$app->request->post('inputPasswordRepeat'));
 						if ($pass1cnt > 0 || $pass2cnt > 0)
@@ -170,7 +174,7 @@ class IntouchController extends components\GlobalController
 						PostsService::createPost($id, Yii::$app->request->post('inputText'));
 						break;
 					case 'newcomment':
-						PostsService::createComment(Yii::$app->request->post('post_id'),
+						PostsService::createComment(PostsService::getPostById(Yii::$app->request->post('post_id')),
 							Yii::$app->request->post('inputText'));
 						break;
 					case 'like':
@@ -206,7 +210,7 @@ class IntouchController extends components\GlobalController
 		$following = count(RelationService::getUsersWhoIFollow($id));
 		$friends = count(RelationService::getFriendsList($id));
 
-		$lUser = UserService::getUserById($id);
+		
 		//////////////////////////////////////////////////////////////////////////
 		return $this->render('profile', [
 			'userinfo' => $userinfo,
@@ -222,15 +226,12 @@ class IntouchController extends components\GlobalController
 	{
 		$id = Yii::$app->user->getId();
 		////////////////////////////
-		$education = UserService::getUserEducation($id);
-		$about = UserService::getUserAbout($id);
-		$city = UserService::getUserCity($id);
-		$birth = UserService::getBirthDate($id);
+		$loggedUser = UserService::getUserById($id);
 		if (Yii::$app->request->isPost)
 		{
-			UserService::setUserCity($id, Yii::$app->request->post('inputLocation'));
-			UserService::setUserEducation($id, Yii::$app->request->post('inputEducation'));
-			UserService::setUserAbout($id, Yii::$app->request->post('inputNotes'));
+			$loggedUser->setCity(Yii::$app->request->post('inputLocation'));
+			$loggedUser->setEducation(Yii::$app->request->post('inputEducation'));
+			$loggedUser->setAbout(Yii::$app->request->post('inputNotes'));
 			try
 			{
 				$bdate = Yii::$app->request->post('inputDate');
@@ -239,7 +240,8 @@ class IntouchController extends components\GlobalController
 					Yii::$app->session->setFlash('error', 'Hello! It\'s date from future!');
 					return $this->redirect('/profile/aboutedit');
 				}
-				UserService::setBirthDate($id, $bdate);
+				$loggedUser->setBirthDate(new \DateTime($bdate));
+				UserService::saveUser($loggedUser);
 			}
 			catch (\common\components\exceptions\InvalidDateException $e)
 			{
@@ -247,17 +249,11 @@ class IntouchController extends components\GlobalController
 				return $this->redirect('/profile/aboutedit');
 			}
 			Yii::$app->session->setFlash('success', 'Profile\'s been Succesfuly Updated');
-			//UserService::setUserAbout($id, Yii::$app->request->post('inputNotes'));
+
 			return $this->redirect('/profile');
 		}
-		///////////////////////////
 		$this->getUserData();
-		$this->layout = 'logged';
 		return $this->render('aboutEdit', [
-			'education' => $education,
-			'about' => $about,
-			'city' => $city,
-			'birth' => $birth
 		]);
 	}
 
@@ -281,13 +277,11 @@ class IntouchController extends components\GlobalController
 
 	public function actionAccessdenied()
 	{
-		$id = Yii::$app->user->getId();
 		return $this->render('accessDenied');
 	}
 
 	public function actionNotifications()
 	{
-		$id = Yii::$app->user->getId();
 		if (Yii::$app->request->isPost)
 		{
 			if (!is_null(Yii::$app->request->post('accept-btn')) || !is_null(Yii::$app->request->post('dismiss-btn')))
@@ -308,7 +302,7 @@ class IntouchController extends components\GlobalController
 	{
 		$id = Yii::$app->user->getId();
 		///////
-		$friends = RelationService::getFriendsList($id, true);
+		$friends = RelationService::getFriendsList($id);
 		$falone =
 			new components\Image("forever_alone.png", new components\ImageTypes(components\ImageTypes::InTouchImage),
 				new components\ImgLocations\ImgIntouch());

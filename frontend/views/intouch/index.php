@@ -73,7 +73,7 @@ use common\components\PhotoService;
 									<p>
 										<?php
 										$attachments = $row->getAttachments();
-										echo $row['post_text'];
+										echo $row->getContent();
 										if ($row->checkPostType(\common\components\EPostType::gallery()))
 										{
 										echo "<br>";
@@ -131,7 +131,7 @@ use common\components\PhotoService;
 										<li class="pull-right">
 											<a href="#" class="link-black text-sm"><i
 														class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app',
-														'Comments'); ?> (<?php echo(count($row['comments'])); ?>
+														'Comments'); ?> (<?php echo(count($comments)); ?>
 												)</a>
 										</li>
 										<li class="pull-right">

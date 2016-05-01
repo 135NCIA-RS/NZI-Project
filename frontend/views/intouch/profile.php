@@ -28,11 +28,10 @@ use yii\widgets\Pjax;
 				<!-- Profile Image -->
 				<div class="box box-primary">
 					<div class="box-body box-profile">
-						<?= Html::img($this->params['userProfilePhoto'],
+						<?= Html::img($userinfo->getImageUrl(),
 								['class' => 'profile-user-img img-responsive img-circle',
 								 'alt' => 'User profile image']) ?>
-						<h3 class="profile-username text-center"><?= $this->params['userInfo']['user_name'] . " " .
-						                                             $this->params['userInfo']['user_surname'] ?></h3>
+						<h3 class="profile-username text-center"><?= $userinfo->getFullName() ?></h3>
 						<p class="text-muted text-center"><?= Yii::t('app', 'InTouch User'); ?></p>
 						<ul class="list-group list-group-unbordered">
 							<li class="list-group-item">

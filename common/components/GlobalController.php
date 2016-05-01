@@ -18,7 +18,7 @@ abstract class GlobalController extends Controller
 	{
 		if (!\Yii::$app->user->isGuest)
 		{
-			$this->view->params['userData'] = $this->getUserData();
+			$this->getUserData();
 			$this->layout = '@app/views/layouts/logged';
 		}
 		else
@@ -32,28 +32,11 @@ abstract class GlobalController extends Controller
 	public function getUserData()
 	{
 		$id = Yii::$app->user->getId();
-
-		$photo = PhotoService::getProfilePhoto($id);
-		$this->view->params['userProfilePhoto'] = $photo;
-
-		$userinfo = array();
-		$userinfo['user_name'] = UserService::getName($id);
-		$userinfo['user_surname'] = UserService::getSurname($id);
-		if ($userinfo['user_name'] == false)
-		{
-			$userinfo['user_name'] = "Uzupełnij";
-		}
-		if ($userinfo['user_surname'] == false)
-		{
-			$userinfo['user_surname'] = "swoje dane";
-		}
-
-		$this->view->params['userInfo'] = $userinfo;
+		$user = UserService::getUserById($id);
+		$this->view->params['userInfo'] = $user;
 		////////////////////////////////////////////////////// request service
-
 		$notification = RequestService::getMyRequests($id);
-		$tablelength = count($notification);
 		$this->view->params['notification_data'] = $notification;
-		$this->view->params['notification_count'] = $tablelength;
+		$this->view->params['notification_count'] = count($notification);
 	}
 }

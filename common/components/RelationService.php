@@ -205,7 +205,7 @@ class RelationService
      * @param int $user1_id User's ID
      * @return int[] Array of User's ID
      */
-    public static function getFriendsList($user1_id, $includeBasicProfileData = false)
+    public static function getFriendsList($user1_id)
     {
         $arr  = [];
         $rel  = Relationship::find()
@@ -222,21 +222,13 @@ class RelationService
                 ->all();
         foreach ($rel as $var)
         {
-            $arr[] = $var['user2_id'];
+            $arr[] = UserService::getUserById($var->user2_id);
         }
         foreach ($rel2 as $var)
         {
-            $arr[] = $var['user1_id'];
+            $arr[] = UserService::getUserById($var->user1_id);
         }
-        if ($includeBasicProfileData)
-        {
-            $arr1 = [];
-            foreach ($arr as $user)
-            {
-                $arr1[] = UserService::createBasicUserInfoObj($user);
-            }
-            $arr = $arr1;
-        }
+
         return $arr;
     }
 

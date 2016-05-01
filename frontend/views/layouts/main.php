@@ -47,14 +47,13 @@ AppAsset::register($this);
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                    
-                                   <!-- <?php echo Html::img('@web/dist/img/guest.png', ['class' => "user-image"]) ?>-->
-                                    <i class="fa fa-sign-in"></i>
+                                   <i class="fa fa-sign-in"></i>
                                     <span class="hidden-xs"><?= Yii::t('app','Sign in') ?></span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
                                     <li class="user-header">
-                                        <?php echo Html::img('@web/dist/img/guest.png', ['class' => "img-circle"]) ?>
+                                        <?php echo Html::img(\common\components\PhotoService::getProfilePhoto(0), ['class' => "img-circle"]) ?>
                                         <p>
                                             <?= Yii::t('app',"You're not signed in.") ?>
                                         </p>

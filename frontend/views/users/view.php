@@ -14,6 +14,10 @@ use common\components\UserService;
 use common\components\PhotoService;
 
 /* @var $this yii\web\View */
+/* @var $user \common\components\IntouchUser */
+/* @var $posts \common\components\Post[] */
+/* @var $myUser \common\components\IntouchUser */
+$myUser = $this->params['userInfo'];
 ?>
 
 <section class="content">
@@ -24,9 +28,9 @@ use common\components\PhotoService;
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <?= Html::img($UserProfilePhoto,
+                    <?= Html::img($user->getImageUrl(),
                             ['class' => 'profile-user-img img-responsive img-circle', 'alt' => 'User profile image']) ?>
-                    <h3 class="profile-username text-center"><?= $name . " " . $surname ?></h3>
+                    <h3 class="profile-username text-center"><?= $user->getFullName() ?></h3>
 
                     <p class="text-muted text-center"><?= Yii::t('app', 'InTouch User'); ?></p>
 
@@ -60,7 +64,7 @@ JS;
                         }
                     </style>
                     <?php
-                    echo Html::beginForm(["users/view", 'uname' => $UserName], 'post', ['data-pjax' => '']);
+                    echo Html::beginForm(["users/view", 'uname' => $user->getUsername()], 'post', ['data-pjax' => '']);
 
                     if (!$UserFollowState)
                     {
@@ -80,7 +84,7 @@ JS;
 
                     if (is_bool($UserFriendshipState))
                     {
-                        echo Html::beginForm(["users/view", 'uname' => $UserName], 'post', ['data-pjax' => '']);
+                        echo Html::beginForm(["users/view", 'uname' => $user->getUsername()], 'post', ['data-pjax' => '']);
                         if (!$UserFriendshipState)
                         {
                             echo Html::submitButton(Yii::t('app', 'Send a friend request'), [
@@ -101,7 +105,7 @@ JS;
                     {
                         echo "<button class='btn btn-default btn-block btn-sm'>Friend Request Sent</button>";
                     }
-                    echo Html::a("Refresh", ["users/view", 'uname' => $UserName],
+                    echo Html::a("Refresh", ["users/view", 'uname' => $user->getUsername()],
                             ['class' => 'hidden', 'id' => 'refr']);
                     Pjax::end();
                     ?>
@@ -121,28 +125,28 @@ JS;
                     <strong><i class="fa fa-book margin-r-5"></i> <?= Yii::t('app', 'Education'); ?></strong>
 
                     <p class="text-muted">
-                        <?= $education ?>
+                        <?= $user->getEducation() ?>
                     </p>
 
                     <hr>
 
                     <strong><i class="fa fa-map-marker margin-r-5"></i> <?= Yii::t('app', 'Location'); ?></strong>
 
-                    <p class="text-muted"><?= $city ?></p>
+                    <p class="text-muted"><?= $user->getCity() ?></p>
 
                     <hr>
 
                     <strong><i class="fa fa-birthday-cake margin-r-5"></i> <?= Yii::t('app', 'Birthday'); ?></strong>
 
                     <p>
-                        <?= $birth ?>
+                        <?= $user->getBirthDate() ?>
                     </p>
 
                     <hr>
 
                     <strong><i class="fa fa-file-text-o margin-r-5"></i> <?= Yii::t('app', 'Miscellaneous'); ?></strong>
 
-                    <p><?= $about ?></p>
+                    <p><?= $user->getAbout() ?></p>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -164,7 +168,7 @@ JS;
                         ?>
 
                         <!-- Add post -->
-                        <?= Html::beginForm(["users/view", 'uname' => $UserName], 'post', ['data-pjax' => '']) ?>
+                        <?= Html::beginForm(["users/view", 'uname' => $user->getUsername()], 'post', ['data-pjax' => '']) ?>
                         <input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post"
                                name="inputText">
                         <input type="hidden" name="type" value="newpost">
@@ -178,19 +182,21 @@ JS;
                         <?php
                         foreach ($posts as $row)
                         {
-                            if ($row['post_visibility'] == "visible")
+                            $author = $row->getAuthor();
+                            $comments = $row->getComments();
+                            if ($row->checkVisibility(\common\components\EVisibility::visible()))
                             {
                                 ?>
                                 <div class="post">
                                     <div class="user-block">
-                                        <img class="img-circle img-bordered-sm" src="<?php echo $row['photo']; ?>"
+                                        <img class="img-circle img-bordered-sm" src="<?= $author->getImageUrl() ?>"
                                              alt="user image">
                                         <span class="username">
-                                            <a href="#"><?php echo($row['name'] . " " . $row['surname']); ?></a>
+                                            <a href="#"><?= $author->getFullName() ?></a>
 
-                                            <?= Html::beginForm(["users/view", 'uname' => $UserName], 'post',
+                                            <?= Html::beginForm(["users/view", 'uname' => $user->getUsername()], 'post',
                                                     ['data-pjax' => '']) ?>
-                                            <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
+                                            <input type="hidden" name="post_id" value="<?= $row->getId() ?>">
                                             <input class="" type="hidden" name="type" value="delete_post"
                                                    id="delete_post-form">
                                             <button style="..." type="submit" class="pull-right fa fa-times"></button>
@@ -200,7 +206,7 @@ JS;
 	                                        <a href="#" class="pull-right btn-box-tool"><i class="fa fa-wrench"></i></a>
                                         </span>
                                         <span class="description"><?php
-                                            if ($row['post_visibility'] == "visible")
+                                            if ($row->checkVisibility(\common\components\EVisibility::visible()))
                                             {
                                                 echo Yii::t('app', 'Post public');
                                             }
@@ -208,19 +214,17 @@ JS;
                                             {
                                                 echo Yii::t('app', 'Post hidden');
                                             }
-                                            ?> - <?php echo($row['post_date']); ?></span>
+                                            ?> - <?= $row->getDate() ?></span>
                                     </div>
                                     <!-- /.user-block -->
                                     <p>
                                         <?php
-                                        $attachments = $row['attachments'];
-                                        if ($row['post_type'] == "text")
+                                        $attachments = $row->getAttachments();
+                                        echo $row->getContent();
+
+                                        if ($row->checkPostType(\common\components\EPostType::gallery()))
                                         {
-                                            echo $row['post_text'];
-                                        }
-                                        else if ($row['post_type'] == "gallery")
-                                        {
-                                        echo $row['post_text'] . "<br>";
+                                        echo "<br>";
                                         ?>
                                     <div class="row margin-bottom">
                                         <div class="col-sm-6">
@@ -275,7 +279,7 @@ JS;
                                         <li class="pull-right">
                                             <a href="#" class="link-black text-sm"><i
                                                         class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app',
-                                                        'Comments'); ?> (<?php echo(count($row['comments'])); ?>)</a>
+                                                        'Comments'); ?> (<?= (count($comments)); ?>)</a>
                                         </li>
                                         <li class="pull-right">
                                             <a href="#" class="link-black text-sm"><i
@@ -283,12 +287,12 @@ JS;
                                                         'Report'); ?></a>
                                         </li>
                                     </ul>
-                                    <?= Html::beginForm(["users/view", 'uname' => $UserName], 'post',
+                                    <?= Html::beginForm(["users/view", 'uname' => $user->getUsername()], 'post',
                                             ['data-pjax' => '']) ?>
                                     <input class="form-control input-sm send-form-input" type="text"
                                            placeholder="<?= Yii::t('app', 'Type a comment'); ?>" name="inputText">
                                     <input type="hidden" name="type" value="newcomment">
-                                    <input type="hidden" name="post_id" value="<?= $row['post_id'] ?>">
+                                    <input type="hidden" name="post_id" value="<?= $row->getId() ?>">
                                     <button style="width:20%; margin-top:5px;" type="submit"
                                             class="btn btn-danger btn-block btn-sm hidden"></button>
                                     <?= Html::endForm() ?>
@@ -297,30 +301,31 @@ JS;
                                         </div>
                                         <!-- /.direct-chat-info -->
                                         <?php
-                                        foreach ($row['comments'] as $comment)
+                                        foreach ($comments as $comment)
                                         {
+                                            $commAuthor = $comment->getAuthor();
                                             ?>
                                             <div style="background-color: #EDF5F7; padding: 10px 10px 1px 10px; border-radius: 10px; margin-left: 30px; margin-bottom:5px;">
-                                                <img class="direct-chat-img" src="<?php echo $comment['photo']; ?>"
+                                                <img class="direct-chat-img" src="<?= $commAuthor->getImageUrl() ?>"
                                                      alt="message user image" style="margin-right: 10px;">
                                                 <!-- /.direct-chat-img -->
                                                 <p class="message">
                                                     <a href="#" class="name">
                                                         <small class="text-muted pull-right"><i
-                                                                    class="fa fa-clock-o"></i> <?php echo $comment['comment_date']; ?>
-                                                            <?= Html::beginForm(["users/view", 'uname' => $UserName], 'post',
+                                                                    class="fa fa-clock-o"></i> <?= $comment->getDate() ?>
+                                                            <?= Html::beginForm(["users/view", 'uname' => $user->getId()], 'post',
                                                                     ['data-pjax' => '']) ?>
                                                             <input type="hidden" name="comment_id"
-                                                                   value="<?= $comment['comment_id'] ?>">
+                                                                   value="<?= $comment->getId() ?>">
                                                             <input class="" type="hidden" name="type"
                                                                    value="delete_comment" id="delete_comment-form">
                                                             <button style="..." type="submit"
                                                                     class="fa fa-times"></button>
                                                             <?= Html::endForm() ?>
                                                         </small>
-                                                        <?php echo($comment['name'] . " " . $comment['surname']); ?><br>
+                                                        <?= $commAuthor->getFullName() ?><br>
                                                     </a>
-                                                    <?php echo $comment['comment_text']; ?>
+                                                    <?= $comment->getContent() ?>
                                                 </p>
                                             </div>
                                         <?php } ?>
