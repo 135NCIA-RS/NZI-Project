@@ -185,7 +185,23 @@ class IntouchController extends components\GlobalController
 						$like_form_score_elem = Yii::$app->request->post('score_elem');
 						$like_form_user_id = Yii::$app->request->post('user_id');
 						$score = new components\Score(EScoreType::like(),null, EScoreElem::$like_form_score_elem(), $like_form_post_id, new components\UserId($like_form_user_id));
-						ScoreService::addScore($score);
+						$existing_scores = ScoreService::getScoresByElem(EScoreElem::post(), $like_form_post_id);
+                                                $found = false;
+                                                $found_score_id;
+                                                foreach($existing_scores as $var)
+                                                {
+                                                    $user = $var->getPublisher();
+                                                    $userId = $user->getId();
+                                                    if((int)$like_form_user_id == $userId && (int)$like_form_post_id == $var->getElementId())
+                                                    {
+                                                        $found = true;
+                                                        $found_score_id = $var->getScoreId();
+                                                    }
+                                                }
+                                                if(!$found)
+                                                    ScoreService::addScore($score);
+                                                else
+                                                    ScoreService::revokeScore ($found_score_id);
 						break;
 					case 'report':
 						$rep_form_post_id = Yii::$app->request->post('post_id');
