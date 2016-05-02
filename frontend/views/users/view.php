@@ -272,13 +272,25 @@ JS;
                                         <li><a href="#" class="link-black text-sm"><i
                                                         class="fa fa-share margin-r-5"></i> <?= Yii::t('app',
                                                         'Share'); ?></a></li>
-                                        <li><a href="#" class="link-black text-sm"><i
-                                                        class="fa fa-thumbs-o-up margin-r-5"></i> <?= Yii::t('app',
-                                                        'Like'.
-                                                       " (" .
-                                                        $row->countScoresByType(\common\components\EScoreType::like()) .
-                                                        ")"); ?></a>
-                                        </li>
+                                        <li>
+                                                    <?php echo Html::beginForm(["users/view", 'uname' => $user->getUsername()], 'post', ['data-pjax' => '']) ?>
+                                                    <input type="hidden" name="post_id" value="<?= $row->getId() ?>">
+                                                    <input type="hidden" name="score_elem" value="post">
+                                                    <input type="hidden" name="user_id" value="<?= $myUser->getId() ?>">
+                                                    <input class="" type="hidden" name="type" value="like" id="like-form">
+                                                    <span class="link-black text-sm">
+                                                        <i class="fa fa-thumbs-o-up"></i>
+                                                        <input type="submit" class="fa fa-t humbs-o-up link-black text-sm"
+                                                               style="background: none; border: none;"
+                                                               value="<?=
+                                                               Yii::t('app', 'Like') .
+                                                               " (" .
+                                                               $row->countScoresByType(\common\components\EScoreType::like()) .
+                                                               ")"
+                                                               ?> ">
+                                                    </span>
+                                                    <?= Html::endForm() ?>
+                                                </li>
                                         <li class="pull-right">
                                             <a href="#" class="link-black text-sm"><i
                                                         class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app',
