@@ -64,14 +64,7 @@ class UserService
 	public static function existUser($user_id)
 	{
 		$user = User::findOne($user_id);
-		if ($user == null)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
+		return ($user != null);
 	}
 
 	/**
@@ -95,8 +88,9 @@ class UserService
 	 *
 	 * @return IntouchUser
 	 */
-	public static function getUserById($id)
+	public static function getUserById(UserId $uid)
 	{
+		$id = $uid->getId();
 		$u = User::findOne($id);
 		if (!is_null($u))
 		{

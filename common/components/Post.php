@@ -34,7 +34,7 @@ class Post
 	 *
 	 * @param $postId
 	 */
-	public function __construct($Id, $author, $content, \DateTime $Date, EVisibility $Visibility, EPostType $PostType, $Comments = [], $Attachments = [], $isEdited = false)
+	public function __construct($Id, UserId $author, $content, \DateTime $Date, EVisibility $Visibility, EPostType $PostType, $Comments = [], $Attachments = [], $isEdited = false)
 	{
 		$this->Id = $Id;
 		$this->Date = $Date;
@@ -76,7 +76,7 @@ class Post
 	 */
 	public function getAuthor()
 	{
-		return $this->author;
+		return $this->author->getUser();
 	}
 
 	public function getAllScores()

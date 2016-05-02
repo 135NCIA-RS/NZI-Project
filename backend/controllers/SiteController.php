@@ -115,7 +115,6 @@ class SiteController extends components\AdminGlobalController
 				switch (Yii::$app->request->post('action'))
 				{
 					case 'delete':
-						//die('dupa');
 						PostsService::deletePost(PostsService::getPostById(Yii::$app->request->post('post_id')));
 						ScoreService::revokeScoresByElemId(
 							Yii::$app->request->post('post_id'),

@@ -17,31 +17,25 @@ class RelationService
      * @param string $rel_type RelationType's const
      * @return boolean true if ok, false if not
      * @throws InvalidRelationException if relation does not exist (USE RelationType!)
-     * @throws InvalidUserException if user does not exist (one or both)
      */
-    public static function setRelation($user1_id, $user2_id, $rel_type)
+    public static function setRelation(UserId $user1_id, UserId $user2_id, $rel_type)
     {
         if (!RelationType::validate($rel_type))
         {
             throw new InvalidRelationException("Error. Something went wrong. Use RelationType class instead of value");
         }
 
-        if (!(UserService::existUser($user1_id) && UserService::existUser($user2_id)))
-        {
-            throw new InvalidUserException("User1 or User2 or both cannot be found");
-        }
-
         $rel1 = Relationship::find()
                 ->where([
-                    'user1_id'      => $user1_id,
-                    'user2_id'      => $user2_id,
+                    'user1_id'      => $user1_id->getId(),
+                    'user2_id'      => $user2_id->getId(),
                     'relation_type' => $rel_type,
                 ])
                 ->one();
         $rel2 = Relationship::find()
                 ->where([
-                    'user1_id'      => $user2_id,
-                    'user2_id'      => $user1_id,
+                    'user1_id'      => $user2_id->getId(),
+                    'user2_id'      => $user1_id->getId(),
                     'relation_type' => $rel_type,
                 ])
                 ->one();
@@ -91,24 +85,18 @@ class RelationService
      * @param int $user1_id User1's ID
      * @param int $user2_id User2's ID
      * @return boolean True if ok, else false
-     * @throws InvalidUserException if User1 or User2 or both of them does not exist
      */
-    public static function isFriend($user1_id, $user2_id)
+    public static function isFriend(UserId $user1_id, UserId $user2_id)
     {
-        if (!(UserService::existUser($user1_id) && UserService::existUser($user2_id)))
-        {
-            throw new InvalidUserException("User1 or User2 or both cannot be found");
-        }
-
         $rel = Relationship::find()
                 ->where([
-                    'user1_id'      => $user1_id,
-                    'user2_id'      => $user2_id,
+                    'user1_id'      => $user1_id->getId(),
+                    'user2_id'      => $user2_id->getId(),
                     'relation_type' => RelationType::Friend,
                 ])
                 ->orWhere([
-                    'user1_id'      => $user2_id,
-                    'user2_id'      => $user1_id,
+                    'user1_id'      => $user2_id->getId(),
+                    'user2_id'      => $user1_id->getId(),
                     'relation_type' => RelationType::Friend,
                 ])
                 ->one();
@@ -129,17 +117,12 @@ class RelationService
      * @return boolean True if ok, else false
      * @throws InvalidUserException if User1 or User2 or both of them does not exist
      */
-    public static function isFollower($user1_id, $user2_id)
+    public static function isFollower(UserId $user1_id, UserId $user2_id)
     {
-        if (!(UserService::existUser($user1_id) && UserService::existUser($user2_id)))
-        {
-            throw new InvalidUserException("User1 or User2 or both cannot be found");
-        }
-
         $rel = Relationship::find()
                 ->where([
-                    'user1_id'      => $user1_id,
-                    'user2_id'      => $user2_id,
+                    'user1_id'      => $user1_id->getId(),
+                    'user2_id'      => $user2_id->getId(),
                     'relation_type' => RelationType::Follower,
                 ])
                 ->one();
@@ -158,19 +141,13 @@ class RelationService
      * @param int $user1_id User1's ID
      * @param int $user2_id User2's ID
      * @return boolean True if ok, else false
-     * @throws InvalidUserException if User1 or User2 or both of them does not exist
      */
-    public static function isBlocked($user1_id, $user2_id)
+    public static function isBlocked(UserId $user1_id, UserId $user2_id)
     {
-        if (!(UserService::existUser($user1_id) && UserService::existUser($user2_id)))
-        {
-            throw new InvalidUserException("User1 or User2 or both cannot be found");
-        }
-
         $rel = Relationship::find()
                 ->where([
-                    'user1_id'      => $user1_id,
-                    'user2_id'      => $user2_id,
+                    'user1_id'      => $user1_id->getId(),
+                    'user2_id'      => $user2_id->getId(),
                     'relation_type' => RelationType::Blocked,
                 ])
                 ->one();
@@ -191,7 +168,7 @@ class RelationService
      * @param int $user2_id User2's ID
      * @return array Array of Relations
      */
-    public static function getRelations($user1_id, $user2_id)
+    public static function getRelations(UserId $user1_id, UserId $user2_id)
     {
         $ret                         = [];
         $ret[RelationType::Blocked]  = self::isBlocked($user1_id, $user2_id);
@@ -205,8 +182,9 @@ class RelationService
      * @param int $user1_id User's ID
      * @return int[] Array of User's ID
      */
-    public static function getFriendsList($user1_id)
+    public static function getFriendsList(UserId $user1id)
     {
+        $user1_id = $user1id->getId();
         $arr  = [];
         $rel  = Relationship::find()
                 ->where([
@@ -222,11 +200,13 @@ class RelationService
                 ->all();
         foreach ($rel as $var)
         {
-            $arr[] = UserService::getUserById($var->user2_id);
+	        $u2id = new UserId($var->user2_id);
+            $arr[] = UserService::getUserById($u2id);
         }
         foreach ($rel2 as $var)
         {
-            $arr[] = UserService::getUserById($var->user1_id);
+	        $u1id = new UserId($var->user1_id);
+            $arr[] = UserService::getUserById($u1id);
         }
 
         return $arr;
@@ -237,8 +217,9 @@ class RelationService
      * @param int $user1_id User's ID
      * @return int[] Array of User IDs
      */
-    public static function getUsersWhoFollowMe($user1_id)
+    public static function getUsersWhoFollowMe(UserId $user1id)
     {
+	    $user1_id = $user1id->getId();
         $arr = [];
         $rel = Relationship::find()
                 ->where([
@@ -258,8 +239,9 @@ class RelationService
      * @param type $user1_id
      * @return array Array of User IDs
      */
-    public static function getUsersWhoIFollow($user1_id)
+    public static function getUsersWhoIFollow(UserId $user1id)
     {
+	    $user1_id = $user1id->getId();
         $arr = [];
         $rel = Relationship::find()
                 ->where([
@@ -279,8 +261,9 @@ class RelationService
      * @param int $user1_id User1's ID
      * @return array
      */
-    public static function getUsersBlockedByUser($user1_id)
+    public static function getUsersBlockedByUser(UserId $user1id)
     {
+	    $user1_id = $user1id->getId();
         $arr = [];
         $rel = Relationship::find()
                 ->where([
@@ -295,21 +278,16 @@ class RelationService
         return $arr;
     }
 
-    public static function removeRelation($user1_id, $user2_id, $rel_type)
+    public static function removeRelation(UserId $user1_id, UserId $user2_id, $rel_type)
     {
         if (!RelationType::validate($rel_type))
         {
             throw new InvalidRelationException("Error. Something went wrong. Use RelationType class instead of value");
         }
 
-        if (!(UserService::existUser($user1_id) && UserService::existUser($user2_id)))
-        {
-            throw new InvalidUserException("User1 or User2 or both cannot be found");
-        }
-
         $dt = Relationship::find()->where([
-                    'user1_id'      => $user1_id,
-                    'user2_id'      => $user2_id,
+                    'user1_id'      => $user1_id->getId(),
+                    'user2_id'      => $user2_id->getId(),
                     'relation_type' => $rel_type
                 ])->one();
         $dt->delete();
@@ -317,8 +295,8 @@ class RelationService
         if (RelationMode::getMode($rel_type) == RelationMode::TwoWay)
         {
             $dt1 = $dt  = Relationship::find()->where([
-                        'user1_id'      => $user2_id,
-                        'user2_id'      => $user1_id,
+                        'user1_id'      => $user2_id->getId(),
+                        'user2_id'      => $user1_id->getId(),
                         'relation_type' => $rel_type
                     ])->one();
             $dt1->delete();
@@ -328,11 +306,11 @@ class RelationService
     /**
      * Do not use that function (Only for setRelation purposes)
      */
-    private static function saveRelation($user1_id, $user2_id, $rel_type)
+    private static function saveRelation(UserId $user1_id, UserId $user2_id, $rel_type)
     {
         $relation                = new Relationship();
-        $relation->user1_id      = $user1_id;
-        $relation->user2_id      = $user2_id;
+        $relation->user1_id      = $user1_id->getId();
+        $relation->user2_id      = $user2_id->getId();
         $relation->relation_type = $rel_type;
         if ($relation->save())
         {

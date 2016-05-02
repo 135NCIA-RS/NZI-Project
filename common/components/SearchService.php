@@ -25,7 +25,8 @@ class SearchService
 
 	private static function createUserObjByID($id)
 	{
-		$u = UserService::getUserById($id);
+		$uid = new UserId($id);
+		$u = $uid->getUser();
 		$photo = $u->getImageUrl();
 		$uname = $u->getUsername(); //already checked if ID exists
 		$name = $u->getFullName();

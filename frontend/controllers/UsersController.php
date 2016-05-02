@@ -63,11 +63,14 @@ class UsersController extends components\GlobalController
 	{
 		/////////////////////////--- Profile Infos ---//////////////////////////
 		$id = UserService::getUserIdByName($uname);
+
 		if ($id === false)
 		{
 			throw new \yii\web\NotFoundHttpException("User cannot be found");
 		}
+		$uid = new components\UserId($id);
 		$myId = Yii::$app->user->getId();
+		$myUid = new components\UserId($myId);
 		if ($id == $myId)
 		{
 			return $this->redirect('/profile');
@@ -79,21 +82,21 @@ class UsersController extends components\GlobalController
 				$request = Yii::$app->request;
 				if (!is_null($request->post('follow-btn')) && Yii::$app->user->can('relations-follow'))
 				{
-					RelationService::setRelation($myId, $id, RelationType::Follower);
+					RelationService::setRelation($myUid, $uid, RelationType::Follower);
 				}
 				if (!is_null($request->post('friend-btn')) && Yii::$app->user->can('relations-friend'))
 				{
-					RequestService::createRequest($myId, $id, RequestType::FriendRequest,
+					RequestService::createRequest($myUid, $uid, RequestType::FriendRequest,
 						date('Y-m-d H:i:s')); //to tutaj
 				}
 
 				if (!is_null($request->post('unfriend-btn')) && Yii::$app->user->can('relations-friend'))
 				{
-					RelationService::removeRelation($myId, $id, RelationType::Friend);
+					RelationService::removeRelation($myUid, $uid, RelationType::Friend);
 				}
 				if (!is_null($request->post('unfollow-btn')) && Yii::$app->user->can('relations-follow'))
 				{
-					RelationService::removeRelation($myId, $id, RelationType::Follower);
+					RelationService::removeRelation($myUid, $uid, RelationType::Follower);
 				}
 
 				if (!is_null(Yii::$app->request->post('type')))
@@ -101,8 +104,7 @@ class UsersController extends components\GlobalController
 					switch (Yii::$app->request->post('type'))
 					{
 						case 'newpost':
-							//die('dupa');
-							PostsService::createPost($id, Yii::$app->request->post('inputText'));
+							PostsService::createPost($uid, Yii::$app->request->post('inputText'));
 							break;
 
 						case 'newcomment':
@@ -127,25 +129,25 @@ class UsersController extends components\GlobalController
 			}
 		}
 
-		$user = UserService::getUserById($id);
-		$followers = count(RelationService::getUsersWhoFollowMe($id));
-		$following = count(RelationService::getUsersWhoIFollow($id));
-		$friends = count(RelationService::getFriendsList($id));
+		$user = $uid->getUser();
+		$followers = count(RelationService::getUsersWhoFollowMe($uid));
+		$following = count(RelationService::getUsersWhoIFollow($uid));
+		$friends = count(RelationService::getFriendsList($uid));
 		/////$$$$$ FORMS $$$$$//////////////////////////////////////////////////
 		////////////////////////////--- Other stuff ---/////////////////////////
-		$UserRelations = RelationService::getRelations($myId, $id);
+		$UserRelations = RelationService::getRelations($myUid, $uid);
 		$isFriend = $UserRelations[RelationType::Friend];
 		if (!$isFriend)
 		{
-			if (RequestService::isRequestBetween($id, $myId, RequestType::FriendRequest))
+			if (RequestService::isRequestBetween($uid, $myUid, RequestType::FriendRequest))
 			{
 				$isFriend = "Friend Request Sent";
 			}
 		}
 		$IFollow = $UserRelations[RelationType::Follower];
 		//***Do not add anything new below this line (except for the render)****
-		$this->getUserData();
-		$posts = PostsService::getUserPosts($user);
+		//$this->getUserData();
+		$posts = PostsService::getUserPosts($uid);
 		$shared = [
 			'user' => $user,
 			'followers' => $followers,

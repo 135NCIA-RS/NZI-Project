@@ -27,7 +27,8 @@ class ScoreService
 				EScoreType::$scoretype(),
 				$row->score_id,
 				$elem,
-				$id
+				$id,
+				new UserId($row->user_id)
 			);
 			$refined[] = $score;
 		}
@@ -36,16 +37,12 @@ class ScoreService
 
 	/*
 	 * Adds a new score to the database.
-	 * $score_type : type of the score e.g. like, dislike (type hinted at EScoreType
-	 * $user_id : id of who performed the score action
-	 * $score_elem_id : id of the element towards which the score is targeted at
-	 * $score_elem_type : type of the element towards which the score is targeted at e.g. post, post_comment, type hinted at EScoreElem
 	 */
-	public static function addScore(Score $Score, $user_id)
+	public static function addScore(Score $Score)
 	{
 		$score = new Scores();
 		$score->score_type = (int)$Score->getScoreType()->getValue();
-		$score->user_id = $user_id;
+		$score->user_id = $Score->getPublisher()->getId();
 		$score->element_id = $Score->getElementId();
 		$score->element_type = (int)$Score->getElementType()->getValue();
 		return $score->save();
@@ -78,12 +75,12 @@ class ScoreService
 		if ($sort)
 		{
 			$sql =
-				"SELECT COUNT(*) AS `count`, `element_id`, `element_type` FROM `scores` GROUP BY `element_id` ORDER BY 1 DESC;";
+				"SELECT COUNT(*) AS `count`, `element_id`, `element_type`, `user_id` FROM `scores` GROUP BY `element_id` ORDER BY 1 DESC;";
 			$ptr = Scores::findBySql($sql)->all();
 		}
 		else
 		{
-			$ptr = Scores::find()->select(['element_id', 'element_type'])
+			$ptr = Scores::find()->select(['element_id', 'element_type', 'user_id'])
 				->where(['score_type' => (int)$score_type->getValue()])->distinct()->all();
 		}
 		$ptr2 = [];
@@ -91,7 +88,13 @@ class ScoreService
 		{
 			$elemType = $row->element_type;
 			$elemt = EScoreElem::search($elemType);
-			$score = new Score($score_type, $row->score_id, EScoreElem::$elemt(), $row->element_id);
+			$score = new Score(
+				$score_type,
+				$row->score_id,
+				EScoreElem::$elemt(),
+				$row->element_id,
+				new UserId($row->user_id)
+			);
 			$ptr2[] = $score;
 		}
 		return $ptr2;

@@ -59,10 +59,11 @@ abstract class AdminGlobalController extends Controller
 	public function getUserData()
 	{
 		$id = Yii::$app->user->getId();
-		$user = UserService::getUserById($id);
+		$uid = new UserId($id);
+		$user = UserService::getUserById($uid);
 		$this->view->params['userInfo'] = $user;
 		////////////////////////////////////////////////////// request service
-		$notification = RequestService::getMyRequests($id);
+		$notification = RequestService::getMyRequests($uid);
 		$this->view->params['notification_data'] = $notification;
 		$this->view->params['notification_count'] = count($notification);
 	}

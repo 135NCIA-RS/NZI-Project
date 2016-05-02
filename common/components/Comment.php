@@ -19,7 +19,7 @@ class Comment
 	private $Author;
 	private $isEdited;
 
-	public function __construct($Id, \DateTime $Date, IntouchUser $Author, $Content, $isEdited = false)
+	public function __construct($Id, \DateTime $Date, UserId $Author, $Content, $isEdited = false)
 	{
 		$this->Content = $Content;
 		$this->Id = $Id;
@@ -68,6 +68,6 @@ class Comment
 	
 	public function getAuthor()
 	{
-		return $this->Author;
+		return $this->Author->getUser();
 	}
 }

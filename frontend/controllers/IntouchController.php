@@ -67,7 +67,8 @@ class IntouchController extends components\GlobalController
 	public function actionIndex()
 	{
 		$id = Yii::$app->user->getId();
-		$loggedUser = UserService::getUserById($id);
+		$uid = new components\UserId($id);
+		$loggedUser = UserService::getUserById($uid);
 		if (Yii::$app->request->isPost || Yii::$app->request->isPjax)
 		{
 			if (!is_null(Yii::$app->request->post('type')))
@@ -89,7 +90,7 @@ class IntouchController extends components\GlobalController
 				}
 			}
 		}
-		$posts = PostsService::getFriendsPosts($id);
+		$posts = PostsService::getFriendsPosts($uid);
 		$args = [
 			'posts' => $posts,
 		    'loggedUser' => $loggedUser,
@@ -100,7 +101,8 @@ class IntouchController extends components\GlobalController
 	public function actionLoadMorePosts($last = 1)
 	{
 		/* @var $data components\Post[] */
-		$data = PostsService::getFriendsPosts(Yii::$app->user->id, $last);
+		$uid = new components\UserId(Yii::$app->user->id);
+		$data = PostsService::getFriendsPosts($uid, $last);
 		$lastId = $data[4]->getId();
 		$id = Yii::$app->user->id;
 		$html = $this->renderPartial('postsLoad', ['UserName' => $id, 'posts' => $data]);
@@ -133,7 +135,8 @@ class IntouchController extends components\GlobalController
 	public function actionProfile()
 	{
 		$id = Yii::$app->user->getId();
-		$lUser = UserService::getUserById($id);
+		$uid = new components\UserId($id);
+		$lUser = $uid->getUser();
 		if (Yii::$app->request->isPost || Yii::$app->request->isPjax)
 		{
 			if (!is_null(Yii::$app->request->post('type')))
@@ -171,7 +174,7 @@ class IntouchController extends components\GlobalController
 						Yii::$app->session->setFlash('success', 'Profile\'s been succesfuly updated');
 						break;
 					case 'newpost':
-						PostsService::createPost($id, Yii::$app->request->post('inputText'));
+						PostsService::createPost($uid, Yii::$app->request->post('inputText'));
 						break;
 					case 'newcomment':
 						PostsService::createComment(PostsService::getPostById(Yii::$app->request->post('post_id')),
@@ -181,15 +184,15 @@ class IntouchController extends components\GlobalController
 						$like_form_post_id = Yii::$app->request->post('post_id');
 						$like_form_score_elem = Yii::$app->request->post('score_elem');
 						$like_form_user_id = Yii::$app->request->post('user_id');
-						$score = new components\Score(EScoreType::like(),null, EScoreElem::$like_form_score_elem(), $like_form_post_id);
-						ScoreService::addScore($score, $like_form_user_id);
+						$score = new components\Score(EScoreType::like(),null, EScoreElem::$like_form_score_elem(), $like_form_post_id, new components\UserId($like_form_user_id));
+						ScoreService::addScore($score);
 						break;
 					case 'report':
 						$rep_form_post_id = Yii::$app->request->post('post_id');
 						$rep_form_score_elem = Yii::$app->request->post('score_elem');
 						$rep_form_user_id = Yii::$app->request->post('user_id');
-						$score = new components\Score(EScoreType::like(),null, EScoreElem::$rep_form_score_elem(), $rep_form_post_id);
-						ScoreService::addScore($score, $rep_form_user_id);
+						$score = new components\Score(EScoreType::like(),null, EScoreElem::$rep_form_score_elem(), $rep_form_post_id, new components\UserId($rep_form_user_id));
+						ScoreService::addScore($score);
 						break;
 					case 'delete_post':
 						$rep_post_id = Yii::$app->request->post('post_id');
@@ -205,17 +208,16 @@ class IntouchController extends components\GlobalController
 			}
 		}
 
-		$userinfo = UserService::getUserById($id);
-		$posts = PostsService::getUserPosts($userinfo);
+		$posts = PostsService::getUserPosts($uid);
 
-		$followers = count(RelationService::getUsersWhoFollowMe($id));
-		$following = count(RelationService::getUsersWhoIFollow($id));
-		$friends = count(RelationService::getFriendsList($id));
+		$followers = count(RelationService::getUsersWhoFollowMe($uid));
+		$following = count(RelationService::getUsersWhoIFollow($uid));
+		$friends = count(RelationService::getFriendsList($uid));
 
 		
 		//////////////////////////////////////////////////////////////////////////
 		return $this->render('profile', [
-			'userinfo' => $userinfo,
+			'userinfo' => $uid->getUser(),
 			'posts' => $posts,
 			'followers' => $followers,
 			'following' => $following,
@@ -227,8 +229,9 @@ class IntouchController extends components\GlobalController
 	public function actionAboutedit()
 	{
 		$id = Yii::$app->user->getId();
+		$uid = new components\UserId($id);
 		////////////////////////////
-		$loggedUser = UserService::getUserById($id);
+		$loggedUser = $uid->getUser();
 		if (Yii::$app->request->isPost)
 		{
 			$loggedUser->setCity(Yii::$app->request->post('inputLocation'));
@@ -254,7 +257,7 @@ class IntouchController extends components\GlobalController
 
 			return $this->redirect('/profile');
 		}
-		$this->getUserData();
+		$this->getUserData(); // refresh
 		return $this->render('aboutEdit', [
 		]);
 	}
@@ -303,8 +306,9 @@ class IntouchController extends components\GlobalController
 	public function actionMyfriends()
 	{
 		$id = Yii::$app->user->getId();
+		$uid = new components\UserId($id);
 		///////
-		$friends = RelationService::getFriendsList($id);
+		$friends = RelationService::getFriendsList($uid);
 		$falone =
 			new components\Image("forever_alone.png", new components\ImageTypes(components\ImageTypes::InTouchImage),
 				new components\ImgLocations\ImgIntouch());

@@ -8,6 +8,7 @@ use common\components\exceptions\InvalidUserException;
 use common\components\exceptions\InvalidEnumKeyException;
 use common\components\exceptions\InvalidLocationException;
 use MyCLabs\Enum\Enum;
+use yii\web\User;
 
 class AccessService
 {
@@ -57,7 +58,9 @@ class AccessService
 			return true;
 		}
 
-		return RelationService::isFriend($user, $receiver_id);
+		$uid = new UserId($user);
+		$ruid = new UserId($receiver_id);
+		return RelationService::isFriend($uid, $ruid);
 	}
 
 	private static function __ownerCheck_typePostComment($post_id)
@@ -75,7 +78,9 @@ class AccessService
 			}
 			else
 			{
-				return RelationService::isFriend($post['user_id'], $user);
+				$puid = new UserId($post['user_id']);
+				$uid = new UserId($user);
+				return RelationService::isFriend($puid, $uid);
 			}
 		}
 		else

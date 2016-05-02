@@ -19,13 +19,15 @@ class Score
     private $element_type;
     private $score_id;
     private $score_type;
+    private $userId;
 
-    public function __construct(EScoreType $scoreType, $scoreId, EScoreElem $elemType, $elemId)
+    public function __construct(EScoreType $scoreType, $scoreId, EScoreElem $elemType, $elemId, UserId $userId)
     {
         $this->element_id = $elemId;
         $this->element_type = $elemType;
         $this->score_id = $scoreId;
         $this->score_type = $scoreType;
+        $this->userId = $userId;
     }
 
     public function getElementId()
@@ -46,5 +48,10 @@ class Score
     public function getScoreType()
     {
         return $this->score_type;
+    }
+
+    public function getPublisher()
+    {
+        return $this->userId;
     }
 }

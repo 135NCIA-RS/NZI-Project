@@ -20,26 +20,29 @@ class PostsService
 	/*
 	 * returns Friends Posts ordered by date
 	 */
-	public static function getFriendsPosts($id, $lastid = null)
+	public static function getFriendsPosts(UserId $uid, $lastid = null)
 	{
 		$arr = [];
-		$friendList = RelationService::getFriendsList($id);
-		$friendList[] = UserService::getUserById($id);
+		$friendList = RelationService::getFriendsList($uid);
+		$friendList[] = UserService::getUserById($uid);
 
 		$arr = self::getPostsOrderById($friendList, $lastid);
 
 		return $arr;
 	}
 
-	/*
+	/**
 	 * used to sort posts by date
+	 * @param $friendsIds UserId[]
+	 * @param $startId
+	 *
+	 * @return array
 	 */
 	private static function getPostsOrderById($friendsIds, $startId)
 	{
 		$fIds = [];
 		foreach ($friendsIds as $fr)
 		{
-			/* @var $fr IntouchUser */
 			$fIds[] = $fr->getId();
 		}
 		$data = Post::find()->where(['in', 'user_id', $fIds]);
@@ -62,7 +65,7 @@ class PostsService
 		return $posts;
 	}
 
-	public static function getUserPosts(IntouchUser $user)
+	public static function getUserPosts(UserId $user)
 	{
 		$id = $user->getId();
 		$data =
@@ -84,7 +87,7 @@ class PostsService
 			$comms = [];
 			foreach ($comments as $comment)
 			{
-				$author = UserService::getUserById($comment->author_id);
+				$author = new UserId($comment->author_id);
 				$date = new \DateTime($comment->comment_date);
 				$comm = new \common\components\Comment($comment->comment_id, $date, $author, $comment->comment_text);
 				$comms[] = $comm;
@@ -93,7 +96,7 @@ class PostsService
 			$date = new \DateTime($p->post_date);
 			$vis = $p->post_visibility;
 			$visibility = EVisibility::$vis();
-			$author = UserService::getUserById($p->owner_id);
+			$author = new UserId($p->owner_id);
 			$pt = $p->post_type;
 			$ptype = EPostType::$pt();
 			$post = new \common\components\Post($postID, $author, $p->post_text, $date, $visibility, $ptype, $comms,
@@ -106,9 +109,11 @@ class PostsService
 		}
 	}
 
-	public static function createPost($receiver_id, $text)
+	public static function createPost(UserId $receiverId, $text)
 	{
 		$author_id = Yii::$app->user->getId();
+		$receiver_id = $receiverId->getId();
+
 		try
 		{
 			if (!AccessService::hasAccess($receiver_id, ObjectCheckType::Post))
@@ -208,7 +213,7 @@ class PostsService
 		$com = new \common\components\Comment(
 			$c->comment_id,
 			new \DateTime($c->comment_date),
-			UserService::getUserById($c->author_id),
+			new UserId($c->author_id),
 			$c->comment_text
 		);
 		return $com;
