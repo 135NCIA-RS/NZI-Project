@@ -37,6 +37,7 @@ $userInfo = $this->params['userInfo'];
 					foreach ($comments as $row)
 					{
 						$author = $row->getAuthor();
+
 						?>
 						<div class="post">
 							<div class="user-block">

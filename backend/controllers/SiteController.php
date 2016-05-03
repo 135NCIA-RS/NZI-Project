@@ -21,6 +21,7 @@ use common\components\UserService;
 use common\components\ScoreService;
 use common\components\ScoreTypeEnum;
 use common\components\ScoreElemEnum;
+use yii\data\Pagination;
 
 /**
  * Site controller
@@ -133,7 +134,10 @@ class SiteController extends components\AdminGlobalController
 		}
 
 		$data = ScoreService::getElementsByScoreType(components\EScoreType::report());
+		//$countQuery = clone $data;
 		$table = [];
+		//$pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize'=>30]);
+
 		foreach ($data as $var)
 		{
 			/* @var $var components\Score*/
@@ -144,6 +148,7 @@ class SiteController extends components\AdminGlobalController
 		}
 		return $this->render('report', [
 			'posts' => $table,
+		   //'pagination' => $pagination,
 		]);
 	}
 
@@ -176,6 +181,8 @@ class SiteController extends components\AdminGlobalController
 
 		$data = ScoreService::getElementsByScoreType(components\EScoreType::report());
 		$table = [];
+		//die(var_dump($data));
+		//$pagination = new Pagination(['totalCount' => count($data), 'pageSize'=>30]);
 		foreach ($data as $var)
 		{
 			/* @var $var components\Score*/

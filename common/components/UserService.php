@@ -92,6 +92,7 @@ class UserService
 	{
 		$id = $uid->getId();
 		$u = User::findOne($id);
+
 		if (!is_null($u))
 		{
 			$details = UserInfo::findOne($id);
