@@ -131,11 +131,12 @@ $userInfo = $this->params['userInfo'];
 					<!-- /.post -->
 				</div>
                 <?php
-//                echo \yii\widgets\LinkPager::widget([
-//                'pagination' => $pagination,
-//                ]);
+                echo \yii\widgets\LinkPager::widget([
+                        'pagination' => $pagination,
+                ]);
                 ?>
 			</div>
+
 			<!-- /.tab-content -->
 		</div>
 		<!-- /.nav-tabs-custom -->

@@ -136,7 +136,6 @@ class SiteController extends components\AdminGlobalController
 		$data = ScoreService::getElementsByScoreType(components\EScoreType::report());
 		//$countQuery = clone $data;
 		$table = [];
-		//$pagination = new Pagination(['totalCount' => $countQuery->count(), 'pageSize'=>30]);
 
 		foreach ($data as $var)
 		{
@@ -146,9 +145,12 @@ class SiteController extends components\AdminGlobalController
 				$table[] = PostsService::getPostById($var->getElementId());
 			}
 		}
+		$pagination = new Pagination(['totalCount' => count($table), 'pageSize'=>1]);
+
 		return $this->render('report', [
 			'posts' => $table,
-		   //'pagination' => $pagination,
+		    'pagination'=>$pagination,
+
 		]);
 	}
 
