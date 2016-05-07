@@ -37,6 +37,28 @@ class PhotoService // v.1.2
 			return $img->getImage();
 		}
 	}
+        
+        /*
+         * Gets the post attachment photo by the filename from the Photo table in the DB
+         * Takes the filename as an argument
+         */
+        public static function getPostAttachmentPhoto($filename)
+	{
+		$data = Photo::find()
+			->where(['filename' => $filename])
+			->andWhere(['type' => 'postPhoto'])
+			->one();
+		if (!is_null($data))
+		{
+			$imgLocClass = "common\\components\\ImgLocations\\" . $data['image_loc'];
+			$img = new Image($data['filename'], ImageTypes::PostPhoto(), new $imgLocClass());
+			return $img->getImage();
+		}
+		else
+		{
+			return null;
+		}
+	}
 
 	/**
 	 * Sets Profile photo
@@ -122,6 +144,35 @@ class PhotoService // v.1.2
 			return false;
 		}
 	}
+        
+        /*
+         * Adds photos attached to the post.
+         * Takes only the data as a parameter.
+         * Returns the name of the photo
+         */
+        public static function addPostAttachmentPhoto($data, $post_id)
+        {
+		$photo = new Photo();
+                $photo->user_id = 0;
+
+		$genFileName = Yii::$app->security->generateRandomString(20);
+		$img = new Image($genFileName, ImageTypes::PostPhoto(), new ImgMediaLoc(), $data);
+		$img->save();
+
+		$photo->filename = $genFileName;
+		$photo->type = "postPhoto";
+                
+                PostsService::addPostAttachmentPhoto($post_id, $genFileName);
+                
+		if ($photo->save())
+		{
+			return $genFileName;
+		}
+		else
+		{
+			return false;
+		}
+        }
 
 	/**
 	 * Returns User's Gallery Photos

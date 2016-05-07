@@ -197,7 +197,9 @@ class IntouchController extends components\GlobalController
 						Yii::$app->session->setFlash('success', 'Profile\'s been succesfuly updated');
 						break;
 					case 'newpost':
-						PostsService::createPost($uid, Yii::$app->request->post('inputText'));
+                                                $plik = $_FILES['kawaiiPicture']['tmp_name'];
+						$post_id = PostsService::createPost($uid, Yii::$app->request->post('inputText'));
+                                                PhotoService::addPostAttachmentPhoto($plik, $post_id);
 						break;
 					case 'newcomment':
 						PostsService::createComment(PostsService::getPostById(Yii::$app->request->post('post_id')),

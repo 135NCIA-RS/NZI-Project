@@ -13,6 +13,7 @@ use app\models\Post;
 use app\models\PostAttachment;
 use app\models\Comment;
 use common\components\RelationService;
+use common\components\PostAttachment as PostAtt;
 
 
 class PostsService
@@ -77,6 +78,21 @@ class PostsService
 		}
 		return $posts;
 	}
+        
+        public static function getPostAttachmentPhoto($post_id)
+        {
+            $data = PostAttachment::find()
+                    ->where(['post_id' => $post_id])
+                    ->one();
+            if(!is_null($data))
+            {
+                return $data->file;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
 	public static function getPostById($postID)
 	{
@@ -92,7 +108,8 @@ class PostsService
 				$comm = new \common\components\Comment($comment->comment_id, $date, $author, $comment->comment_text);
 				$comms[] = $comm;
 			}
-			$attachments = []; //TODO
+                        $attachment = new PostAtt($postID);
+			$attachments = ($attachment->getFile() == null) ? null : $attachment;
 			$date = new \DateTime($p->post_date);
 			$vis = $p->post_visibility;
 			$visibility = EVisibility::$vis();
@@ -134,8 +151,23 @@ class PostsService
 		$post->post_date = date('Y-m-d H:i:s');
 		$post->post_type = EPostType::text;
 		$post->post_visibility = "visible";
-		return $post->save();
+                if($post->save())
+                    return $post->post_id;
+                else 
+                    return false;
 	}
+        
+        /*
+         * Adds the post attachment photo to the database
+         * Takes post_id and filename as arguments
+         */
+        public static function addPostAttachmentPhoto($post_id, $file)
+        {
+            $att = new PostAttachment();
+            $att->post_id = $post_id;
+            $att->file = $file;
+            return $att->save();
+        }
 
 	/**
 	 * @param \common\components\Post $post

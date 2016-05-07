@@ -21,7 +21,6 @@ use yii\widgets\Pjax;
 /* @var $loggedUser \common\components\IntouchUser */
 
 ?>
-	
 	<section class="content">
 		<div class="row">
 			<div class="col-md-3">
@@ -102,6 +101,7 @@ use yii\widgets\Pjax;
 							<input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post"
 							       name="inputText">
 							<input type="hidden" name="type" value="newpost">
+							<input type="file" name="kawaiiPicture">
 							<button style="width:20%; margin-top:5px;" type="submit"
 							        class="btn btn-danger pull-right btn-primary btn-sm"><?= Yii::t('app',
 										'Publish'); ?></button>
@@ -145,45 +145,18 @@ use yii\widgets\Pjax;
 									<!-- /.user-block -->
 									<p>
 										<?php
-										$attachments = $row->getAttachments();
+										$attachment = $row->getAttachments();
+                                                                                /* @var $attachment common\components\PostAttachment */
 										echo $row->getContent();
-										if ($row->checkPostType(\common\components\EPostType::gallery()))
+										if ($attachment != null)
 										{
 										echo "<br>";
 										?>
 									<div class="row margin-bottom">
 										<div class="col-sm-6">
 											<img class="img-responsive"
-											     src="../../dist/content/attachments/<?php echo $attachments[0]['file']; ?>"
+											     src="<?= $attachment->getFile() ?>"
 											     alt="Photo">
-										</div>
-										<!-- /.col -->
-										<div class="col-sm-6">
-											<div class="row">
-												<div class="col-sm-6">
-													<img class="img-responsive"
-													     src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>"
-													     alt="Photo">
-													<br>
-													<img class="img-responsive"
-													     src="../../dist/content/attachments/<?php echo $attachments[2]['file']; ?>"
-													     alt="Photo">
-												</div>
-												<!-- /.col -->
-												<div class="col-sm-6">
-													<img class="img-responsive"
-													     src="../../dist/content/attachments/<?php echo $attachments[3]['file']; ?>"
-													     alt="Photo">
-													<br>
-													<?php if (isset($attachments[4]['file']))
-													{
-														?><img class="img-responsive"
-														       src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>"
-														       alt="Photo"> <?php } ?>
-												</div>
-												<!-- /.col -->
-											</div>
-											<!-- /.row -->
 										</div>
 										<!-- /.col -->
 									</div>
