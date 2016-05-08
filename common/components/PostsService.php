@@ -2,6 +2,7 @@
 
 namespace common\components;
 
+use app\models\Event;
 use Yii;
 use common\components;
 use app\models\UserInfo;
@@ -34,6 +35,7 @@ class PostsService
 
 	/**
 	 * used to sort posts by date
+	 *
 	 * @param $friendsIds UserId[]
 	 * @param $startId
 	 *
@@ -66,34 +68,6 @@ class PostsService
 		return $posts;
 	}
 
-	public static function getUserPosts(UserId $user)
-	{
-		$id = $user->getId();
-		$data =
-			Post::find()->select(['post_id'])->where(['user_id' => $id])->orderBy(['post_date' => SORT_DESC])->all();
-		$posts = [];
-		foreach ($data as $post)
-		{
-			$posts[] = self::getPostById($post->post_id);
-		}
-		return $posts;
-	}
-        
-        public static function getPostAttachmentPhoto($post_id)
-        {
-            $data = PostAttachment::find()
-                    ->where(['post_id' => $post_id])
-                    ->one();
-            if(!is_null($data))
-            {
-                return $data->file;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
 	public static function getPostById($postID)
 	{
 		$p = Post::findOne(['post_id' => $postID]);
@@ -108,7 +82,7 @@ class PostsService
 				$comm = new \common\components\Comment($comment->comment_id, $date, $author, $comment->comment_text);
 				$comms[] = $comm;
 			}
-                        $attachment = new PostAtt($postID);
+			$attachment = new PostAtt($postID);
 			$attachments = ($attachment->getFile() == null) ? null : $attachment;
 			$date = new \DateTime($p->post_date);
 			$vis = $p->post_visibility;
@@ -123,6 +97,34 @@ class PostsService
 		else
 		{
 			return null;
+		}
+	}
+
+	public static function getUserPosts(UserId $user)
+	{
+		$id = $user->getId();
+		$data =
+			Post::find()->select(['post_id'])->where(['user_id' => $id])->orderBy(['post_date' => SORT_DESC])->all();
+		$posts = [];
+		foreach ($data as $post)
+		{
+			$posts[] = self::getPostById($post->post_id);
+		}
+		return $posts;
+	}
+
+	public static function getPostAttachmentPhoto($post_id)
+	{
+		$data = PostAttachment::find()
+			->where(['post_id' => $post_id])
+			->one();
+		if (!is_null($data))
+		{
+			return $data->file;
+		}
+		else
+		{
+			return false;
 		}
 	}
 
@@ -151,23 +153,27 @@ class PostsService
 		$post->post_date = date('Y-m-d H:i:s');
 		$post->post_type = EPostType::text;
 		$post->post_visibility = "visible";
-                if($post->save())
-                    return $post->post_id;
-                else 
-                    return false;
+		if ($post->save())
+		{
+			return $post->post_id;
+		}
+		else
+		{
+			return false;
+		}
 	}
-        
-        /*
-         * Adds the post attachment photo to the database
-         * Takes post_id and filename as arguments
-         */
-        public static function addPostAttachmentPhoto($post_id, $file)
-        {
-            $att = new PostAttachment();
-            $att->post_id = $post_id;
-            $att->file = $file;
-            return $att->save();
-        }
+
+	/*
+	 * Adds the post attachment photo to the database
+	 * Takes post_id and filename as arguments
+	 */
+	public static function addPostAttachmentPhoto($post_id, $file)
+	{
+		$att = new PostAttachment();
+		$att->post_id = $post_id;
+		$att->file = $file;
+		return $att->save();
+	}
 
 	/**
 	 * @param \common\components\Post $post

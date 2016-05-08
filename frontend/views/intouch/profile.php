@@ -19,6 +19,7 @@ use yii\widgets\Pjax;
 /* @var $userinfo \common\components\IntouchUser */
 /* @var $posts \common\components\Post[] */
 /* @var $loggedUser \common\components\IntouchUser */
+/* @var $timeline \common\components\UserEvent[] */
 
 ?>
 	<section class="content">
@@ -104,7 +105,7 @@ use yii\widgets\Pjax;
 							<!-- Add picture-->
 							<div class="btn btn-danger btn-file btn-primary" style="margin-top: 5px; ">
 								<i class="fa fa-paperclip"> Attachment </i>
-								<input type="file"  name="kawaiiPicture">
+								<input type="file" name="kawaiiPicture">
 							</div>
 							<!-- /Add picture-->
 							<button style="width:20%; margin-top:5px;" type="submit"
@@ -131,7 +132,8 @@ use yii\widgets\Pjax;
 	                                    <input type="hidden" name="post_id" value="<?= $row->getId() ?>">
                                         <input class="" type="hidden" name="type" value="delete_post"
                                                id="delete_post-form">
-                                        <button style="border-style: none; margin-top: 2px"  type="submit" class="pull-right btn-box-tool fa fa-times"></button>
+                                        <button style="border-style: none; margin-top: 2px" type="submit"
+                                                class="pull-right btn-box-tool fa fa-times"></button>
 	                                    <?= Html::endForm() ?>
 	                                    <!--                                        <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>-->
 	                                    <a href="#" class="pull-right btn-box-tool"><i class="fa fa-wrench"></i></a>
@@ -151,7 +153,7 @@ use yii\widgets\Pjax;
 									<p>
 										<?php
 										$attachment = $row->getAttachments();
-                                                                                /* @var $attachment common\components\PostAttachment */
+										/* @var $attachment common\components\PostAttachment */
 										echo $row->getContent();
 										if ($attachment != null)
 										{
@@ -243,7 +245,8 @@ use yii\widgets\Pjax;
 															       value="<?= $comment->getId() ?>">
 															<input class="" type="hidden" name="type"
 															       value="delete_comment" id="delete_comment-form">
-															<button style="border-style: none; margin-top: 2px"  type="submit"
+															<button style="border-style: none; margin-top: 2px"
+															        type="submit"
 															        class="pull-right btn btn-box-tool fa fa-times"></button>
 															<?= Html::endForm() ?>
 															<i class="fa fa-clock-o"></i> <?php echo $comment->getDate() ?>
@@ -279,88 +282,516 @@ use yii\widgets\Pjax;
 								<!-- timeline time label -->
 								<li class="time-label">
                                 <span class="bg-red">
-                                    10 Feb. 2014
+                                    <?= (new DateTime())->format("d-m-Y") ?>
                                 </span>
 								</li>
 								<!-- /.timeline-label -->
-								<!-- timeline item -->
-								<li>
-									<i class="fa fa-envelope bg-blue"></i>
-									<div class="timeline-item">
-										<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-										<h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-										<div class="timeline-body">
-											Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-											weebly ning heekya handango imeem plugg dopplr jibjab, movity
-											jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-											quora plaxo ideeli hulu weebly balihoo...
-										</div>
-										<div class="timeline-footer">
-											<a class="btn btn-primary btn-xs">Read more</a>
-											<a class="btn btn-danger btn-xs">Delete</a>
-										</div>
-									</div>
-								</li>
-								<!-- END timeline item -->
-								<!-- timeline item -->
-								<li>
-									<i class="fa fa-user bg-aqua"></i>
-									
-									<div class="timeline-item">
-										<span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-										
-										<h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your
-											friend request
-										</h3>
-									</div>
-								</li>
-								<!-- END timeline item -->
-								<!-- timeline item -->
-								<li>
-									<i class="fa fa-comments bg-yellow"></i>
-									
-									<div class="timeline-item">
-										<span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-										
-										<h3 class="timeline-header"><a href="#">Jay White</a> commented on your post
-										</h3>
-										
-										<div class="timeline-body">
-											Take me to your leader!
-											Switzerland is small and neutral!
-											We are more like Germany, ambitious and misunderstood!
-										</div>
-										<div class="timeline-footer">
-											<a class="btn btn-warning btn-flat btn-xs">View comment</a>
-										</div>
-									</div>
-								</li>
-								<!-- END timeline item -->
-								<!-- timeline time label -->
-								<li class="time-label">
+								<?php
+								$lastDate = (new DateTime())->format("Y-m-d");
+								foreach ($timeline as $event)
+								{
+									$dateChanged = $event->getEventDate("Y-m-d") != $lastDate;
+									$userConnected = $event->getEventOwner();
+									$userConnectedDefault = true;
+									$content = "Unknown Event Type";
+									$icon = "fa-exclamation-triangle";
+									$color = "bg-red";
+									switch ($event->getEventType())
+									{
+										case \common\components\EEvent::ACCOUNT_CREATE():
+											$icon = "fa-user-plus";
+											$color = "bg-green";
+											$content = "<a href='/user/" . $userConnected->getUsername() . "'>" .
+											           Yii::t('app', 'You') . "</a>&nbsp
+								                " . Yii::t('app', 'have created an account');
+											break;
+										case \common\components\EEvent::ACCOUNT_INFO_CHANGED():
+											$icon = "fa-user";
+											$color = "bg-aqua";
+											$content = "<a href='/user/ " . $userConnected->getUsername() . "'>" .
+											           Yii::t('app', 'You') . "</a>&nbsp"
+											           . Yii::t('app', 'have changed your account details');
+											break;
+										case \common\components\EEvent::ACCOUNT_PASSWORD_CHANGED():
+											$icon = "fa-user-secret";
+											$color = "bg-yellow";
+											$content = "<a href='/user/" . $userConnected->getUsername() . "'>" .
+											           Yii::t('app', 'You') . "</a>&nbsp"
+											           . Yii::t('app', 'have changed your password');
+											break;
+										case \common\components\EEvent::ACCOUNT_PASSWORD_RESET():
+											$icon = "fa-user-md";
+											$color = "bg-red";
+											$content = "<a href='/user/" . $userConnected->getUsername() . "'>" .
+											           Yii::t('app', 'You') . "</a>&nbsp"
+											           . Yii::t('app', 'have reset your password');
+											break;
+										case \common\components\EEvent::COMMENT_CREATE():
+											$icon = "fa-comment-o";
+											$color = "bg-fuchsia";
+											$userConnected = $event->getConnectedUser();
+											if ($userConnected != null)
+											{
+												if ($event->getConnectedData()->self_mode)
+												{
+													$content = "<a href='/user/" .
+													           $event->getEventOwner()->getUsername() . "'>" .
+													           Yii::t('app', 'You') . "</a>&nbsp" .
+													           Yii::t('app', "have commented on") .
+													           "<a href='/user/" . $userConnected->getUsername() .
+													           "'> " .
+													           $userConnected->getFullName() . " </a>" .
+													           Yii::t('app', 'post');
+												}
+												else
+												{
+													$content =
+															"<a href='/user/" . $userConnected->getUsername() . "'>" .
+															$userConnected->getFullName() . "</a>&nbsp"
+															. Yii::t('app', "has commented on your post");
+												}
+											}
+											else
+											{
+												$content = "<a href='/user/" . $event->getEventOwner()->getUsername() .
+												           "'>" . Yii::t('app', 'You') . "</a>&nbsp"
+												           . Yii::t('app', 'have commented on your post');
+											}
+											break;
+										case \common\components\EEvent::COMMENT_DELETE():
+											$icon = "fa-comment";
+											$color = "bg-red";
+											$userConnected = $event->getConnectedUser();
+											if ($userConnected != null)
+											{
+												if ($event->getConnectedData()->self_mode)
+												{
+													$content = "<a href='/users/" .
+													           $event->getEventOwner()->getUsername() . "'>" .
+													           Yii::t('app', 'You') . "</a>&nbsp" .
+													           Yii::t('app', "have deleted a comment from") .
+													           "<a href='/user/" . $userConnected->getUsername() .
+													           "'> " .
+													           $userConnected->getFullName() . " </a>" .
+													           Yii::t('app', 'post');
+												}
+												else
+												{
+													$content =
+															"<a href='/user/" . $userConnected->getUsername() . "'>" .
+															$userConnected->getFullName() . "</a>&nbsp"
+															. Yii::t('app', "has deleted a comment from your post");
+												}
+											}
+											else
+											{
+												$content = "<a href='/user/" . $event->getEventOwner()->getUsername() .
+												           "'>" . Yii::t('app', 'You') . "</a>&nbsp"
+												           . Yii::t('app', 'have deleted a comment from your profile');
+											}
+											break;
+										case \common\components\EEvent::COMMENT_EDIT():
+											$icon = "fa-commenting-o";
+											$color = "bg-yellow";
+											$userConnected = $event->getConnectedUser();
+											if ($userConnected != null)
+											{
+												if ($event->getConnectedData()->self_mode)
+												{
+													$content = "<a href='/user/" .
+													           $event->getEventOwner()->getUsername() . "'>" .
+													           Yii::t('app', 'You') . "</a>&nbsp" .
+													           Yii::t('app', "have edited a comment from") .
+													           "<a href='/users/" . $userConnected->getUsername() .
+													           "'> " .
+													           $userConnected->getFullName() . " </a>" .
+													           Yii::t('app', 'post');
+												}
+												else
+												{
+													$content =
+															"<a href='/user/" . $userConnected->getUsername() . "'>" .
+															$userConnected->getFullName() . "</a>&nbsp"
+															. Yii::t('app', "has commented on your post");
+												}
+											}
+											else
+											{
+												$content = "<a href='/user/" . $event->getEventOwner()->getUsername() .
+												           "'>" . Yii::t('app', 'You') . "</a>&nbsp"
+												           . Yii::t('app', 'have edited a comment from your profile');
+											}
+											break;
+										case \common\components\EEvent::POST_CREATE():
+											$icon = "fa-pencil";
+											$color = "bg-maroon";
+											$userConnected = $event->getConnectedUser();
+											if ($userConnected != null)
+											{
+												if ($event->getConnectedData()->self_mode)
+												{
+													$content =
+															"<a href='/user/" .
+															$event->getEventOwner()->getUsername() . "'>" .
+															Yii::t('app', 'You') . "</a>&nbsp"
+															. Yii::t('app', "have added a post to") . " " .
+															"<a href='/user/" . $userConnected->getUsername() . "'>" .
+															$userConnected->getFullName() . "'s profile";
+												}
+												else
+												{
+													$content =
+															"<a href='/user/" . $userConnected->getUsername() . "'>" .
+															$userConnected->getFullName() . "</a>&nbsp"
+															. Yii::t('app', "has added a post to your profile");
+												}
+											}
+											else
+											{
+												$content = "<a href='/user/" . $event->getEventOwner()->getUsername() .
+												           "'>" . Yii::t('app', 'You') . "</a>&nbsp"
+												           . Yii::t('app', 'have added a post from your profile');
+											}
+											break;
+										case \common\components\EEvent::POST_DELETE():
+											$icon = "fa-pencil";
+											$color = "bg-lime";
+											$userConnected = $event->getConnectedUser();
+											if ($userConnected != null)
+											{
+												if ($event->getConnectedData()->self_mode)
+												{
+													$content = "<a href='/user/" .
+													           $event->getEventOwner()->getUsername() . "'>" .
+													           Yii::t('app', 'You') . "</a>&nbsp" .
+													           Yii::t('app', "have deleted a post from") .
+													           "<a href='/user/" . $userConnected->getUsername() .
+													           "'> " .
+													           $userConnected->getFullName()  .
+													           Yii::t('app', '\'s profile') . " </a>";
+												}
+												else
+												{
+													$content =
+															"<a href='/user/" . $userConnected->getUsername() . "'>" .
+															$userConnected->getFullName() . "</a>&nbsp"
+															. Yii::t('app', "has deleted his post from your profile");
+												}
+											}
+											else
+											{
+												$content = "<a href='/user/" . $event->getEventOwner()->getUsername() .
+												           "'>" . Yii::t('app', 'You') . "</a>&nbsp"
+												           . Yii::t('app', 'have deleted a post from your profile');
+											}
+											break;
+										case \common\components\EEvent::POST_EDIT():
+											$icon = "fa-pencil";
+											$color = "bg-maroon";
+											$userConnected = $event->getConnectedUser();
+											if ($userConnected != null)
+											{
+												if ($event->getConnectedData()->self_mode)
+												{
+													$content = "<a href='/user/" .
+													           $event->getEventOwner()->getUsername() . "'>" .
+													           Yii::t('app', 'You') . "</a>&nbsp" .
+													           Yii::t('app', "have edited your post from") .
+													           "<a href='/user/" . $userConnected->getUsername() .
+													           "'> " .
+													           $userConnected->getFullName()  .
+													           Yii::t('app', '\'s profile') . " </a>";
+												}
+												else
+												{
+													$content =
+															"<a href='/user/" . $userConnected->getUsername() . "'>" .
+															$userConnected->getFullName() . "</a>&nbsp"
+															. Yii::t('app', "has edited his post at your profile");
+												}
+											}
+											else
+											{
+												$content = "<a href='/user/" . $event->getEventOwner()->getUsername() .
+												           "'>" . Yii::t('app', 'You') . "</a>&nbsp"
+												           . Yii::t('app', 'have edited a post from your profile');
+											}
+											break;
+										case \common\components\EEvent::POST_LIKED():
+											$icon = "fa-pencil";
+											$color = "bg-teal";
+											$userConnected = $event->getConnectedUser();
+											if ($userConnected != null)
+											{
+												if ($event->getConnectedData()->self_mode)
+												{
+													$content = "<a href='/user/" .
+													           $event->getEventOwner()->getUsername() . "'>" .
+													           Yii::t('app', 'You') . "</a>&nbsp" .
+													           Yii::t('app', "have liked a post from") .
+													           "<a href='/user/" . $userConnected->getUsername() .
+													           "'> " .
+													           $userConnected->getFullName()  .
+													           Yii::t('app', '\'s profile') . " </a>";
+												}
+												else
+												{
+													$content =
+															"<a href='/user/" . $userConnected->getUsername() . "'>" .
+															$userConnected->getFullName() . "</a>&nbsp"
+															. Yii::t('app', "has liked a post from your profile");
+												}
+											}
+											else
+											{
+												$content = "<a href='/user/" . $event->getEventOwner()->getUsername() .
+												           "'>" . Yii::t('app', 'You') . "</a>&nbsp"
+												           . Yii::t('app', 'have liked a post from your profile');
+											}
+											break;
+										case \common\components\EEvent::POST_UNLIKED():
+											$icon = "fa-pencil";
+											$color = "bg-navy";
+											$userConnected = $event->getConnectedUser();
+											if ($userConnected != null)
+											{
+												if ($event->getConnectedData()->self_mode)
+												{
+													$content = "<a href='/user/" .
+													           $event->getEventOwner()->getUsername() . "'>" .
+													           Yii::t('app', 'You') . "</a>&nbsp" .
+													           Yii::t('app', "have unliked a post from") .
+													           "<a href='/user/" . $userConnected->getUsername() .
+													           "'> " .
+													           $userConnected->getFullName()  .
+													           Yii::t('app', '\'s profile') . " </a>";
+												}
+												else
+												{
+													$content =
+															"<a href='/user/" . $userConnected->getUsername() . "'>" .
+															$userConnected->getFullName() . "</a>&nbsp"
+															. Yii::t('app', "has revoked a like from post on your profile");
+												}
+											}
+											else
+											{
+												$content = "<a href='/user/" . $event->getEventOwner()->getUsername() .
+												           "'>" . Yii::t('app', 'You') . "</a>&nbsp"
+												           . Yii::t('app', 'have revoked a like from a post on your profile');
+											}
+											break;
+										case \common\components\EEvent::FOLLOWS():
+											$icon = "fa-eye";
+											$color = "";
+											$userConnected = $event->getConnectedUser();
+											if ($userConnected != null)
+											{
+												if ($event->getConnectedData()->self_mode)
+												{
+													$content = "<a href='/user/" .
+													           $event->getEventOwner()->getUsername() . "'>" .
+													           Yii::t('app', 'You') . "</a>&nbsp" .
+													           Yii::t('app', "have followed") .
+													           "<a href='/user/" . $userConnected->getUsername() .
+													           "'> " .
+													           $userConnected->getFullName()  .
+													           Yii::t('app', '\'s profile') . " </a>";
+												}
+												else
+												{
+													$content =
+															"<a href='/user/" . $userConnected->getUsername() . "'>" .
+															$userConnected->getFullName() . "</a>&nbsp"
+															. Yii::t('app', "has followed your profile");
+												}
+											}
+											else
+											{
+												throw new \yii\base\Exception("Impossible event : you cannot follow yourself");
+											}
+											break;
+										case \common\components\EEvent::UNFOLLOWS():
+											$icon = "fa-eye-slash";
+											$color = "";
+											$userConnected = $event->getConnectedUser();
+											if ($userConnected != null)
+											{
+												if ($event->getConnectedData()->self_mode)
+												{
+													$content = "<a href='/user/" .
+													           $event->getEventOwner()->getUsername() . "'>" .
+													           Yii::t('app', 'You') . "</a>&nbsp" .
+													           Yii::t('app', "have unfollowed") .
+													           "<a href='/user/" . $userConnected->getUsername() .
+													           "'> " .
+													           $userConnected->getFullName()  .
+													           Yii::t('app', '\'s profile') . " </a>";
+												}
+												else
+												{
+													$content =
+															"<a href='/user/" . $userConnected->getUsername() . "'>" .
+															$userConnected->getFullName() . "</a>&nbsp"
+															. Yii::t('app', "has unfollowed your profile");
+												}
+											}
+											else
+											{
+												throw new \yii\base\Exception("Impossible event : you cannot unfollow your profile");
+											}
+											break;
+										case \common\components\EEvent::FRIEND_REQUEST_SENT():
+											$icon = "fa-plus-circle";
+											$color = "bg-aqua";
+											$userConnected = $event->getConnectedUser();
+											if ($userConnected != null)
+											{
+												if ($event->getConnectedData()->self_mode)
+												{
+													$content = "<a href='/user/" .
+													           $event->getEventOwner()->getUsername() . "'>" .
+													           Yii::t('app', 'You') . "</a>&nbsp" .
+													           Yii::t('app', "have send a friend request to") .
+													           "<a href='/user/" . $userConnected->getUsername() .
+													           "'> " .
+													           $userConnected->getFullName()  . " </a>";
+												}
+												else
+												{
+													$content =
+															"<a href='/user/" . $userConnected->getUsername() . "'>" .
+															$userConnected->getFullName() . "</a>&nbsp"
+															. Yii::t('app', "has send to you a friend request");
+												}
+											}
+											else
+											{
+												throw new \yii\base\Exception("Impossible event : you cannot sent a friend request to yourself");
+											}
+											break;
+										case \common\components\EEvent::FRIEND_REQUEST_ACCEPTED():
+											$icon = "fa-user-plus";
+											$color = "bg-orange";
+											$userConnected = $event->getConnectedUser();
+											if ($userConnected != null)
+											{
+												if ($event->getConnectedData()->self_mode)
+												{
+													$content = "<a href='/user/" .
+													           $event->getEventOwner()->getUsername() . "'>" .
+													           Yii::t('app', 'You') . "</a>&nbsp" .
+													           Yii::t('app', "have accepted a friend request from") .
+													           "<a href='/user/" . $userConnected->getUsername() .
+													           "'> " .
+													           $userConnected->getFullName()  . " </a>";
+												}
+												else
+												{
+													$content =
+															"<a href='/user/" . $userConnected->getUsername() . "'>" .
+															$userConnected->getFullName() . "</a>&nbsp"
+															. Yii::t('app', "has accepted your friend request");
+												}
+											}
+											else
+											{
+												throw new \yii\base\Exception("Impossible event : you cannot accept a friend request to yourself");
+											}
+											break;
+										case \common\components\EEvent::FRIEND_REQUEST_DENIED():
+											$icon = "fa-minus-circle";
+											$color = "bg-red";
+											$userConnected = $event->getConnectedUser();
+											if ($userConnected != null)
+											{
+												if ($event->getConnectedData()->self_mode)
+												{
+													$content = "<a href='/user/" .
+													           $event->getEventOwner()->getUsername() . "'>" .
+													           Yii::t('app', 'You') . "</a>&nbsp" .
+													           Yii::t('app', "have denied a friend request from") .
+													           "<a href='/user/" . $userConnected->getUsername() .
+													           "'> " .
+													           $userConnected->getFullName()  . " </a>";
+												}
+												else
+												{
+													$content =
+															"<a href='/user/" . $userConnected->getUsername() . "'>" .
+															$userConnected->getFullName() . "</a>&nbsp"
+															. Yii::t('app', "has denied your friend request");
+												}
+											}
+											else
+											{
+												throw new \yii\base\Exception("Impossible event : you cannot denied a friend request to yourself");
+											}
+											break;
+										case \common\components\EEvent::UNFRIEND():
+											$icon = "fa-user-times";
+											$color = "bg-red";
+											$userConnected = $event->getConnectedUser();
+											if ($userConnected != null)
+											{
+												if ($event->getConnectedData()->self_mode)
+												{
+													$content = "<a href='/user/" .
+													           $event->getEventOwner()->getUsername() . "'>" .
+													           Yii::t('app', 'You') . "</a>&nbsp" .
+													           Yii::t('app', "have removed ") .
+													           "<a href='/user/" . $userConnected->getUsername() .
+													           "'> " .
+													           $userConnected->getFullName()  . " </a> from your friend list";
+												}
+												else
+												{
+													$content =
+															"<a href='/user/" . $userConnected->getUsername() . "'>" .
+															$userConnected->getFullName() . "</a>&nbsp"
+															. Yii::t('app', "has removed you from his friend list");
+												}
+											}
+											else
+											{
+												throw new \yii\base\Exception("Impossible event : you cannot remove yourself from your friendlist");
+											}
+											break;
+										default:
+											break;
+									}
+									if ($dateChanged)
+									{
+										$lastDate = $event->getEventDate("Y-m-d");
+										?>
+										<!-- timeline time label -->
+										<li class="time-label">
                                 <span class="bg-green">
-                                    3 Jan. 2014
+                                    <?= $event->getEventDate("d-m-Y") ?>
                                 </span>
-								</li>
-								<!-- /.timeline-label -->
-								<!-- timeline item -->
-								<li>
-									<i class="fa fa-camera bg-purple"></i>
-									
-									<div class="timeline-item">
-										<span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-										
-										<h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-										
-										<div class="timeline-body">
-											<img src="http://placehold.it/150x100" alt="..." class="margin">
-											<img src="http://placehold.it/150x100" alt="..." class="margin">
-											<img src="http://placehold.it/150x100" alt="..." class="margin">
-											<img src="http://placehold.it/150x100" alt="..." class="margin">
+										</li>
+										<!-- /.timeline-label -->
+										<?php
+									}
+									?>
+									<!-- timeline item -->
+									<li>
+										<i class="fa <?= $icon . " " . $color ?>"></i>
+
+										<div class="timeline-item">
+											<span class="time"><i
+														class="fa fa-clock-o"></i> <?= $event->getEventDate("H:i:s") ?></span>
+
+											<h3 class="timeline-header no-border">
+												<?= $content ?>
+											</h3>
 										</div>
-									</div>
-								</li>
-								<!-- END timeline item -->
+									</li>
+									<!-- END timeline item -->
+									<?php
+
+								}
+								?>
 								<li>
 									<i class="fa fa-clock-o bg-gray"></i>
 								</li>

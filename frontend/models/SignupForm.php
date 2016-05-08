@@ -2,6 +2,10 @@
 
 namespace frontend\models;
 
+use app\models\UserInfo;
+use common\components\EEvent;
+use common\components\EventService;
+use common\components\UserId;
 use common\models\User;
 use yii\base\Model;
 use Yii;
@@ -57,7 +61,13 @@ class SignupForm extends Model
             $auth->assign($userRole, $user->getId());
 
             if ($b)
+            {
+	            $x = new UserInfo();
+	            $x->user_id = $user->id;
+	            $x->save();
+	            EventService::createEvent(EEvent::ACCOUNT_CREATE(), new UserId($user->id));
                 return $user;
+            }
         }
 
         return null;

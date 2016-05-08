@@ -81,6 +81,13 @@ class RequestService
 		if ($answer)
 		{
 			RelationService::setRelation($uid1, $uid2, RelationType::Friend);
+			EventService::createEvent(EEvent::FRIEND_REQUEST_ACCEPTED(), $uid2, true, $uid1);
+			EventService::createEvent(EEvent::FRIEND_REQUEST_ACCEPTED(), $uid1, false, $uid2);
+		}
+		else
+		{
+			EventService::createEvent(EEvent::FRIEND_REQUEST_DENIED(), $uid2, true, $uid1);
+			EventService::createEvent(EEvent::FRIEND_REQUEST_DENIED(), $uid1, false, $uid2);
 		}
 		self::dropRequest($req_id);
 

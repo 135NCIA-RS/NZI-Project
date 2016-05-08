@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use app\models\Event;
 use app\models\Photo;
 use Faker\Provider\Image;
 use Yii;
@@ -24,6 +25,7 @@ use common\components\RequestType;
 use common\components\ScoreService;
 use common\components\EScoreElem;
 use common\components\EScoreType;
+use common\components\EventService;
 
 class IntouchController extends components\GlobalController
 {
@@ -77,38 +79,44 @@ class IntouchController extends components\GlobalController
 				{
 					case 'newpost':
 						PostsService::createPost($id, Yii::$app->request->post('inputText'));
+						EventService::createEvent(components\EEvent::POST_CREATE(), $uid);
+
 						break;
 					case 'newcomment':
-							PostsService::createComment(
-								PostsService::getPostById(Yii::$app->request->post('post_id')),
-								Yii::$app->request->post('inputText')
-							);
+						PostsService::createComment(
+							PostsService::getPostById(Yii::$app->request->post('post_id')),
+							Yii::$app->request->post('inputText')
+						);
 						break;
 					case 'delete':
 						PostsService::deletePost(PostsService::getPostById(Yii::$app->request->post('post_id')));
 						break;
-                                        case 'like':
+					case 'like':
 						$like_form_post_id = Yii::$app->request->post('post_id');
 						$like_form_score_elem = Yii::$app->request->post('score_elem');
 						$like_form_user_id = Yii::$app->request->post('user_id');
-						$score = new components\Score(EScoreType::like(),null, EScoreElem::$like_form_score_elem(), $like_form_post_id, new components\UserId($like_form_user_id));
+						$score = new components\Score(EScoreType::like(), null, EScoreElem::$like_form_score_elem(),
+							$like_form_post_id, new components\UserId($like_form_user_id));
 						$existing_scores = ScoreService::getScoresByElem(EScoreElem::post(), $like_form_post_id);
-                                                $found = false;
-                                                $found_score_id;
-                                                foreach($existing_scores as $var)
-                                                {
-                                                    $user = $var->getPublisher();
-                                                    $userId = $user->getId();
-                                                    if((int)$like_form_user_id == $userId && (int)$like_form_post_id == $var->getElementId())
-                                                    {
-                                                        $found = true;
-                                                        $found_score_id = $var->getScoreId();
-                                                    }
-                                                }
-                                                if(!$found)
-                                                    ScoreService::addScore($score);
-                                                else
-                                                    ScoreService::revokeScore ($found_score_id);
+						$found = false;
+						foreach ($existing_scores as $var)
+						{
+							$user = $var->getPublisher();
+							$userId = $user->getId();
+							if ((int)$like_form_user_id == $userId && (int)$like_form_post_id == $var->getElementId())
+							{
+								$found = true;
+								$found_score_id = $var->getScoreId();
+							}
+						}
+						if (!$found)
+						{
+							ScoreService::addScore($score);
+						}
+						else
+						{
+							ScoreService::revokeScore($found_score_id);
+						}
 						break;
 				}
 			}
@@ -116,7 +124,7 @@ class IntouchController extends components\GlobalController
 		$posts = PostsService::getFriendsPosts($uid);
 		$args = [
 			'posts' => $posts,
-		    'loggedUser' => $loggedUser,
+			'loggedUser' => $loggedUser,
 		];
 		return $this->render('index', $args);
 	}
@@ -192,58 +200,68 @@ class IntouchController extends components\GlobalController
 								Yii::$app->session->setFlash('error', 'Password is too short');
 								return $this->redirect('/profile');
 							}
+							EventService::createEvent(components\EEvent::ACCOUNT_PASSWORD_CHANGED(), $uid);
 						}
 						////////////////////
 						Yii::$app->session->setFlash('success', 'Profile\'s been succesfuly updated');
 						break;
 					case 'newpost':
-                                                $plik = $_FILES['kawaiiPicture']['tmp_name'];
+						$plik = $_FILES['kawaiiPicture']['tmp_name'];
 						$post_id = PostsService::createPost($uid, Yii::$app->request->post('inputText'));
-                                                PhotoService::addPostAttachmentPhoto($plik, $post_id);
+						PhotoService::addPostAttachmentPhoto($plik, $post_id);
+						EventService::createEvent(components\EEvent::POST_CREATE(), $uid);
 						break;
 					case 'newcomment':
 						PostsService::createComment(PostsService::getPostById(Yii::$app->request->post('post_id')),
 							Yii::$app->request->post('inputText'));
+						EventService::createEvent(components\EEvent::COMMENT_CREATE(), $uid);
 						break;
 					case 'like':
 						$like_form_post_id = Yii::$app->request->post('post_id');
 						$like_form_score_elem = Yii::$app->request->post('score_elem');
 						$like_form_user_id = Yii::$app->request->post('user_id');
-						$score = new components\Score(EScoreType::like(),null, EScoreElem::$like_form_score_elem(), $like_form_post_id, new components\UserId($like_form_user_id));
+						$score = new components\Score(EScoreType::like(), null, EScoreElem::$like_form_score_elem(),
+							$like_form_post_id, new components\UserId($like_form_user_id));
 						$existing_scores = ScoreService::getScoresByElem(EScoreElem::post(), $like_form_post_id);
-                                                $found = false;
-                                                $found_score_id;
-                                                foreach($existing_scores as $var)
-                                                {
-                                                    $user = $var->getPublisher();
-                                                    $userId = $user->getId();
-                                                    if((int)$like_form_user_id == $userId && (int)$like_form_post_id == $var->getElementId())
-                                                    {
-                                                        $found = true;
-                                                        $found_score_id = $var->getScoreId();
-                                                    }
-                                                }
-                                                if(!$found)
-                                                    ScoreService::addScore($score);
-                                                else
-                                                    ScoreService::revokeScore ($found_score_id);
+						$found = false;
+						foreach ($existing_scores as $var)
+						{
+							$user = $var->getPublisher();
+							$userId = $user->getId();
+							if ((int)$like_form_user_id == $userId && (int)$like_form_post_id == $var->getElementId())
+							{
+								$found = true;
+								$found_score_id = $var->getScoreId();
+							}
+						}
+						if (!$found)
+						{
+							ScoreService::addScore($score);
+							EventService::createEvent(components\EEvent::POST_LIKED(), $uid);
+						}
+						else
+						{
+							EventService::createEvent(components\EEvent::POST_UNLIKED(), $uid);
+							ScoreService::revokeScore($found_score_id);
+						}
 						break;
 					case 'report':
 						$rep_form_post_id = Yii::$app->request->post('post_id');
 						$rep_form_score_elem = Yii::$app->request->post('score_elem');
 						$rep_form_user_id = Yii::$app->request->post('user_id');
-						$score = new components\Score(EScoreType::like(),null, EScoreElem::$rep_form_score_elem(), $rep_form_post_id, new components\UserId($rep_form_user_id));
+						$score = new components\Score(EScoreType::like(), null, EScoreElem::$rep_form_score_elem(),
+							$rep_form_post_id, new components\UserId($rep_form_user_id));
 						ScoreService::addScore($score);
 						break;
 					case 'delete_post':
 						$rep_post_id = Yii::$app->request->post('post_id');
 						PostsService::deletePost(PostsService::getPostById($rep_post_id));
-						//PostsService::deletePost($rep_post_id);
+						EventService::createEvent(components\EEvent::POST_DELETE(), $uid);
 						break;
 					case 'delete_comment':
 						$rep_comment_id = Yii::$app->request->post('comment_id');
 						PostsService::deleteComment(PostsService::getCommentById($rep_comment_id));
-						//PostsService::deleteComment($rep_comment_id);
+						EventService::createEvent(components\EEvent::COMMENT_DELETE(), $uid);
 						break;
 				}
 			}
@@ -255,7 +273,7 @@ class IntouchController extends components\GlobalController
 		$following = count(RelationService::getUsersWhoIFollow($uid));
 		$friends = count(RelationService::getFriendsList($uid));
 
-		
+		$timeline = components\EventService::getUserEvents($uid, true);
 		//////////////////////////////////////////////////////////////////////////
 		return $this->render('profile', [
 			'userinfo' => $uid->getUser(),
@@ -263,7 +281,8 @@ class IntouchController extends components\GlobalController
 			'followers' => $followers,
 			'following' => $following,
 			'friends' => $friends,
-		    'loggedUser' => $lUser,
+			'loggedUser' => $lUser,
+			'timeline' => $timeline,
 		]);
 	}
 
@@ -294,6 +313,7 @@ class IntouchController extends components\GlobalController
 				Yii::$app->session->setFlash('error', 'Invalid date');
 				return $this->redirect('/profile/aboutedit');
 			}
+			EventService::createEvent(components\EEvent::ACCOUNT_INFO_CHANGED(), $uid);
 			Yii::$app->session->setFlash('success', 'Profile\'s been Succesfuly Updated');
 
 			return $this->redirect('/profile');

@@ -86,20 +86,28 @@ class UsersController extends components\GlobalController
 				if (!is_null($request->post('follow-btn')) && Yii::$app->user->can('relations-follow'))
 				{
 					RelationService::setRelation($myUid, $uid, RelationType::Follower);
+					components\EventService::createEvent(components\EEvent::FOLLOWS(), $uid, false, $myUid);
+					components\EventService::createEvent(components\EEvent::FOLLOWS(), $myUid, true, $uid);
 				}
 				if (!is_null($request->post('friend-btn')) && Yii::$app->user->can('relations-friend'))
 				{
 					RequestService::createRequest($myUid, $uid, RequestType::FriendRequest,
 						date('Y-m-d H:i:s')); //to tutaj
+					components\EventService::createEvent(components\EEvent::FRIEND_REQUEST_SENT(), $uid, false, $myUid);
+					components\EventService::createEvent(components\EEvent::FRIEND_REQUEST_SENT(), $myUid, true, $uid);
 				}
 
-				if (!is_null($request->post('unfriend-btn')) && Yii::$app->user->can('relations-friend'))
+				if (!is_null($request->post('unfriend-btn')))
 				{
 					RelationService::removeRelation($myUid, $uid, RelationType::Friend);
+					components\EventService::createEvent(components\EEvent::UNFRIEND(), $uid, false, $myUid);
+					components\EventService::createEvent(components\EEvent::UNFRIEND(), $myUid, true, $uid);
 				}
-				if (!is_null($request->post('unfollow-btn')) && Yii::$app->user->can('relations-follow'))
+				if (!is_null($request->post('unfollow-btn')))
 				{
 					RelationService::removeRelation($myUid, $uid, RelationType::Follower);
+					components\EventService::createEvent(components\EEvent::UNFOLLOWS(), $uid, false, $myUid);
+					components\EventService::createEvent(components\EEvent::UNFOLLOWS(), $myUid, true, $uid);
 				}
 
 				if (!is_null(Yii::$app->request->post('type')))
@@ -108,20 +116,28 @@ class UsersController extends components\GlobalController
 					{
 						case 'newpost':
 							PostsService::createPost($uid, Yii::$app->request->post('inputText'));
+							components\EventService::createEvent(components\EEvent::POST_CREATE(), $uid, false, $myUid);
+							components\EventService::createEvent(components\EEvent::POST_CREATE(), $myUid, true, $uid);
 							break;
 
 						case 'newcomment':
 							PostsService::createComment(PostsService::getPostById(Yii::$app->request->post('post_id')),
 								Yii::$app->request->post('inputText'));
+							components\EventService::createEvent(components\EEvent::COMMENT_CREATE(), $uid, false, $myUid);
+							components\EventService::createEvent(components\EEvent::COMMENT_CREATE(), $myUid, true, $uid);
 							break;
 
 						case 'delete_post':
 							$rep_post_id = Yii::$app->request->post('post_id');
 							PostsService::deletePost(PostsService::deletePost(PostsService::getPostById($rep_post_id)));
+							components\EventService::createEvent(components\EEvent::POST_DELETE(), $uid, false, $myUid);
+							components\EventService::createEvent(components\EEvent::POST_DELETE(), $myUid, true, $uid);
 							break;
 						case 'delete_comment':
 							$rep_comment_id = Yii::$app->request->post('comment_id');
 							PostsService::deleteComment(PostsService::getCommentById($rep_comment_id));
+							components\EventService::createEvent(components\EEvent::COMMENT_DELETE(), $uid, false, $myUid);
+							components\EventService::createEvent(components\EEvent::COMMENT_DELETE(), $myUid, true, $uid);
 							break;
 					}
 				}
@@ -130,35 +146,43 @@ class UsersController extends components\GlobalController
 			{
 				$this->redirect(["intouch/accessdenied"]);
 			}
-                        if (!is_null(Yii::$app->request->post('type')))
-                        {
-                            switch (Yii::$app->request->post('type'))
-                            {
-                                case 'like':
+			if (!is_null(Yii::$app->request->post('type')))
+			{
+				switch (Yii::$app->request->post('type'))
+				{
+					case 'like':
 						$like_form_post_id = Yii::$app->request->post('post_id');
 						$like_form_score_elem = Yii::$app->request->post('score_elem');
 						$like_form_user_id = Yii::$app->request->post('user_id');
-						$score = new components\Score(EScoreType::like(),null, EScoreElem::$like_form_score_elem(), $like_form_post_id, new components\UserId($like_form_user_id));
-                                                $existing_scores = ScoreService::getScoresByElem(EScoreElem::post(), $like_form_post_id);
-                                                $found = false;
-                                                $found_score_id;
-                                                foreach($existing_scores as $var)
-                                                {
-                                                    $user = $var->getPublisher();
-                                                    $userId = $user->getId();
-                                                    if((int)$like_form_user_id == $userId && (int)$like_form_post_id == $var->getElementId())
-                                                    {
-                                                        $found = true;
-                                                        $found_score_id = $var->getScoreId();
-                                                    }
-                                                }
-                                                if(!$found)
-                                                    ScoreService::addScore($score);
-                                                else
-                                                    ScoreService::revokeScore ($found_score_id);
+						$score = new components\Score(EScoreType::like(), null, EScoreElem::$like_form_score_elem(),
+							$like_form_post_id, new components\UserId($like_form_user_id));
+						$existing_scores = ScoreService::getScoresByElem(EScoreElem::post(), $like_form_post_id);
+						$found = false;
+						foreach ($existing_scores as $var)
+						{
+							$user = $var->getPublisher();
+							$userId = $user->getId();
+							if ((int)$like_form_user_id == $userId && (int)$like_form_post_id == $var->getElementId())
+							{
+								$found = true;
+								$found_score_id = $var->getScoreId();
+							}
+						}
+						if (!$found)
+						{
+							ScoreService::addScore($score);
+							components\EventService::createEvent(components\EEvent::POST_LIKED(), $uid, false, $myUid);
+							components\EventService::createEvent(components\EEvent::POST_LIKED(), $myUid, true, $uid);
+						}
+						else
+						{
+							ScoreService::revokeScore($found_score_id);
+							components\EventService::createEvent(components\EEvent::POST_UNLIKED(), $uid, false, $myUid);
+							components\EventService::createEvent(components\EEvent::POST_UNLIKED(), $myUid, true, $uid);
+						}
 						break;
-                            }
-                        }
+				}
+			}
 		}
 
 		$user = $uid->getUser();

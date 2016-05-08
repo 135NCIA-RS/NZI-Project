@@ -280,17 +280,16 @@ class RelationService
 
     public static function removeRelation(UserId $user1_id, UserId $user2_id, $rel_type)
     {
-        if (!RelationType::validate($rel_type))
-        {
-            throw new InvalidRelationException("Error. Something went wrong. Use RelationType class instead of value");
-        }
 
         $dt = Relationship::find()->where([
                     'user1_id'      => $user1_id->getId(),
                     'user2_id'      => $user2_id->getId(),
                     'relation_type' => $rel_type
                 ])->one();
-        $dt->delete();
+	    if(!is_null($dt))
+	    {
+		    $dt->delete();
+	    }
 
         if (RelationMode::getMode($rel_type) == RelationMode::TwoWay)
         {
@@ -299,8 +298,12 @@ class RelationService
                         'user2_id'      => $user1_id->getId(),
                         'relation_type' => $rel_type
                     ])->one();
-            $dt1->delete();
+	        if(!is_null($dt1))
+	        {
+		        $dt1->delete();
+	        }
         }
+
     }
 
     /**
