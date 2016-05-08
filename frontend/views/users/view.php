@@ -199,7 +199,7 @@ JS;
                                             <input type="hidden" name="post_id" value="<?= $row->getId() ?>">
                                             <input class="" type="hidden" name="type" value="delete_post"
                                                    id="delete_post-form">
-                                            <button style="..." type="submit" class="pull-right fa fa-times"></button>
+                                            <button style="border: none; margin-top: 2px" type="submit" class="pull-right btn-box-tool fa fa-times"></button>
                                             <?= Html::endForm() ?>
 
                                             <!--                                            <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>-->
@@ -326,17 +326,18 @@ JS;
                                                 <!-- /.direct-chat-img -->
                                                 <p class="message">
                                                     <a href="#" class="name">
-                                                        <small class="text-muted pull-right"><i
-                                                                    class="fa fa-clock-o"></i> <?= $comment->getDate() ?>
-                                                            <?= Html::beginForm(["users/view", 'uname' => $user->getId()], 'post',
-                                                                    ['data-pjax' => '']) ?>
-                                                            <input type="hidden" name="comment_id"
-                                                                   value="<?= $comment->getId() ?>">
-                                                            <input class="" type="hidden" name="type"
-                                                                   value="delete_comment" id="delete_comment-form">
-                                                            <button style="..." type="submit"
-                                                                    class="fa fa-times"></button>
-                                                            <?= Html::endForm() ?>
+                                                        <small class="text-muted pull-right">
+	                                                        <?= Html::beginForm(["users/view", 'uname' => $user->getId()], 'post',
+			                                                        ['data-pjax' => '']) ?>
+	                                                        <input type="hidden" name="comment_id"
+	                                                               value="<?= $comment->getId() ?>">
+	                                                        <input class="" type="hidden" name="type"
+	                                                               value="delete_comment" id="delete_comment-form">
+	                                                        <button style="border: none; margin-top: -4px" type="submit"
+	                                                                class="pull-right btn-box-tool fa fa-times"></button>
+	                                                        <?= Html::endForm() ?>
+	                                                        <i class="fa fa-clock-o"></i> <?= $comment->getDate() ?>
+
                                                         </small>
                                                         <?= $commAuthor->getFullName() ?><br>
                                                     </a>

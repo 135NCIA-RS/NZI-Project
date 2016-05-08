@@ -101,7 +101,12 @@ use yii\widgets\Pjax;
 							<input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post"
 							       name="inputText">
 							<input type="hidden" name="type" value="newpost">
-							<input type="file" name="kawaiiPicture">
+							<!-- Add picture-->
+							<div class="btn btn-danger btn-file btn-primary" style="margin-top: 5px; ">
+								<i class="fa fa-paperclip"> Attachment </i>
+								<input type="file"  name="kawaiiPicture">
+							</div>
+							<!-- /Add picture-->
 							<button style="width:20%; margin-top:5px;" type="submit"
 							        class="btn btn-danger pull-right btn-primary btn-sm"><?= Yii::t('app',
 										'Publish'); ?></button>
@@ -126,7 +131,7 @@ use yii\widgets\Pjax;
 	                                    <input type="hidden" name="post_id" value="<?= $row->getId() ?>">
                                         <input class="" type="hidden" name="type" value="delete_post"
                                                id="delete_post-form">
-                                        <button style="..." type="submit" class="pull-right fa fa-times"></button>
+                                        <button style="border-style: none; margin-top: 2px"  type="submit" class="pull-right btn-box-tool fa fa-times"></button>
 	                                    <?= Html::endForm() ?>
 	                                    <!--                                        <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>-->
 	                                    <a href="#" class="pull-right btn-box-tool"><i class="fa fa-wrench"></i></a>
@@ -177,7 +182,7 @@ use yii\widgets\Pjax;
                                             <span class="link-black text-sm">
                                                 <i class="fa fa-thumbs-o-up"></i>
                                                 <input type="submit" class="fa fa-t humbs-o-up link-black text-sm"
-                                                       style="background: none; border: none;"
+                                                       style="background: none; border: none"
                                                        value="<?=
                                                        Yii::t('app', 'Like') .
                                                        " (" .
@@ -231,21 +236,22 @@ use yii\widgets\Pjax;
 												<!-- /.direct-chat-img -->
 												<p class="message">
 													<a href="#" class="name">
-														<small class="text-muted pull-right"><i
-																	class="fa fa-clock-o"></i> <?php echo $comment->getDate() ?>
-															<button type="button"
-															        class="btn btn-box-tool dropdown-toggle"
-															        data-toggle="dropdown">
-																<i class="fa fa-wrench"></i></button>
+														<small class="text-muted pull-right">
 															<!--button to delete comment -->
 															<?php echo Html::beginForm(['intouch/profile'], 'post') ?>
 															<input type="hidden" name="comment_id"
 															       value="<?= $comment->getId() ?>">
 															<input class="" type="hidden" name="type"
 															       value="delete_comment" id="delete_comment-form">
-															<button style="..." type="submit"
-															        class="fa fa-times"></button>
+															<button style="border-style: none; margin-top: 2px"  type="submit"
+															        class="pull-right btn btn-box-tool fa fa-times"></button>
 															<?= Html::endForm() ?>
+															<i class="fa fa-clock-o"></i> <?php echo $comment->getDate() ?>
+															<button type="button"
+															        class="btn btn-box-tool dropdown-toggle"
+															        data-toggle="dropdown">
+																<i class="fa fa-wrench"></i></button>
+
 															
 															<!--                                                            <button type="button" class="btn btn-box-tool"-->
 															<!--                                                                    data-widget="remove">-->

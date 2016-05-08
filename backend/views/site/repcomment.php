@@ -48,15 +48,15 @@ $userInfo = $this->params['userInfo'];
 	                                    <input type="hidden" name="action" value="delete">
                                          <input type="hidden" name="post_id" value="<?= $row->getId() ?>">
 	                                    <!-- post_id ??? -->
-                                         <button style="..." type="submit"
-                                                 class="pull-right fa fa-times"></button>
+                                         <button style="border: none" type="submit"
+                                                 class="pull-right btn-box-tool fa fa-times"></button>
 	                                    <?= Html::endForm() ?>
 
 	                                    <?php echo Html::beginForm(['site/repcomment'], 'post', ['data-pjax' => '']) ?>
 	                                    <input type="hidden" name="action" value="revoke">
                                          <input type="hidden" name="post_id" value="<?= $row->getId() ?>">
-                                         <button style="..." type="submit"
-                                                 class="pull-right fa fa-minus-circle"></button>
+                                         <button style="border: none" type="submit"
+                                                 class="pull-right btn-box-tool fa fa-minus-circle"></button>
 	                                    <?= Html::endForm() ?>
 	                                    <small class="text-muted pull-right"><i
 				                                    class="fa fa-clock-o"></i> <?= $row->getDate() ?>
