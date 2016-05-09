@@ -103,8 +103,8 @@ use yii\widgets\Pjax;
 							       name="inputText">
 							<input type="hidden" name="type" value="newpost">
 							<!-- Add picture-->
-							<div class="btn btn-danger btn-file btn-primary" style="margin-top: 5px; ">
-								<i class="fa fa-paperclip"> Attachment </i>
+							<div class="btn-file btn btn-default fa fa-t link-black text-sm" style="margin-top: 5px;"> 
+								<i class="fa fa-paperclip "></i><i style="font: inherit"> Attachment </i>
 								<input type="file" name="kawaiiPicture">
 							</div>
 							<!-- /Add picture-->
