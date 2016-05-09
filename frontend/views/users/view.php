@@ -170,8 +170,14 @@ JS;
                         <input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post"
                                name="inputText">
                         <input type="hidden" name="type" value="newpost">
+	                    <!-- Add picture-->
+	                    <div class="btn-file btn btn-default fa fa-t link-black text-sm" style="margin-top: 5px;">
+		                    <i class="fa fa-paperclip "></i><i style="font: inherit"> Attachment </i>
+		                    <input type="file" name="kawaiiPicture">
+	                    </div>
+	                    <!-- /Add picture-->
                         <button style="width:20%; margin-top:5px;" type="submit"
-                                class="btn btn-danger btn-block btn-sm"><?= Yii::t('app', 'Publish'); ?></button>
+                                class="btn btn-danger pull-right btn-primary btn-sm"><?= Yii::t('app', 'Publish'); ?></button>
                         <hr>
                         <?= Html::endForm() ?>
                         <!-- /Add post-->
