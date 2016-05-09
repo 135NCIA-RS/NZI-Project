@@ -149,9 +149,19 @@ use common\components\PhotoService;
 														'Comments'); ?> (<?php echo(count($comments));?>)</a>
 										</li>
 										<li class="pull-right">
-											<a href="#" class="link-black text-sm"><i
-														class="fa fa-exclamation margin-r-5"></i><?= Yii::t('app',
-														'Report'); ?></a>
+											<?php echo Html::beginForm(['intouch/profile'], 'post') ?>
+											<input type="hidden" name="post_id" value="<?= $row->getId() ?>">
+											<input type="hidden" name="score_elem" value="post">
+											<input type="hidden" name="user_id" value="<?= $loggedUser->getId() ?>">
+											<input class="" type="hidden" name="type" value="report" id="like-form">
+                                            <span class="link-black text-sm">
+                                                <i class="fa fa-exclamation"></i>
+                                                <input type="submit" class="link-black text-sm"
+                                                       style="background: none; border: none;"
+                                                       value="<?= Yii::t('app', 'Report'); ?>">
+                                            </span>
+											
+											<?= Html::endForm() ?>
 										</li>
 									</ul>
 									<?= Html::beginForm(["intouch/index", 'uname' => $loggedUser->getUsername()],
