@@ -115,7 +115,12 @@ class UsersController extends components\GlobalController
 					switch (Yii::$app->request->post('type'))
 					{
 						case 'newpost':
-							PostsService::createPost($uid, Yii::$app->request->post('inputText'));
+                                                        $pliks = $_FILES['kawaiiPicture']['tmp_name'];
+							$post_id = PostsService::createPost($uid, Yii::$app->request->post('inputText'));
+                                                        if($pliks[0]!='')
+                                                        {
+                                                            PhotoService::addPostAttachmentPhoto($pliks, $post_id);
+                                                        }
 							components\EventService::createEvent(components\EEvent::POST_CREATE(), $uid, false, $myUid);
 							components\EventService::createEvent(components\EEvent::POST_CREATE(), $myUid, true, $uid);
 							break;

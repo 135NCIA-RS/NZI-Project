@@ -38,7 +38,7 @@ use common\components\PhotoService;
 						<!-- Add picture-->
 						<div class="btn-file btn btn-default fa fa-t link-black text-sm" style="margin-top: 5px;">
 							<i class="fa fa-paperclip "></i><i style="font: inherit"><?= Yii::t('app', ' Attach Image') ?></i>
-							<input type="file" name="kawaiiPicture">
+							<input type="file" name="kawaiiPicture[]" multiple>
 						</div>
 						<!-- /Add picture-->
 						<button style="width:20%; margin-top:5px;" type="submit"
@@ -78,53 +78,28 @@ use common\components\PhotoService;
 									<!-- /.user-block -->
 									<p>
 										<?php
-										$attachments = $row->getAttachments();
+										$attachment = $row->getAttachments();
+                                                                                //die(var_dump($attachment));
+										/* @var $attachment common\components\PostAttachment */
 										echo $row->getContent();
-										if ($row->checkPostType(\common\components\EPostType::gallery()))
+										if ($attachment != null)
 										{
+                                                                                    $attachment = $attachment->getFile();
 										echo "<br>";
 										?>
 									<div class="row margin-bottom">
+                                                                                <?php foreach($attachment as $att) { ?>
 										<div class="col-sm-6">
 											<img class="img-responsive"
-											     src="../../dist/content/attachments/<?php echo $attachments[0]['file']; ?>"
+                                                                                             src="<?= $att ?>"
 											     alt="Photo">
 										</div>
-										<!-- /.col -->
-										<div class="col-sm-6">
-											<div class="row">
-												<div class="col-sm-6">
-													<img class="img-responsive"
-													     src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>"
-													     alt="Photo">
-													<br>
-													<img class="img-responsive"
-													     src="../../dist/content/attachments/<?php echo $attachments[2]['file']; ?>"
-													     alt="Photo">
-												</div>
-												<!-- /.col -->
-												<div class="col-sm-6">
-													<img class="img-responsive"
-													     src="../../dist/content/attachments/<?php echo $attachments[3]['file']; ?>"
-													     alt="Photo">
-													<br>
-													<?php
-													if (isset($attachments[4]['file']))
-													{
-														?><img class="img-responsive"
-														       src="../../dist/content/attachments/<?php echo $attachments[1]['file']; ?>"
-														       alt="Photo"> <?php } ?>
-												</div>
-												<!-- /.col -->
-											</div>
-											<!-- /.row -->
-										</div>
+                                                                                <?php } ?>
 										<!-- /.col -->
 									</div>
 									<?php
 									}
 									?>
-									
 									</p>
 									<ul class="list-inline">
 										<li><a href="#" class="link-black text-sm"><i
