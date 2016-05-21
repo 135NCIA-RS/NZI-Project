@@ -105,7 +105,7 @@ use yii\widgets\Pjax;
 							<!-- Add picture-->
 							<div class="btn-file btn btn-default fa fa-t link-black text-sm" style="margin-top: 5px;">
 								<i class="fa fa-paperclip "></i><i style="font: inherit"><?= Yii::t('app', ' Attach Image') ?></i>
-								<input type="file" name="kawaiiPicture">
+								<input type="file" name="kawaiiPicture[]" multiple>
 							</div>
 							<!-- /Add picture-->
 							<button style="width:20%; margin-top:5px;" type="submit"

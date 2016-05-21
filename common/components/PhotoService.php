@@ -155,14 +155,22 @@ class PhotoService // v.1.2
 		$photo = new Photo();
                 $photo->user_id = 0;
 
-		$genFileName = Yii::$app->security->generateRandomString(20);
-		$img = new Image($genFileName, ImageTypes::PostPhoto(), new ImgMediaLoc(), $data);
-		$img->save();
+                $randomStrings = [];
+                foreach($data as $picture)
+                {
+                    $genFileName = Yii::$app->security->generateRandomString(20);
+                    array_push($randomStrings, $genFileName);
+                    $img = new Image($genFileName, ImageTypes::PostPhoto(), new ImgMediaLoc(), $picture);
+                    $img->save();
+                }
 
 		$photo->filename = $genFileName;
 		$photo->type = "postPhoto";
                 
-                PostsService::addPostAttachmentPhoto($post_id, $genFileName);
+                foreach($randomStrings as $genFileName)
+                {
+                    PostsService::addPostAttachmentPhoto($post_id, $genFileName);
+                }
                 
 		if ($photo->save())
 		{
