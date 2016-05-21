@@ -148,38 +148,22 @@ class PhotoService // v.1.2
         /*
          * Adds photos attached to the post.
          * Takes only the data as a parameter.
-         * Returns the name of the photo
+         * Returns the name of the photo (well, not anymore)
          */
         public static function addPostAttachmentPhoto($data, $post_id)
         {
-		$photo = new Photo();
-                $photo->user_id = 0;
-
-                $randomStrings = [];
                 foreach($data as $picture)
                 {
+                    $photo = new Photo();
+                    $photo->user_id = 0;
                     $genFileName = Yii::$app->security->generateRandomString(20);
-                    array_push($randomStrings, $genFileName);
                     $img = new Image($genFileName, ImageTypes::PostPhoto(), new ImgMediaLoc(), $picture);
                     $img->save();
-                }
-
-		$photo->filename = $genFileName;
-		$photo->type = "postPhoto";
-                
-                foreach($randomStrings as $genFileName)
-                {
+                    $photo->filename = $genFileName;
+                    $photo->type = "postPhoto";
                     PostsService::addPostAttachmentPhoto($post_id, $genFileName);
+                    $photo->save();
                 }
-                
-		if ($photo->save())
-		{
-			return $genFileName;
-		}
-		else
-		{
-			return false;
-		}
         }
 
 	/**

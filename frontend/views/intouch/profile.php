@@ -153,18 +153,22 @@ use yii\widgets\Pjax;
 									<p>
 										<?php
 										$attachment = $row->getAttachments();
+                                                                                //die(var_dump($attachment));
 										/* @var $attachment common\components\PostAttachment */
 										echo $row->getContent();
 										if ($attachment != null)
 										{
+                                                                                    $attachment = $attachment->getFile();
 										echo "<br>";
 										?>
 									<div class="row margin-bottom">
+                                                                                <?php foreach($attachment as $att) { ?>
 										<div class="col-sm-6">
 											<img class="img-responsive"
-											     src="<?= $attachment->getFile() ?>"
+                                                                                             src="<?= $att ?>"
 											     alt="Photo">
 										</div>
+                                                                                <?php } ?>
 										<!-- /.col -->
 									</div>
 									<?php

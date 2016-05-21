@@ -19,7 +19,7 @@ use common\components\PhotoService;
 class PostAttachment
 {
     private $post_id;
-    private $file;
+    private $file = [];
     private $attachment_id;
     private $is_attachment;
     
@@ -34,7 +34,11 @@ class PostAttachment
         else 
         {
             $this->is_attachment = true;
-            $this->file = PhotoService::getPostAttachmentPhoto($file_name);
+            foreach ($file_name as $file)
+            {
+                $tmp_file = PhotoService::getPostAttachmentPhoto($file['file']);
+                array_push($this->file, $tmp_file);
+            }
         }
     }
     

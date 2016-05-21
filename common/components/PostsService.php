@@ -117,10 +117,10 @@ class PostsService
 	{
 		$data = PostAttachment::find()
 			->where(['post_id' => $post_id])
-			->one();
+			->all();
 		if (!is_null($data))
 		{
-			return $data->file;
+			return $data;
 		}
 		else
 		{
