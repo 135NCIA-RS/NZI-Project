@@ -60,7 +60,7 @@ use common\components\PhotoService;
 										     src="<?php echo $row->getAuthor()->getImageUrl() ?>"
 										     alt="user image">
                                         <span class="username">
-                                            <a href="#"><?= $row->getAuthor()->getFullName() ?></a>
+                                            <a href="user/<?= $author->getUsername() ?>"><?= $row->getAuthor()->getFullName() ?></a>
                                             <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
 	                                        <a href="#" class="pull-right btn-box-tool"><i class="fa fa-wrench"></i></a>
                                         </span>

@@ -196,7 +196,7 @@ JS;
                                         <img class="img-circle img-bordered-sm" src="<?= $author->getImageUrl() ?>"
                                              alt="user image">
                                         <span class="username">
-                                            <a href="#"><?= $author->getFullName() ?></a>
+                                            <a href="user/<?= $author->getUsername() ?>"><?= $author->getFullName() ?></a>
 
                                             <?= Html::beginForm(["users/view", 'uname' => $user->getUsername()], 'post',
                                                     ['data-pjax' => '']) ?>

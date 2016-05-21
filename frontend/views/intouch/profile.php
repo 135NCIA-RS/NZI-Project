@@ -127,7 +127,7 @@ use yii\widgets\Pjax;
 										<img class="img-circle img-bordered-sm" src="<?= $author->getImageUrl() ?>"
 										     alt="user image">
                                     <span class="username">
-                                        <a href="#"><?= $author->getFullName() ?></a>
+                                        <a href="user/<?= $author->getUsername() ?>"><?= $author->getFullName() ?></a>
 	                                    <?php echo Html::beginForm(['intouch/profile'], 'post') ?>
 	                                    <input type="hidden" name="post_id" value="<?= $row->getId() ?>">
                                         <input class="" type="hidden" name="type" value="delete_post"
