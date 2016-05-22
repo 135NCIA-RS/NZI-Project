@@ -61,7 +61,14 @@ use common\components\PhotoService;
 										     alt="user image">
                                         <span class="username">
                                             <a href="user/<?= $author->getUsername() ?>"><?= $row->getAuthor()->getFullName() ?></a>
-                                            <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
+	                                        <?php echo Html::beginForm(['intouch/index'], 'post') ?>
+	                                        <input type="hidden" name="post_id" value="<?= $row->getId() ?>">
+                                        <input class="" type="hidden" name="type" value="delete_post"
+                                               id="delete_post-form">
+                                        <button style="border-style: none; margin-top: 2px" type="submit"
+                                                class="pull-right btn-box-tool fa fa-times"></button>
+	                                        <?= Html::endForm() ?>
+                                            <!-- <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a> -->
                                             <?php
                                             $postOwner=$author->getId();
                                             if(Yii::$app->user->getId() == $postOwner || Yii::$app->user->can('admin'))
