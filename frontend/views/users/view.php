@@ -207,7 +207,15 @@ JS;
                                             <?= Html::endForm() ?>
 
                                             <!--                                            <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>-->
-	                                        <a href="#" class="pull-right btn-box-tool"><i class="fa fa-wrench"></i></a>
+                                            <?php
+                                            $postOwner=$author->getId();
+                                            if(Yii::$app->user->getId() == $postOwner || Yii::$app->user->can('admin'))
+                                                echo '<button type="button"
+                                                                    onclick="window.location.href=\'/post/edit/'.$row->getId().' \'"
+															        class="btn btn-box-tool dropdown-toggle"
+															        data-toggle="dropdown">
+																<i class="fa fa-wrench"></i></button>';
+                                            ?>
                                         </span>
                                         <span class="description"><?php
                                             if ($row->checkVisibility(\common\components\EVisibility::visible()))
@@ -315,6 +323,17 @@ JS;
 	                                                                class="pull-right btn-box-tool fa fa-times"></button>
 	                                                        <?= Html::endForm() ?>
 	                                                        <i class="fa fa-clock-o"></i> <?= $comment->getDate() ?>
+                                                            <?php
+
+                                                            $nothing = $comment->getAuthor();
+                                                            $commentOwner= $nothing->getId();
+                                                            if(Yii::$app->user->getId() == $commentOwner || Yii::$app->user->can('admin'))
+                                                                echo '<button type="button"
+                                                                    onclick="window.location.href=\'/post/commentEdit/'.$comment->getId().'\'"
+															        class="btn btn-box-tool dropdown-toggle"
+															        data-toggle="dropdown">
+																<i class="fa fa-wrench"></i></button>';
+                                                            ?>
 
                                                         </small>
                                                         <?= $commAuthor->getFullName() ?><br>
