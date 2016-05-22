@@ -105,12 +105,12 @@ $userInfo = $this->params['userInfo'];
 						<li class="header"><?= Yii::t('app', 'MAIN NAVIGATION'); ?></li>
 						<li>
 							<a href="/rep">
-								<i class="fa fa-bicycle"></i> <span><?= Yii::t('app', 'Reported Posts') ?></span>
+								<i class="fa fa-bicycle"></i> <span><?= Yii::t('app', 'Reported posts') ?></span>
 							</a>
 						</li>
 						<li>
 							<a href="/reportedComment">
-								<i class="fa fa-comments"></i> <span><?= Yii::t('app', 'Reported Comments') ?></span>
+								<i class="fa fa-comments"></i> <span><?= Yii::t('app', 'Reported comments') ?></span>
 							</a>
 						</li>
 						<li class="header"><?= Yii::t('app', 'ACTIONS') ?></li>

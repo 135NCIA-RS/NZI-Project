@@ -31,7 +31,7 @@ $userInfo = $this->params['userInfo'];
 					<?php
 					if ($posts == [])
 					{
-						echo 'Nothing to show';
+						echo Yii::t('app', 'No reported posts');
 					}
 					foreach ($posts as $row)
 					{

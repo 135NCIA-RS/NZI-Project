@@ -76,6 +76,12 @@ return [
     'Request password reset' => 'Zresetuj hasło.',
     'Send' => 'Wyślij',
     'Save' => 'Zapisz',
+    'ADMIN MODE'=>'TRYB ADMINISTRACYJNY',
+    'You have successfully logged in as an admin.'=>'Pomyślnie zalogowałes się jako administrator',
+    'No reported comments'=>'Brak zgłoszonych komentarzy',
+    'No reported posts'=>'Brak zgłoszonych postów',
+    'Reported comments'=>'Zgłoszony komentarze',
+    'Reported posts'=>'Zgłoszone posty',
 ];
 
 
