@@ -34,6 +34,21 @@ class PostsService
 		return $arr;
 	}
 
+	public static function getFollowersPosts(UserId $uid, $lastid = null)
+	{
+		$arr = [];
+		$followersList = RelationService::getUsersWhoIFollow($uid);
+		for($i = 0; $i < count($followersList); $i++)
+		{
+			$followersList[$i] = new UserId($followersList[$i]);
+		}
+		$followersList[] = UserService::getUserById($uid);
+
+		$arr = self::getPostsOrderById($followersList, $lastid);
+
+		return $arr;
+	}
+
 	/**
 	 * used to sort posts by date
 	 *

@@ -81,8 +81,11 @@ class RequestService
 		if ($answer)
 		{
 			RelationService::setRelation($uid1, $uid2, RelationType::Friend);
+			RelationService::setRelation($uid1, $uid2, RelationType::Follower); // for default friend is followed
+			RelationService::setRelation($uid2, $uid1, RelationType::Follower);
 			EventService::createEvent(EEvent::FRIEND_REQUEST_ACCEPTED(), $uid2, true, $uid1);
 			EventService::createEvent(EEvent::FRIEND_REQUEST_ACCEPTED(), $uid1, false, $uid2);
+
 		}
 		else
 		{

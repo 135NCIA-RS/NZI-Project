@@ -24,25 +24,27 @@ use common\components\PhotoService;
 				<div class="tab-content">
 					
 					<?php
-					yii\widgets\Pjax::begin();
+					//yii\widgets\Pjax::begin();
 					?>
 					<div class="active tab-pane" id="activity">
 						
 						
 						<!-- Add post -->
-						<?= Html::beginForm(["intouch/index", 'uname' => $loggedUser->getUsername()], 'post',
-								['data-pjax' => '']) ?>
+						<?= Html::beginForm(["intouch/index"], 'post',
+								['data-pjax' => '', 'enctype'=>"multipart/form-data"]) ?>
 						<input class="form-control input-sm send-form-input" row="3" type="text" placeholder="Post"
 						       name="inputText">
 						<input type="hidden" name="type" value="newpost">
 						<!-- Add picture-->
 						<div class="btn-file btn btn-default fa fa-t link-black text-sm" style="margin-top: 5px;">
-							<i class="fa fa-paperclip "></i><i style="font: inherit"><?= Yii::t('app', ' Attach Image') ?></i>
+							<i class="fa fa-paperclip "></i><i style="font: inherit"><?= Yii::t('app',
+										' Attach Image') ?></i>
 							<input type="file" name="kawaiiPicture[]" multiple>
 						</div>
 						<!-- /Add picture-->
 						<button style="width:20%; margin-top:5px;" type="submit"
-						        class="btn btn-danger pull-right btn-primary btn-sm"><?= Yii::t('app', 'Publish'); ?></button>
+						        class="btn btn-danger pull-right btn-primary btn-sm"><?= Yii::t('app',
+									'Publish'); ?></button>
 						<hr>
 						<?= Html::endForm() ?>
 						<!-- /Add post-->
@@ -60,7 +62,8 @@ use common\components\PhotoService;
 										     src="<?php echo $row->getAuthor()->getImageUrl() ?>"
 										     alt="user image">
                                         <span class="username">
-                                            <a href="user/<?= $author->getUsername() ?>"><?= $row->getAuthor()->getFullName() ?></a>
+                                            <a href="/user/<?= $author->getUsername() ?>"><?= $row->getAuthor()
+			                                            ->getFullName() ?></a>
 	                                        <?= Html::beginForm(['intouch/index'], 'post') ?>
 	                                        <input type="hidden" name="post_id" value="<?= $row->getId() ?>">
                                         <input type="hidden" name="type" value="delete_post"
@@ -68,15 +71,18 @@ use common\components\PhotoService;
                                         <button style="border-style: none; margin-top: 2px" type="submit"
                                                 class="pull-right btn-box-tool fa fa-times"></button>
 	                                        <?= Html::endForm() ?>
-                                            <?php
-                                            $postOwner=$author->getId();
-                                            if(Yii::$app->user->getId() == $postOwner || Yii::$app->user->can('admin'))
-                                                echo '<button type="button"
-                                                                    onclick="window.location.href=\'/post/edit/'.$row->getId().' \'"
+	                                        <?php
+	                                        $postOwner = $author->getId();
+	                                        if (Yii::$app->user->getId() == $postOwner || Yii::$app->user->can('admin'))
+	                                        {
+		                                        echo '<button type="button"
+                                                                    onclick="window.location.href=\'/post/edit/' .
+		                                             $row->getId() . ' \'"
 															        class="btn pull-right btn-box-tool dropdown-toggle"
 															        data-toggle="dropdown">
 																<i class="fa fa-wrench"></i></button>';
-                                            ?>
+	                                        }
+	                                        ?>
                                         </span>
                                         <span class="description"><?php
 	                                        if ($row->checkVisibility(\common\components\EVisibility::visible()))
@@ -93,22 +99,23 @@ use common\components\PhotoService;
 									<p>
 										<?php
 										$attachment = $row->getAttachments();
-                                                                                //die(var_dump($attachment));
+										//die(var_dump($attachment));
 										/* @var $attachment common\components\PostAttachment */
 										echo $row->getContent();
 										if ($attachment != null)
 										{
-                                                                                    $attachment = $attachment->getFile();
+										$attachment = $attachment->getFile();
 										echo "<br>";
 										?>
 									<div class="row margin-bottom">
-                                                                                <?php foreach($attachment as $att) { ?>
-										<div class="col-sm-6">
-											<img class="img-responsive"
-                                                                                             src="<?= $att ?>"
-											     alt="Photo">
-										</div>
-                                                                                <?php } ?>
+										<?php foreach ($attachment as $att)
+										{ ?>
+											<div class="col-sm-6">
+												<img class="img-responsive"
+												     src="<?= $att ?>"
+												     alt="Photo">
+											</div>
+										<?php } ?>
 										<!-- /.col -->
 									</div>
 									<?php
@@ -141,7 +148,7 @@ use common\components\PhotoService;
 										<li class="pull-right">
 											<a href="#" class="link-black text-sm"><i
 														class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app',
-														'Comments'); ?> (<?=(count($comments))?>)</a>
+														'Comments'); ?> (<?= (count($comments)) ?>)</a>
 										</li>
 										<li class="pull-right">
 											<?php echo Html::beginForm(['intouch/profile'], 'post') ?>
@@ -183,7 +190,7 @@ use common\components\PhotoService;
 												     src="<?php echo $comAuthor->getImageUrl() ?>"
 												     alt="message user image" style="margin-right: 10px;">
 												<!-- /.direct-chat-img -->
-
+												
 												<?php echo Html::beginForm(['intouch/index'], 'post') ?>
 												<input type="hidden" name="comment_id" value="<?= $comment->getId() ?>">
 												<input class="" type="hidden" name="type" value="delete_comment"
@@ -191,22 +198,27 @@ use common\components\PhotoService;
 												<button style="border-style: none; margin-top: 2px" type="submit"
 												        class="pull-right btn-box-tool fa fa-times"></button>
 												<?= Html::endForm() ?>
-
+												
 												<p class="message">
 													<a href="#" class="name">
 														<small class="text-muted pull-right">
 															<i class="fa fa-clock-o"></i> <?= $comment->getDate() ?>
-                                                            <?php
-
-                                                            $nothing = $comment->getAuthor();
-                                                            $commentOwner= $nothing->getId();
-                                                            if(Yii::$app->user->getId() == $commentOwner || Yii::$app->user->can('admin'))
-                                                                echo '<button type="button"
-                                                                    onclick="window.location.href=\'/post/commentEdit/'.$comment->getId().'\'"
+															<?php
+															
+															$nothing = $comment->getAuthor();
+															$commentOwner = $nothing->getId();
+															if (Yii::$app->user->getId() == $commentOwner ||
+															    Yii::$app->user->can('admin')
+															)
+															{
+																echo '<button type="button"
+                                                                    onclick="window.location.href=\'/post/commentEdit/' .
+																     $comment->getId() . '\'"
 															        class="btn btn-box-tool dropdown-toggle"
 															        data-toggle="dropdown">
 																<i class="fa fa-wrench"></i></button>';
-                                                            ?>
+															}
+															?>
 														</small>
 														<?= $comAuthor->getFullName() ?>
 														<br>
@@ -227,11 +239,12 @@ use common\components\PhotoService;
 						<!-- /.post -->
 					</div>
 					<?php
-					yii\widgets\Pjax::end();
+					//yii\widgets\Pjax::end();
 					?>
 				</div>
 				<div class="box-footer text-center">
-					<a href="javascript::;" class="btn btn-sm btn-info btn-flat"><?= Yii::t('app','View more posts'); ?></a>
+					<a href="javascript::;" class="btn btn-sm btn-info btn-flat"><?= Yii::t('app',
+								'View more posts'); ?></a>
 				</div>
 			</div>
 		</div>

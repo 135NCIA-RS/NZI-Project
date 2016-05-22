@@ -27,6 +27,7 @@ use common\components\ScoreService;
 use common\components\EScoreElem;
 use common\components\EScoreType;
 use common\components\EventService;
+use yii\web\UploadedFile;
 
 class IntouchController extends components\GlobalController
 {
@@ -79,12 +80,14 @@ class IntouchController extends components\GlobalController
 				switch (Yii::$app->request->post('type'))
 				{
 					case 'newpost':
-						$pliks = $_FILES['kawaiiPicture']['tmp_name'];
 						$post_id = PostsService::createPost($uid, Yii::$app->request->post('inputText'));
-                                                if($pliks[0]!='')
-                                                {
-                                                    PhotoService::addPostAttachmentPhoto($pliks, $post_id);
-                                                }
+						
+						$pliks = $_FILES['kawaiiPicture']['tmp_name'];
+						if ($pliks[0] != '')
+						{
+							PhotoService::addPostAttachmentPhoto($pliks, $post_id);
+						}
+
 						EventService::createEvent(components\EEvent::POST_CREATE(), $uid);
 						break;
 					case 'newcomment':
@@ -131,7 +134,8 @@ class IntouchController extends components\GlobalController
 				}
 			}
 		}
-		$posts = PostsService::getFriendsPosts($uid);
+		//$posts = PostsService::getFriendsPosts($uid);
+		$posts = PostsService::getFollowersPosts($uid);
 		$args = [
 		'posts' => $posts,
 		'loggedUser' => $loggedUser,
