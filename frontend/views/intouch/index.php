@@ -67,7 +67,7 @@ use common\components\PhotoService;
                                             if(Yii::$app->user->getId() == $postOwner || Yii::$app->user->can('admin'))
                                                 echo '<button type="button"
                                                                     onclick="window.location.href=\'/post/edit/'.$row->getId().' \'"
-															        class="btn btn-box-tool dropdown-toggle"
+															        class="btn pull-right btn-box-tool dropdown-toggle"
 															        data-toggle="dropdown">
 																<i class="fa fa-wrench"></i></button>';
                                             ?>
