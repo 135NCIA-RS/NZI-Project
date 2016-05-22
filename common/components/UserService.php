@@ -7,6 +7,7 @@ use common\components\exceptions\FeatureNotImplemented;
 use common\models\User;
 use common\components\exceptions\InvalidDateException;
 use common\components\exceptions\InvalidUserException;
+use common\models\UserTokens;
 
 class UserService
 {
@@ -140,6 +141,37 @@ class UserService
 		if(!$uinfo->save()){ return false; };
 		return true;
 	}
+
+	public static function activateUser(UserId $uid)
+	{
+		$token = self::getUserActivationToken($uid);
+		TokenService::revokeToken($token);
+
+		$user = User::findOne(['id' => $uid->getId()]);
+		$user->status = 10; // UserId checks if user exists.
+		return $user->save();
+	}
+
+	public static function getUserActivationToken(UserId $uid)
+	{
+		$tokens = TokenService::getUserTokensByType($uid, ETokenType::ACCOUNT_ACTIVATION());
+		if(count($tokens) > 0)
+		{
+			return $tokens[0];
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public static function isUserAccountActivated(UserId $uid)
+	{
+		$user = User::findOne(['id' => $uid->getId()]);
+		return ($user->status == EAccountStatus::STATUS_ACTIVE && $user->status != EAccountStatus::STATUS_NOTACTIVATED);
+	}
+
+
 
 
 
