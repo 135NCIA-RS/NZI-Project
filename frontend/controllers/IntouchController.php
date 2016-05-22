@@ -7,6 +7,7 @@ use Faker\Provider\Image;
 use Yii;
 use common\models\LoginForm;
 use yii\base\InvalidParamException;
+use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;

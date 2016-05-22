@@ -24,7 +24,7 @@ class Token
 	 * @param UserId     $uid
 	 * @param \DateTime  $exp_date
 	 */
-	public function __construct($token, ETokenType $type, UserId $uid, \DateTime $exp_date)
+	public function __construct($token, ETokenType $type, UserId $uid, \DateTime $exp_date = null)
 	{
 		$this->token = $token;
 		$this->uid = $uid;

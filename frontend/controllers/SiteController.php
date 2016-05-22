@@ -271,5 +271,36 @@ class SiteController extends components\GlobalController
                     'model' => $model,
         ]);
     }
+    
+    public function actionActivate($email, $token)
+    {
+        $user = UserService::getUserIdByEmail($email);
+	    if($user == null)
+	    {
+		    Yii::$app->session->setFlash("error", Yii::t('app', 'Invalid email'));
+		    return $this->goHome();
+	    }
+	    $activationToken = UserService::getUserActivationToken($user);
+	    if($activationToken == null)
+	    {
+		    Yii::$app->session->setFlash("error", Yii::t('app', 'No activation token. Contact with admin.'));
+		    return $this->goHome();
+	    }
+	    else
+	    {
+			if($token == $activationToken->getToken())
+			{
+				UserService::activateUser($user);
+				Yii::$app->session->setFlash("success", Yii::t('app', 'User has been activated'));
+				return $this->goHome();
+			}
+		    else
+		    {
+			    Yii::$app->session->setFlash("error", Yii::t('app', 'Invalid token'));
+			    return $this->goHome();
+		    }
+	    }
+
+    }
 
 }

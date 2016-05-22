@@ -128,6 +128,10 @@ return [
     "have removed "=>'skasowałeś ',
     " </a> from your friend list"=>' </a> ze swojej listy znajomych',
     "has removed you from his friend list"=>'usunął cię ze swojej listy znajomych',
+    'Invalid email' => 'Nieprawidłowy email',
+    'No activation token. Contact with admin.' => 'Nie ma takiego tokenu aktywacyjnego. Skontaktuj sie z adminem',
+    'User has been activated'=>'Użytkownik został aktywowany',
+    'Invalid token' => 'Niewłaściwy token',
     
 ];
 

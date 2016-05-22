@@ -65,6 +65,7 @@ return [
 			    'post/edit/<pid>' => 'post/edit',
 			    'post/view/<pid>' => 'post/view',
 				'post/commentEdit/<cid>' => 'post/comment',
+			    'activate' => 'site/activate',
 
 			],
 		],

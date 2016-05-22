@@ -39,7 +39,7 @@ class TokenService
 		foreach($tkns as $var)
 		{
 			$tokenType = ETokenType::search($var->token_type);
-			$token = new Token($var->token,  ETokenType::$tokenType(), $var->user_id, $var->token_expiration_date);
+			$token = new Token($var->token,  ETokenType::$tokenType(), new UserId($var->user_id), $var->token_expiration_date);
 			$tokens[] = $token;
 		}
 		return $tokens;
@@ -56,7 +56,7 @@ class TokenService
 		foreach($tkns as $var)
 		{
 			$tokenType = ETokenType::search($var->token_type);
-			$token = new Token($var->token, ETokenType::$tokenType(), $var->user_id, $var->token_expiration_date);
+			$token = new Token($var->token, ETokenType::$tokenType(), new UserId($var->user_id), $var->token_expiration_date);
 			$tokens[] = $token;
 		}
 		return $tokens;

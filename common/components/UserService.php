@@ -126,10 +126,13 @@ class UserService
 	{
 		$id = $user->getId();
 		$u = User::findIdentity($id);
-		/* @var $u User*/
+		/* @var $u User */
 		$u->email = $user->getEmail();
 		$u->username = $user->getUsername();
-		if(!$u->save()) { return false; }
+		if (!$u->save())
+		{
+			return false;
+		}
 		$uinfo = UserInfo::findOne($id);
 		/* @var $uinfo UserInfo */
 		$uinfo->user_about = $user->getAbout();
@@ -138,7 +141,10 @@ class UserService
 		$uinfo->user_education = $user->getEducation();
 		$uinfo->user_name = $user->getName();
 		$uinfo->user_surname = $user->getSurname();
-		if(!$uinfo->save()){ return false; };
+		if (!$uinfo->save())
+		{
+			return false;
+		};
 		return true;
 	}
 
@@ -152,10 +158,15 @@ class UserService
 		return $user->save();
 	}
 
+	/**
+	 * @param UserId $uid
+	 *
+	 * @return null|Token
+	 */
 	public static function getUserActivationToken(UserId $uid)
 	{
 		$tokens = TokenService::getUserTokensByType($uid, ETokenType::ACCOUNT_ACTIVATION());
-		if(count($tokens) > 0)
+		if (count($tokens) > 0)
 		{
 			return $tokens[0];
 		}
@@ -171,8 +182,19 @@ class UserService
 		return ($user->status == EAccountStatus::STATUS_ACTIVE && $user->status != EAccountStatus::STATUS_NOTACTIVATED);
 	}
 
+	public static function getUserIdByEmail($email)
+	{
+		$user = User::findOne(['email' => $email]);
 
-
+		if ($user != null)
+		{
+			return new UserId($user->id);
+		}
+		else
+		{
+			return null;
+		}
+	}
 
 
 }
