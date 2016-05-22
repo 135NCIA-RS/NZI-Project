@@ -127,8 +127,8 @@ class IntouchController extends components\GlobalController
 		}
 		$posts = PostsService::getFriendsPosts($uid);
 		$args = [
-			'posts' => $posts,
-			'loggedUser' => $loggedUser,
+		'posts' => $posts,
+		'loggedUser' => $loggedUser,
 		];
 		return $this->render('index', $args);
 	}

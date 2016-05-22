@@ -3,6 +3,7 @@
 namespace common\components;
 
 use app\models\Event;
+use Faker\Provider\DateTime;
 use Yii;
 use common\components;
 use app\models\UserInfo;
@@ -203,6 +204,7 @@ class PostsService
 		$comment->comment_text = $content;
 		$comment->comment_date = date('Y-m-d H:i:s');
 		$comment->post_id = $post->getId();
+
 		return $comment->save();
 	}
 
@@ -235,8 +237,12 @@ class PostsService
 
 	public static function savePost(\common\components\Post $post)
 	{
+		$c = Post::findOne($post->getId());
+		$c->post_text = $post->getContent();
+		$c->post_editdate =date('Y-m-d H:i:s');
+		return $c->save();
 		//tu pobierz wszystko z posta i zapisz (łacznie z komentarzami itd.
-		throw new components\exceptions\FeatureNotImplemented();
+
 	}
 
 	public static function removePost(\common\components\Post $post)

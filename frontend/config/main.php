@@ -62,6 +62,10 @@ return [
 				'search' => 'intouch/search',
 				'notifications' => 'intouch/notifications',
 				'myFriends' => 'intouch/myfriends',
+			    'post/edit/<pid>' => 'post/edit',
+			    'post/view/<pid>' => 'post/view',
+				'post/commentEdit/<cid>' => 'post/comment',
+
 			],
 		],
 		'authManager' => [
