@@ -132,6 +132,7 @@ return [
     'No activation token. Contact with admin.' => 'Nie ma takiego tokenu aktywacyjnego. Skontaktuj sie z adminem',
     'User has been activated'=>'Użytkownik został aktywowany',
     'Invalid token' => 'Niewłaściwy token',
+    'Latest Posts' => 'Najnowsze posty',
     
 ];
 

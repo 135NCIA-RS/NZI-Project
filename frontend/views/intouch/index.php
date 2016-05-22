@@ -18,7 +18,7 @@ use common\components\PhotoService;
 		<div class="col-md-12">
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs">
-					<li class="active"><a href="#activity" data-toggle="tab"><?= Yii::t('app', 'Activity'); ?></a></li>
+					<li class="active"><a href="#activity" data-toggle="tab"><?= Yii::t('app', 'Latest Posts'); ?></a></li>
 				
 				</ul>
 				<div class="tab-content">
@@ -51,8 +51,13 @@ use common\components\PhotoService;
 						<!-- Post -->
 						<div id="posts">
 							<?php
+							$limit = 5;
 							foreach ($posts as $row)
 							{
+								if($limit-- < 0)
+								{
+									continue;
+								}
 								$author = $row->getAuthor();
 								$comments = $row->getComments();
 								?>
@@ -242,7 +247,7 @@ use common\components\PhotoService;
 					//yii\widgets\Pjax::end();
 					?>
 				</div>
-				<div class="box-footer text-center">
+				<div class="box-footer text-center hidden">
 					<a href="javascript::;" class="btn btn-sm btn-info btn-flat"><?= Yii::t('app',
 								'View more posts'); ?></a>
 				</div>
