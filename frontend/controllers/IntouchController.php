@@ -93,9 +93,6 @@ class IntouchController extends components\GlobalController
 							Yii::$app->request->post('inputText')
 						);
 						break;
-					case 'delete':
-						PostsService::deletePost(PostsService::getPostById(Yii::$app->request->post('post_id')));
-						break;
 					case 'like':
 						$like_form_post_id = Yii::$app->request->post('post_id');
 						$like_form_score_elem = Yii::$app->request->post('score_elem');
@@ -122,6 +119,15 @@ class IntouchController extends components\GlobalController
 						{
 							ScoreService::revokeScore($found_score_id);
 						}
+						break;
+
+					case 'delete':
+						$rep_post_id = Yii::$app->request->post('post_id');
+						PostsService::deletePost(PostsService::deletePost(PostsService::getPostById($rep_post_id)));;
+						break;
+					case 'delete_comment':
+						$rep_comment_id = Yii::$app->request->post('comment_id');
+						PostsService::deleteComment(PostsService::getCommentById($rep_comment_id));
 						break;
 				}
 			}

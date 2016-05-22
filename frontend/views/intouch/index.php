@@ -142,7 +142,7 @@ use common\components\PhotoService;
 										<li class="pull-right">
 											<a href="#" class="link-black text-sm"><i
 														class="fa fa-comments-o margin-r-5"></i> <?= Yii::t('app',
-														'Comments'); ?> (<?php echo(count($comments));?>)</a>
+														'Comments'); ?> (<?=(count($comments))?>)</a>
 										</li>
 										<li class="pull-right">
 											<?php echo Html::beginForm(['intouch/profile'], 'post') ?>
@@ -184,13 +184,19 @@ use common\components\PhotoService;
 												     src="<?php echo $comAuthor->getImageUrl() ?>"
 												     alt="message user image" style="margin-right: 10px;">
 												<!-- /.direct-chat-img -->
-												<a href="#" class="pull-right btn-box-tool"><i
-															class="fa fa-times"></i></a>
+
+												<?php echo Html::beginForm(['intouch/index'], 'post') ?>
+												<input type="hidden" name="comment_id" value="<?= $comment->getId() ?>">
+												<input class="" type="hidden" name="type" value="delete_comment"
+												       id="delete_post-form">
+												<button style="border-style: none; margin-top: 2px" type="submit"
+												        class="pull-right btn-box-tool fa fa-times"></button>
+												<?= Html::endForm() ?>
 
 												<p class="message">
 													<a href="#" class="name">
 														<small class="text-muted pull-right">
-															<i class="fa fa-clock-o"></i> <?php echo $comment->getDate() ?>
+															<i class="fa fa-clock-o"></i> <?= $comment->getDate() ?>
                                                             <?php
 
                                                             $nothing = $comment->getAuthor();
