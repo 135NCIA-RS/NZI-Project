@@ -69,7 +69,6 @@ class SignupForm extends Model
 			$activationToken->token_type = ETokenType::ACCOUNT_ACTIVATION;
 			$activationToken->token = sha1(mt_rand(10000, 99999) . time() . $user->email);
 			$activationToken->save();
-			$this->sendActivationMail($user, $activationToken->token);
 
 			$auth = Yii::$app->authManager;
 			$userRole = $auth->getRole('user');
@@ -81,6 +80,7 @@ class SignupForm extends Model
 				$x->user_id = $user->id;
 				$x->save();
 				EventService::createEvent(EEvent::ACCOUNT_CREATE(), new UserId($user->id));
+				$this->sendActivationMail($user, $activationToken->token);
 				return $user;
 			}
 		}
