@@ -62,7 +62,15 @@ use common\components\PhotoService;
                                         <span class="username">
                                             <a href="user/<?= $author->getUsername() ?>"><?= $row->getAuthor()->getFullName() ?></a>
                                             <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
-	                                        <a href="#" class="pull-right btn-box-tool"><i class="fa fa-wrench"></i></a>
+                                            <?php
+                                            $postOwner=$author->getId();
+                                            if(Yii::$app->user->getId() == $postOwner || Yii::$app->user->can('admin'))
+                                                echo '<button type="button"
+                                                                    onclick="window.location.href=\'/post/edit/'.$row->getId().' \'"
+															        class="btn pull-right btn-box-tool dropdown-toggle"
+															        data-toggle="dropdown">
+																<i class="fa fa-wrench"></i></button>';
+                                            ?>
                                         </span>
                                         <span class="description"><?php
 	                                        if ($row->checkVisibility(\common\components\EVisibility::visible()))
@@ -171,12 +179,22 @@ use common\components\PhotoService;
 												<!-- /.direct-chat-img -->
 												<a href="#" class="pull-right btn-box-tool"><i
 															class="fa fa-times"></i></a>
-												<a href="#" class="pull-right btn-box-tool"><i
-															class="fa fa-wrench"></i></a>
+
 												<p class="message">
 													<a href="#" class="name">
 														<small class="text-muted pull-right">
 															<i class="fa fa-clock-o"></i> <?php echo $comment->getDate() ?>
+                                                            <?php
+
+                                                            $nothing = $comment->getAuthor();
+                                                            $commentOwner= $nothing->getId();
+                                                            if(Yii::$app->user->getId() == $commentOwner || Yii::$app->user->can('admin'))
+                                                                echo '<button type="button"
+                                                                    onclick="window.location.href=\'/post/commentEdit/'.$comment->getId().'\'"
+															        class="btn btn-box-tool dropdown-toggle"
+															        data-toggle="dropdown">
+																<i class="fa fa-wrench"></i></button>';
+                                                            ?>
 														</small>
 														<?= $comAuthor->getFullName() ?>
 														<br>

@@ -135,8 +135,19 @@ use yii\widgets\Pjax;
                                         <button style="border-style: none; margin-top: 2px" type="submit"
                                                 class="pull-right btn-box-tool fa fa-times"></button>
 	                                    <?= Html::endForm() ?>
+
+                                        <?php
+                                        $postOwner=$author->getId();
+                                        if($userinfo->getId() == $postOwner || Yii::$app->user->can('admin'))
+                                            echo '<button type="button"
+                                                                    onclick="window.location.href=\'/post/edit/'.$row->getId().' \'"
+															        class="btn pull-right btn-box-tool dropdown-toggle"
+															        data-toggle="dropdown">
+																<i class="fa fa-wrench"></i></button>';
+                                        ?>
+
 	                                    <!--                                        <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>-->
-	                                    <a href="#" class="pull-right btn-box-tool"><i class="fa fa-wrench"></i></a>
+
                                     </span>
                                     <span class="description"><?php
 	                                    if ($row->checkVisibility(\common\components\EVisibility::visible()))
@@ -254,12 +265,20 @@ use yii\widgets\Pjax;
 															        class="pull-right btn btn-box-tool fa fa-times"></button>
 															<?= Html::endForm() ?>
 															<i class="fa fa-clock-o"></i> <?php echo $comment->getDate() ?>
-															<button type="button"
+															<?php
+
+                                                            $nothing = $comment->getAuthor();
+                                                            $commentOwner= $nothing->getId();
+                                                            if($userinfo->getId() == $commentOwner || Yii::$app->user->can('admin'))
+                                                            echo '<button type="button"
+                                                                    onclick="window.location.href=\'/post/commentEdit/'.$comment->getId().'\'"
 															        class="btn btn-box-tool dropdown-toggle"
 															        data-toggle="dropdown">
-																<i class="fa fa-wrench"></i></button>
+																<i class="fa fa-wrench"></i></button>';
+                                                            ?>
 
-															
+
+
 															<!--                                                            <button type="button" class="btn btn-box-tool"-->
 															<!--                                                                    data-widget="remove">-->
 															<!--                                                                <i class="fa fa-times"></i></button>-->

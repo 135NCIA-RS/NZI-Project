@@ -271,6 +271,7 @@ class IntouchController extends components\GlobalController
 						PostsService::deleteComment(PostsService::getCommentById($rep_comment_id));
 						EventService::createEvent(components\EEvent::COMMENT_DELETE(), $uid);
 						break;
+
 				}
 			}
 		}
