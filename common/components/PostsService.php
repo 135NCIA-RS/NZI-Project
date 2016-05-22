@@ -245,12 +245,6 @@ class PostsService
 
 	}
 
-	public static function removePost(\common\components\Post $post)
-	{
-		//usun post
-		throw new components\exceptions\FeatureNotImplemented();
-	}
-
 	public static function getCommentById($id)
 	{
 		$c = Comment::findOne($id);

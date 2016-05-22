@@ -120,10 +120,9 @@ class IntouchController extends components\GlobalController
 							ScoreService::revokeScore($found_score_id);
 						}
 						break;
-
-					case 'delete':
+					case 'delete_post':
 						$rep_post_id = Yii::$app->request->post('post_id');
-						PostsService::deletePost(PostsService::deletePost(PostsService::getPostById($rep_post_id)));;
+						PostsService::deletePost(PostsService::getPostById($rep_post_id));
 						break;
 					case 'delete_comment':
 						$rep_comment_id = Yii::$app->request->post('comment_id');
