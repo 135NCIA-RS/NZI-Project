@@ -115,7 +115,18 @@ $this->beginPage() ?>
                             </li>
                         </ul>
                     </li>
+	                <?php
+	                if(Yii::$app->user->can('admin'))
+	                {
+		                ?>
 
+		                <li>
+			                <a style="color: red; font-weight: 900; background-color: rgb(60,141,188)">ADMIN</a>
+		                </li>
+
+		                <?php
+	                }
+	                ?>
                 </ul>
             </div>
         </nav>
