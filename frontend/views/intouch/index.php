@@ -203,7 +203,7 @@ use common\components\PhotoService;
 					?>
 				</div>
 				<div class="box-footer text-center">
-					<a href="javascript::;" class="btn btn-sm btn-info btn-flat">View More Posts</a>
+					<a href="javascript::;" class="btn btn-sm btn-info btn-flat"><?= Yii::t('app','View more posts'); ?></a>
 				</div>
 			</div>
 		</div>

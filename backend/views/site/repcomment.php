@@ -31,7 +31,7 @@ $userInfo = $this->params['userInfo'];
 
 					if ($comments == [])
 					{
-						echo 'Nothing to show';
+						echo Yii::t('app', 'No reported comments');
 					}
 
 					foreach ($comments as $row)

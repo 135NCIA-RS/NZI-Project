@@ -440,7 +440,7 @@ use yii\widgets\Pjax;
 															Yii::t('app', 'You') . "</a>&nbsp"
 															. Yii::t('app', "have added a post to") . " " .
 															"<a href='/user/" . $userConnected->getUsername() . "'>" .
-															$userConnected->getFullName() . "'s profile";
+															$userConnected->getFullName() . Yii::t('app', '\'s profile');
 												}
 												else
 												{
@@ -532,7 +532,7 @@ use yii\widgets\Pjax;
 													$content = "<a href='/user/" .
 													           $event->getEventOwner()->getUsername() . "'>" .
 													           Yii::t('app', 'You') . "</a>&nbsp" .
-													           Yii::t('app', "have liked a post from") .
+													           Yii::t('app', 'have liked a post from') .
 													           "<a href='/user/" . $userConnected->getUsername() .
 													           "'> " .
 													           $userConnected->getFullName()  .
@@ -575,14 +575,14 @@ use yii\widgets\Pjax;
 													$content =
 															"<a href='/user/" . $userConnected->getUsername() . "'>" .
 															$userConnected->getFullName() . "</a>&nbsp"
-															. Yii::t('app', "has revoked a like from post on your profile");
+															. Yii::t('app', "has unliked from post on your profile");
 												}
 											}
 											else
 											{
 												$content = "<a href='/user/" . $event->getEventOwner()->getUsername() .
 												           "'>" . Yii::t('app', 'You') . "</a>&nbsp"
-												           . Yii::t('app', 'have revoked a like from a post on your profile');
+												           . Yii::t('app', 'have unliked from a post on your profile');
 											}
 											break;
 										case \common\components\EEvent::FOLLOWS():
@@ -746,7 +746,7 @@ use yii\widgets\Pjax;
 													           Yii::t('app', "have removed ") .
 													           "<a href='/user/" . $userConnected->getUsername() .
 													           "'> " .
-													           $userConnected->getFullName()  . " </a> from your friend list";
+													           $userConnected->getFullName()  . Yii::t('app'," </a> from your friend list");
 												}
 												else
 												{
