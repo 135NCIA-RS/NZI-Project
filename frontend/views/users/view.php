@@ -219,7 +219,7 @@ JS;
 		                                        echo '<button type="button"
                                                                     onclick="window.location.href=\'/post/edit/' .
 		                                             $row->getId() . ' \'"
-															        class="btn btn-box-tool dropdown-toggle"
+															        class="btn pull-right btn-box-tool dropdown-toggle"
 															        data-toggle="dropdown">
 																<i class="fa fa-wrench"></i></button>';
 	                                        }
@@ -348,7 +348,7 @@ JS;
 																     $comment->getId() . '\'"
 															        class="btn pull-right btn-box-tool dropdown-toggle"
 															        data-toggle="dropdown">
-																<i class="fa fa-wrench"></i></button>';
+																<i class="fa pull-right fa-wrench"></i></button>';
 															}
 															?>
 
