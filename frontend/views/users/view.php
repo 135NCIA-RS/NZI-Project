@@ -346,7 +346,7 @@ JS;
 																echo '<button type="button"
                                                                     onclick="window.location.href=\'/post/commentEdit/' .
 																     $comment->getId() . '\'"
-															        class="btn btn-box-tool dropdown-toggle"
+															        class="btn pull-right btn-box-tool dropdown-toggle"
 															        data-toggle="dropdown">
 																<i class="fa fa-wrench"></i></button>';
 															}
